@@ -47,6 +47,7 @@ User_Data_T User_data;
 uint8_t RX[20];
 
 //电机
+
 MOTOR_Typdef ALL_MOTOR;
 
 //陀螺仪
@@ -58,7 +59,8 @@ RUI_ROOT_STATUS_Typedef RUI_ROOT_STATUS;
 
 //视觉
 VisionRxDataUnion VisionRxData;
-uint8_t VisionRx[30];
+
+uint8_t VisionRx[15];
 
 //电容
 CAPDATE_TYPDEF CAPDATE;
@@ -114,7 +116,7 @@ void Everying_Init(void)
     HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);
 	
 	//USB初始化
-	MX_USB_DEVICE_Init();
+//	MX_USB_DEVICE_Init();
 
     //蜂鸣器指示初始化完成
     TIM4->CCR3 = 50;

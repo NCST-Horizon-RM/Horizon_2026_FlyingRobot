@@ -44,8 +44,8 @@
 #define RUI_DF_LED_WRITE  6
 
 #define INIT_ANGLE 6680
-#define WIPE_MAX_SPEED 500
-#define SINGLE_ANGLE -6864
+#define WIPE_MAX_SPEED 2500
+#define SINGLE_ANGLE -37000
 /************************************************************万能分隔符**************************************************************
  * 	@author:			//小瑞
  *	@performance:	    //离线检测宏定义

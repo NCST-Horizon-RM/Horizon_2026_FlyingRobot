@@ -10,7 +10,7 @@
 #define __VOFA_H
 
 #include "usart.h"
-#include "usbd_cdc_if.h"
+
 
 void VOFA_justfloat(float a,float b,float c,float d,float e,float f,float g,float h,float j,float k);
 

@@ -69,6 +69,6 @@ void Anonymity_TX(int16_t a_x,int16_t a_y,int16_t a_z,int16_t g_x,int16_t g_y,in
     anonymity_au8[_cnt++]=sum;
     anonymity_au8[_cnt++]=add;
 
-    CDC_Transmit_FS(anonymity_au8,70);
+//    CDC_Transmit_FS(anonymity_au8,70);
 
 }

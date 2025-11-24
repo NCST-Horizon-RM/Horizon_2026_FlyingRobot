@@ -38,9 +38,6 @@ horizon_infantry/shoot_task.o: ..\User\App\Shoot_Task.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   ..\User\Bsp\inc\bsp_dwt.h ..\User\Algorithm\inc\user_lib.h \
@@ -93,4 +90,4 @@ horizon_infantry/shoot_task.o: ..\User\App\Shoot_Task.c \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
   ..\User\Bsp\inc\RGBctrl.h ..\User\Bsp\inc\Power_CAP.h \
   ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h \
-  ..\User\Bsp\inc\bsp_adc.h
+  ..\User\Bsp\inc\bsp_adc.h ..\User\Bsp\inc\VOFA.h

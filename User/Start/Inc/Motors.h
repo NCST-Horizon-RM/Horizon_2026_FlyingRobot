@@ -5,7 +5,8 @@
 #include "DM_Motor.h"
 
 typedef struct
-{
+{   
+	  Motor_typedef MG4005_Pitch;
     DJI_MOTOR_Typedef DJI_6020_Pitch;
     DJI_MOTOR_Typedef DJI_6020_Yaw;
 
@@ -17,7 +18,7 @@ typedef struct
     DJI_MOTOR_Typedef DJI_3508_Chassis_2;
     DJI_MOTOR_Typedef DJI_3508_Chassis_3;
     DJI_MOTOR_Typedef DJI_3508_Chassis_4;
-
+    
 }MOTOR_Typdef;
 
 typedef struct

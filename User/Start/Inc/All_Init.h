@@ -28,7 +28,7 @@
 #include "Robot.h"
 #include "CANSPI.h"
 #include "MCP2515.h"
-#include "usb_device.h"
+
 #include "music.h"
 #include "log.h"
 
@@ -44,6 +44,7 @@ extern User_Data_T User_data;
 extern uint8_t RX[20];
 
 extern MOTOR_Typdef ALL_MOTOR;
+extern Motor_typedef MG4005_Pitch;
 
 extern pid_type_def imu_temp;
 
@@ -52,7 +53,7 @@ extern IMU_Data_t IMU_Data;
 extern RUI_ROOT_STATUS_Typedef RUI_ROOT_STATUS;
 
 extern VisionRxDataUnion VisionRxData;
-extern uint8_t VisionRx[30];
+extern uint8_t VisionRx[15];
 
 extern CAPDATE_TYPDEF CAPDATE;
 

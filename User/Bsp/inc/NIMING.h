@@ -2,7 +2,7 @@
 #define _NIMING_H_
 
 #include "usart.h"
-#include "usbd_cdc_if.h"
+//#include "usbd_cdc_if.h"
 
 #define df_AnonymityLong 70
 #define BYTE0(dwTemp)       ( *( (char *)(&dwTemp)		) )

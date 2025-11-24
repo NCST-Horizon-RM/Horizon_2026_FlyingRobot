@@ -66,7 +66,6 @@ void StartDefiantTask(void const * argument);
 void StartIMUTask(void const * argument);
 void StartRootTask(void const * argument);
 
-extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* GetIdleTaskMemory prototype (linked to static allocation support) */
@@ -149,7 +148,7 @@ void MX_FREERTOS_Init(void) {
   IMUTaskHandle = osThreadCreate(osThread(IMUTask), NULL);
 
   /* definition and creation of RootTask */
-  osThreadDef(RootTask, StartRootTask, osPriorityNormal, 0, 128);
+  osThreadDef(RootTask, StartRootTask, osPriorityHigh, 0, 128);
   RootTaskHandle = osThreadCreate(osThread(RootTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -167,8 +166,6 @@ void MX_FREERTOS_Init(void) {
 /* USER CODE END Header_StartDefaultTask */
 __weak void StartDefaultTask(void const * argument)
 {
-  /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)

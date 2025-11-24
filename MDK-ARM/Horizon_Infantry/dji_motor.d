@@ -1,6 +1,22 @@
 horizon_infantry/dji_motor.o: ..\User\Bsp\DJI_Motor.c \
-  ..\User\Bsp\inc\DJI_Motor.h ..\User\Algorithm\inc\RUI_MATH.h \
+  ..\User\Algorithm\inc\QuaternionEKF.h \
+  ..\User\Algorithm\inc\kalman_filter.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\matrix_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\arm_math_types.h \
+  ..\Drivers\CMSIS\Include\cmsis_compiler.h \
+  ..\Drivers\CMSIS\Include\cmsis_armclang.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\math.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\float.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\limits.h \
+  ..\Middlewares\CMSIS\DSP\Inc\arm_math_memory.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\none.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\utils.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\fast_math_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\basic_math_functions.h \
+  ..\User\Bsp\inc\DJI_Motor.h ..\User\Algorithm\inc\RUI_MATH.h \
   ..\User\Algorithm\inc\controller.h ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
@@ -10,8 +26,6 @@ horizon_infantry/dji_motor.o: ..\User\Bsp\DJI_Motor.c \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
   ..\Drivers\CMSIS\Include\core_cm4.h \
   ..\Drivers\CMSIS\Include\cmsis_version.h \
-  ..\Drivers\CMSIS\Include\cmsis_compiler.h \
-  ..\Drivers\CMSIS\Include\cmsis_armclang.h \
   ..\Drivers\CMSIS\Include\mpu_armv7.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h \
@@ -37,11 +51,6 @@ horizon_infantry/dji_motor.o: ..\User\Bsp\DJI_Motor.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   ..\User\Bsp\inc\bsp_dwt.h ..\User\Algorithm\inc\user_lib.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\FreeRTOS.h \
@@ -58,19 +67,9 @@ horizon_infantry/dji_motor.o: ..\User\Bsp\DJI_Motor.c \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\event_groups.h \
   ..\Middlewares\CMSIS\DSP\Inc\arm_math.h \
-  ..\Middlewares\CMSIS\DSP\Inc\arm_math_types.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\math.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\float.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\limits.h \
-  ..\Middlewares\CMSIS\DSP\Inc\arm_math_memory.h \
-  ..\Middlewares\CMSIS\DSP\Inc\dsp\none.h \
-  ..\Middlewares\CMSIS\DSP\Inc\dsp\utils.h \
-  ..\Middlewares\CMSIS\DSP\Inc\dsp\basic_math_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\interpolation_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\bayes_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\statistics_functions.h \
-  ..\Middlewares\CMSIS\DSP\Inc\dsp\fast_math_functions.h \
-  ..\Middlewares\CMSIS\DSP\Inc\dsp\matrix_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\complex_math_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\controller_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\support_functions.h \

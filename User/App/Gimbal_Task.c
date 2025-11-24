@@ -1,5 +1,8 @@
 #include "Gimbal_Task.h"
-
+#include "math.h"
+#include "VOFA.h"
+extern DBUS_Typedef WHW_V_DBUS;
+float x;
 /************************************************************万能分隔符**************************************************************
  * 	@author:			//小瑞
  *	@performance:	    //头部PID+前馈总初始化函数
@@ -10,41 +13,41 @@
 uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
 {
     //云台电机初始化
-    float PID_F_Pitch[3] = {   0.0f,   0.0f,   0.0f   };
-    float PID_P_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
-    float PID_S_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
+    float PID_F_Pitch[3] = {   0,   0.0f,   0.0f   };
+    float PID_P_Pitch[3] = {   0.9,   0.02f,   0   };
+    float PID_S_Pitch[3] = {   0.4,   0.0f,   0.01   };
     Feedforward_Init(&MOTOR->DJI_6020_Pitch.PID_F, 2000, PID_F_Pitch,//存储参数的结构体，前馈最大输出值,前馈控制器系数,低通滤波参数，最小二乘法一阶，二阶
                      0.5f, 0, 0);
     PID_Init(&MOTOR->DJI_6020_Pitch.PID_P, 6000.0f, 2000.0f,//存储初始化后的pid的参数结构体，总输出限幅，积分限幅，单个电机pid参数
-             PID_P_Pitch, 0.0f, 0.0f,//变速积分参数，变速积分参数，总输出低通滤波，微分低通滤波，最小二乘提取信号
-             0.0f, 0.0f, 2,
+             PID_P_Pitch, 1000, 1000,//变速积分参数，变速积分参数，总输出低通滤波，微分低通滤波，最小二乘提取信号
+             0.0f, 0.0f, 0,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
              |Trapezoid_Intergral|ChangingIntegrationRate//梯形积分,变速积分
              |Derivative_On_Measurement|0);//微分先行,微分滤波器
-    PID_Init(&MOTOR->DJI_6020_Pitch.PID_S, 6000.0f, 2000.0f,
+    PID_Init(&MOTOR->DJI_6020_Pitch.PID_S, 2040.0f, 2000.0f,
              PID_S_Pitch, 1000.0f, 1000.0f,
-             0.7f, 0.7f, 2,
+             0, 0, 0,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
              |Trapezoid_Intergral|ChangingIntegrationRate//梯形积分,变速积分
-             |Derivative_On_Measurement|0);//微分先行,微分滤波器
+             |Derivative_On_Measurement&00000000);//微分先行,微分滤波器
 
-    float PID_F_Yaw[3] = {   1.0f,   0.0f,   0.0f   };
-    float PID_P_Yaw[3] = {   1.0f,   0.0f,   0.0f   };
-    float PID_S_Yaw[3] = {   1.0f,   0.0f,   0.0f   };
+    float PID_F_Yaw[3] = {  0,   0.0f,   0.0f   };
+    float PID_P_Yaw[3] = {  1.1,   0.03f,   0.0f   };
+    float PID_S_Yaw[3] = {  15,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_6020_Yaw.PID_F, 3000, PID_F_Yaw,
-                     0.5f, 2, 2);
+                     0, 0, 0);
     PID_Init(&MOTOR->DJI_6020_Yaw.PID_P, 6000.0f, 2000.0f,
              PID_P_Yaw, 1000.0f, 1000.0f,
-             0.7f, 0.7f, 2,
+             0, 0, 0,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
              |Trapezoid_Intergral|ChangingIntegrationRate//梯形积分,变速积分
              |Derivative_On_Measurement|DerivativeFilter);//微分先行,微分滤波器
-    PID_Init(&MOTOR->DJI_6020_Yaw.PID_S, 6000.0f, 2000.0f,
+    PID_Init(&MOTOR->DJI_6020_Yaw.PID_S, 15000.0f, 2000.0f,
              PID_S_Yaw, 1000.0f, 1000.0f,
-             0.7f, 0.7f, 2,
+             0, 0, 0,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
              |Trapezoid_Intergral|ChangingIntegrationRate//梯形积分,变速积分
-             |Derivative_On_Measurement|DerivativeFilter);//微分先行,微分滤波器
+             |Derivative_On_Measurement|DerivativeFilter&00000000);//微分先行,微分滤波器
 
     return RUI_DF_READY;
 }
@@ -86,62 +89,63 @@ uint8_t gimbal_task(CONTAL_Typedef *CONTAL,
 //    }
 
     /*底盘跟随变量赋值*/
-    CONTAL->CG.RELATIVE_ANGLE = (int16_t) (CONTAL->CG.YAW_INIT_ANGLE - 4096 - MOTOR->DJI_6020_Yaw.DATA.Angle_now);
-    CONTAL->CG.YAW_SPEED =  MOTOR->DJI_6020_Yaw.DATA.Speed_now;
-    if (CONTAL->CG.RELATIVE_ANGLE > 4096)
-    {
-        CONTAL->CG.RELATIVE_ANGLE -= 8192;
-    }
-    else if (CONTAL->CG.RELATIVE_ANGLE < -4096)
-    {
-        CONTAL->CG.RELATIVE_ANGLE += 8192;
-    }
+//    CONTAL->CG.RELATIVE_ANGLE = (int16_t) (CONTAL->CG.YAW_INIT_ANGLE - 4096 - MOTOR->DJI_6020_Yaw.DATA.Angle_now);
+//    CONTAL->CG.YAW_SPEED =  MOTOR->DJI_6020_Yaw.DATA.Speed_now;
+//    if (CONTAL->CG.RELATIVE_ANGLE > 4096)
+//    {
+//        CONTAL->CG.RELATIVE_ANGLE -= 8192;
+//    }
+//    else if (CONTAL->CG.RELATIVE_ANGLE < -4096)
+//    {
+//        CONTAL->CG.RELATIVE_ANGLE += 8192;
+//    }
 
     /*目标值赋值*/
     MOTOR->DJI_6020_Pitch.DATA.Aim = CONTAL->HEAD.Pitch;
     MOTOR->DJI_6020_Yaw.DATA.Aim = CONTAL->HEAD.Yaw;
 
-    if(CONTAL->MOD[0] - CONTAL->MOD[1] == 1)//自瞄模式
-    {
-        float PID_P_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
-        float PID_S_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
-        PID_set(&MOTOR->DJI_6020_Pitch.PID_P, PID_P_Pitch);
-        PID_set(&MOTOR->DJI_6020_Pitch.PID_S, PID_S_Pitch);
-    }
-    if(CONTAL->MOD[0] - CONTAL->MOD[1] <= 0)//手瞄模式
-    {
-        float PID_P_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
-        float PID_S_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
-        PID_set(&MOTOR->DJI_6020_Pitch.PID_P, PID_P_Pitch);
-        PID_set(&MOTOR->DJI_6020_Pitch.PID_S, PID_S_Pitch);
-    }
+//    if(CONTAL->MOD[0] - CONTAL->MOD[1] == 1)//自瞄模式
+//    {
+//        float PID_P_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
+//        float PID_S_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
+//        PID_set(&MOTOR->DJI_6020_Pitch.PID_P, PID_P_Pitch);
+//        PID_set(&MOTOR->DJI_6020_Pitch.PID_S, PID_S_Pitch);
+//    }
+//    if(CONTAL->MOD[0] - CONTAL->MOD[1] <= 0)//手瞄模式
+//    {
+//        float PID_P_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
+//        float PID_S_Pitch[3] = {   1.0f,   0.0f,   0.0f   };
+//        PID_set(&MOTOR->DJI_6020_Pitch.PID_P, PID_P_Pitch);
+//        PID_set(&MOTOR->DJI_6020_Pitch.PID_S, PID_S_Pitch);
+//    }
 
-    CONTAL->MOD[1] = CONTAL->MOD[0];
+//    CONTAL->MOD[1] = CONTAL->MOD[0];
 
     /*遥控离线保护*/
     if(!Root->RM_DBUS)
     {
         MOTOR->DJI_6020_Pitch.PID_P.IntegralLimit = 0;
         MOTOR->DJI_6020_Pitch.PID_S.IntegralLimit = 0;
-        MOTOR->DJI_6020_Pitch.DATA.Aim = (float)MOTOR->DJI_6020_Pitch.DATA.Angle_Infinite;
+       // MOTOR->DJI_6020_Pitch.DATA.Aim = (float)MOTOR->DJI_6020_Pitch.DATA.Angle_Infinite;
 
-        MOTOR->DJI_6020_Yaw.PID_P.IntegralLimit = 0;
-        MOTOR->DJI_6020_Yaw.PID_S.IntegralLimit = 0;
-        MOTOR->DJI_6020_Yaw.DATA.Aim = (float)MOTOR->DJI_6020_Yaw.DATA.Angle_Infinite;
-
+//        MOTOR->DJI_6020_Yaw.PID_P.IntegralLimit = 0;
+//        MOTOR->DJI_6020_Yaw.PID_S.IntegralLimit = 0;
+      // MOTOR->DJI_6020_Yaw.DATA.Aim = (float)MOTOR->DJI_6020_Yaw.DATA.Angle_Infinite;
+        DJI_Current_Ctrl(&hcan1,0x200,0,0,0,0);
+			  LKMF_iq_ctrl(&hcan2,2,00);
         PID_INIT = RUI_DF_ERROR;
         AIM_INIT = RUI_DF_ERROR;
     }
 
     /*堵转处理*/
-    RUI_F_HEAD_MOTOR3508_STUCK(&MOTOR->DJI_6020_Pitch, 4000, 10);
-    RUI_F_HEAD_MOTOR3508_STUCK(&MOTOR->DJI_6020_Yaw, 4000, 10);
+//    RUI_F_HEAD_MOTOR3508_STUCK(&MOTOR->DJI_6020_Pitch, 4000, 10);
+//    RUI_F_HEAD_MOTOR3508_STUCK(&MOTOR->DJI_6020_Yaw, 4000, 10);
 
     /*Pitch计算*/
     Feedforward_Calculate(&MOTOR->DJI_6020_Pitch.PID_F,
                           MOTOR->DJI_6020_Pitch.DATA.Aim);
     PID_Calculate(&MOTOR->DJI_6020_Pitch.PID_P,
-                  IMU->pitch * 22.75555555555556f,
+                  IMU->pitch * 50.0f,
                   MOTOR->DJI_6020_Pitch.DATA.Aim);
     PID_Calculate(&MOTOR->DJI_6020_Pitch.PID_S,
                   IMU->gyro[1] * 100.0f,
@@ -151,15 +155,11 @@ uint8_t gimbal_task(CONTAL_Typedef *CONTAL,
     Feedforward_Calculate(&MOTOR->DJI_6020_Yaw.PID_F,
                           MOTOR->DJI_6020_Yaw.DATA.Aim);
     PID_Calculate(&MOTOR->DJI_6020_Yaw.PID_P,//存储用的结构体
-                  IMU->YawTotalAngle * 22.75555555555556f,//实际值
+                  IMU->YawTotalAngle * 22.75f,//实际值
                   MOTOR->DJI_6020_Yaw.DATA.Aim);//期望值
     PID_Calculate(&MOTOR->DJI_6020_Yaw.PID_S,
                   IMU->gyro[2] * 100.0f,
                   MOTOR->DJI_6020_Yaw.PID_P.Output);
-
-
-
-
 
     /*总输出计算*/
     float tmp_G[2];
@@ -171,12 +171,43 @@ uint8_t gimbal_task(CONTAL_Typedef *CONTAL,
                MOTOR->DJI_6020_Yaw.PID_S.Output;
 
     /*CAN发送*/
+	//	LKMF_Data_Read(&hcan2,2);
+			//	Visual_can_ctrl(&hcan1,0x001);
+
+//	 LKMF_Data_Read(&hcan2,2);//翎控电机获取数据
+VOFA_justfloat(0,MOTOR->DJI_3508_Shoot_M.DATA.Angle_Infinite,MOTOR->DJI_3508_Shoot_M.DATA.Aim,MOTOR->DJI_6020_Yaw.DATA.Aim,IMU->YawTotalAngle*22.75,IMU->pitch * 50.0, 0,MOTOR->DJI_6020_Pitch.DATA.Aim,0,0);
+  if(Root->RM_DBUS)
+	{if(WHW_V_DBUS.Remote.S2_u8==1)
+		{ 
+			LKMF_iq_ctrl(&hcan2,2,00);
+				DJI_Current_Ctrl(&hcan1,
+                     0x1FF,0,0,0,0);
+			if(WHW_V_DBUS.Remote.S1_u8==2)
+			{
+		  DJI_Current_Ctrl(&hcan1,0x200,0,0,0,0);
+			}
+			else//   MOTOR->DJI_3508_Shoot_L.PID_S.Output
+			{ DJI_Current_Ctrl(&hcan1,0x200, MOTOR->DJI_3508_Shoot_L.PID_S.Output, 0, 
+				                            MOTOR->DJI_3508_Shoot_M.PID_S.Output  ,
+				                                MOTOR->DJI_3508_Shoot_R.PID_S.Output);
+			}				
+		}
+	  else
+		{	
+		//LKMF_iq_ctrl(&hcan2,2,MOTOR->DJI_6020_Pitch.PID_S.Output);
+			x=0.48252*cos(IMU->pitch*0.017453)/0.07/33*2048;
+			x=RUI_F_MATH_ABS_float(x);
+	LKMF_iq_ctrl(&hcan2,2,-MOTOR->DJI_6020_Pitch.PID_S.Output+x*0.2);
+			
     DJI_Current_Ctrl(&hcan1,
                      0x200,
-                     0,
-                     0,
-MOTOR->DJI_6020_Pitch.PID_S.Output,
- MOTOR->DJI_6020_Yaw.PID_S.Output);
-
+                  MOTOR->DJI_3508_Shoot_L.PID_S.Output,
+                   0,
+                   MOTOR->DJI_3508_Shoot_M.PID_S.Output ,
+                   MOTOR->DJI_3508_Shoot_R.PID_S.Output);
+   DJI_Current_Ctrl(&hcan1,
+                     0x1FF,0,0,0,-MOTOR->DJI_6020_Yaw.PID_S.Output);
+	
+		}}
     return RUI_DF_READY;
 }

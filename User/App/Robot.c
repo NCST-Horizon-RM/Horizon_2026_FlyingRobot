@@ -1,5 +1,9 @@
 #include "Robot.h"
-
+#include "IMU_Task.h"
+extern MOTOR_Typdef ALL_MOTOR;
+extern IMU_Data_t IMU_Data;
+extern VisionRxDataUnion VisionRxDataTemp;
+int a=0,b=0;
 void RobotTask(uint8_t mode,
                DBUS_Typedef *DBUS,
                CONTAL_Typedef *CONTAL,
@@ -95,33 +99,66 @@ void RobotTask(uint8_t mode,
         } break;
 
         case 2://云台
-          {  
+          { 
 						if(DBUS->Remote.S2_u8 == 1)
 						{
-							CONTAL->HEAD.Pitch=0;
-						  CONTAL->HEAD.Yaw=0;
-							CONTAL->SHOOT.SHOOT_L=0;
-							CONTAL->SHOOT.SHOOT_R=0;
+							CONTAL->HEAD.Pitch=IMU_Data.pitch * 50.0f;
+						  CONTAL->HEAD.Yaw= IMU_Data.YawTotalAngle * 22.75f;
 						}
 						else
 						{
 						   if(DBUS->Remote.S2_u8 == 3)
+						 {	 
+							 if(VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900)
+							 {  
+                                CONTAL->HEAD.Pitch = VisionRxDataTemp.PitchAngle * 50.0f-(float) (DBUS->Remote.CH3_int16) * 0.001f;
+                                CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
+                                                                            CONTAL->HEAD.Pitch_MIN,
+                                                                            CONTAL->HEAD.Pitch);
+
+                                CONTAL->HEAD.Yaw = VisionRxDataTemp.YawAngle * 22.75f-(float) (DBUS->Remote.CH2_int16) * 0.001f;
+                                CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,-700,CONTAL->HEAD.Yaw);
+                  a=CONTAL->HEAD.Pitch;
+								  b= CONTAL->HEAD.Yaw;
+							 }
+								else
 							 {
-								 CONTAL->HEAD.Pitch -= (float) (DBUS->Remote.CH3_int16) * 0.001f -
+								 CONTAL->HEAD.Pitch -= (float) (DBUS->Remote.CH3_int16) * 0.01f -
                                       DBUS->Mouse.Y_Flt * 0.01f;
 
                  CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
                                                             CONTAL->HEAD.Pitch_MIN,
                                                             CONTAL->HEAD.Pitch);
 
-                 CONTAL->HEAD.Yaw -= (float) (DBUS->Remote.CH2_int16) * 0.002f +
-                                    RUI_F_MATH_Limit_float(1, -1, DBUS->Mouse.X_Flt * 0.01f) +
-                                    (float) (DBUS->KeyBoard.E - DBUS->KeyBoard.Q);
+                 CONTAL->HEAD.Yaw -= (float) (DBUS->Remote.CH2_int16) * 0.01f;
+								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,
+                                                          -700,
+                                                         CONTAL->HEAD.Yaw);
+                 a=CONTAL->HEAD.Pitch;
+								b= CONTAL->HEAD.Yaw;
+//                                    +RUI_F_MATH_Limit_float(1, -1, DBUS->Mouse.X_Flt * 0.01f) +
+//                                    (float) (DBUS->KeyBoard.E - DBUS->KeyBoard.Q);
 							 }
-						   if(DBUS->Remote.S2_u8 == 2)
-							 {}
+						 }
+                     
+             if(DBUS->Remote.S2_u8 == 2)
+							 {
+								 CONTAL->HEAD.Pitch = a-(float) (DBUS->Remote.CH3_int16) *0.8 -
+                                      DBUS->Mouse.Y_Flt * 0.01f;
+
+                 CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
+                                                            CONTAL->HEAD.Pitch_MIN,
+                                                            CONTAL->HEAD.Pitch);
+
+                 CONTAL->HEAD.Yaw = b-(float) (DBUS->Remote.CH2_int16) * 0.8;
+								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,
+                                                          -700,
+                                                         CONTAL->HEAD.Yaw);
+
+							 }								 
+							
 						}
-						
+						  
 						
 //            if(DBUS->Mouse.R_State & (int8_t) Vision->Target)//自瞄
 //            {
@@ -161,40 +198,40 @@ void RobotTask(uint8_t mode,
         case 4://发射
         {
             /*摩擦轮目标值赋值*/
-           float FIRE_WIPE_SPEED = RUI_F_GET_FIRE_WIPE_SPEED(CONTAL, DBUS, User_data, Root);
+          float FIRE_WIPE_SPEED = RUI_F_GET_FIRE_WIPE_SPEED(CONTAL, DBUS, User_data, Root);
         
-            CONTAL->SHOOT.SHOOT_L = +FIRE_WIPE_SPEED;
-            CONTAL->SHOOT.SHOOT_R = -FIRE_WIPE_SPEED;
+            CONTAL->SHOOT.SHOOT_L = -FIRE_WIPE_SPEED;
+            CONTAL->SHOOT.SHOOT_R = +FIRE_WIPE_SPEED;
 
-            //确保摩擦轮到达指定目标速度，再拨弹，防止堵弹
-            if (RUI_F_MATH_ABS_float(CONTAL->SHOOT_Bask.Speed_err_L) > 2500 || CONTAL->SHOOT_Bask.Speed_Aim_L == 0)
-            {   //误差过大或目标为0
-               // CONTAL->SHOOT.SHOOT_M = (float) CONTAL->SHOOT_Bask.Angle;
-            }
-            else
-            {
-                static int16_t LOCK = 0, RUI_V_TEMP_TIME = 0;
-                if (CONTAL->SHOOT_Bask.JAM_Flag == RUI_DF_ERROR && LOCK == 0)
-                {   //卡弹
-                    /*Shoot_M*/
-                    CONTAL->SHOOT.SHOOT_M = (float) CONTAL->SHOOT_Bask.Angle;
-                    CONTAL->SHOOT.SHOOT_L = CONTAL->SHOOT_Bask.Speed_Aim_L - CONTAL->SHOOT_Bask.Speed_err_L;
-                    CONTAL->SHOOT.SHOOT_R = CONTAL->SHOOT_Bask.Speed_Aim_R - CONTAL->SHOOT_Bask.Speed_err_R;
+//            //确保摩擦轮到达指定目标速度，再拨弹，防止堵弹
+//            if (RUI_F_MATH_ABS_float(CONTAL->SHOOT_Bask.Speed_err_L) > 2500 || CONTAL->SHOOT_Bask.Speed_Aim_L == 0)
+//            {   //误差过大或目标为0
+//               // CONTAL->SHOOT.SHOOT_M = (float) CONTAL->SHOOT_Bask.Angle;
+//            }
+//            else
+//            {
+//                static int16_t LOCK = 0, RUI_V_TEMP_TIME = 0;
+//                if (CONTAL->SHOOT_Bask.JAM_Flag == RUI_DF_ERROR && LOCK == 0)
+//                {   //卡弹
+//                    /*Shoot_M*/
+//                    CONTAL->SHOOT.SHOOT_M = (float) CONTAL->SHOOT_Bask.Angle;
+//                    CONTAL->SHOOT.SHOOT_L = CONTAL->SHOOT_Bask.Speed_Aim_L - CONTAL->SHOOT_Bask.Speed_err_L;
+//                    CONTAL->SHOOT.SHOOT_R = CONTAL->SHOOT_Bask.Speed_Aim_R - CONTAL->SHOOT_Bask.Speed_err_R;
 
-                    LOCK = 1;
-                    break;
-                }
-                RUI_V_TEMP_TIME++;
-                if (DBUS->Remote.S1_u8-1 == 1 || RUI_V_TEMP_TIME > 1000)//与卡弹有关
-                {
-                    RUI_V_TEMP_TIME = 0;
-                    LOCK = 0;
-                }
-                if (LOCK != 1)
-                {
-                    CONTAL->SHOOT.SHOOT_M = (float) RUI_F_GET_FIRE_AIM(DBUS, CONTAL, User_data);
-                }
-            }
+//                    LOCK = 1;
+//                    break;
+//                }
+//                RUI_V_TEMP_TIME++;
+//                if (DBUS->Remote.S1_u8-1 == 1 || RUI_V_TEMP_TIME > 1000)//与卡弹有关
+//                {
+//                    RUI_V_TEMP_TIME = 0;
+//                    LOCK = 0;
+//                }
+          
+               
+                   CONTAL->SHOOT.SHOOT_M = (float) RUI_F_GET_FIRE_AIM(DBUS, CONTAL, User_data);
+                
+//            }
         } break;
     }
 }
@@ -219,39 +256,46 @@ float Shoot_Speed_P(float Kp, float measure, float ref, float OUT_Lim)
 
 float RUI_F_GET_FIRE_WIPE_SPEED(CONTAL_Typedef *CONTAL, DBUS_Typedef *DBUS, User_Data_T *User_data, RUI_ROOT_STATUS_Typedef *Root)
 {
-    static uint8_t LOCK = 0, MOD = 0, KEYBOARD_LOCK = 0, JUDGE_LOCK = 0;
-    static float AIM = 0.0f, TEMP = 0.0f, SPEED_NOW = 0.0f, SPEED_LAST = 0.0f;
-    MOD = DBUS->Remote.S1_u8;//-1 | DBUS->Mouse.L_State | LOCK;
-    //停止
-    if (MOD=0||DBUS->Remote.S1_u8 == 2 || Root->RM_DBUS == RUI_DF_OFFLINE)
-    {
-        AIM = 0.0f;//0.0
-        LOCK = 0;
-			
-    } 
+	static float AIM = 0.0f;
 
-		   else
-    {
-//        LOCK = 1;
-//        SPEED_LAST = SPEED_NOW;
-//        SPEED_NOW = User_data->shoot_data.initial_speed;
+	if(DBUS->Remote.S1_u8==1||DBUS->Remote.S1_u8==3)
+	{AIM=4000;}
+   else
+	 {AIM=0;}
+////    static uint8_t LOCK = 0, MOD = 0, KEYBOARD_LOCK = 0, JUDGE_LOCK = 0;
+//    static float AIM = 0.0f, TEMP = 0.0f, SPEED_NOW = 0.0f, SPEED_LAST = 0.0f;
+////    MOD = DBUS->Remote.S1_u8;//-1 | DBUS->Mouse.L_State | LOCK;
+//    //停止
+//    if (DBUS->Remote.S1_u8 == 2 || Root->RM_DBUS == RUI_DF_OFFLINE)
+//    {
+//        AIM = 0.0f;//0.0
+////        LOCK = 0;
+//			
+//    } 
 
-//        /*弹速PID,仅限于修正摩擦轮发热所带来的弹速变化,优化为打一发弹算一次*/
-//        if (CONTAL->SHOOT_Bask.Shoot_Number - CONTAL->SHOOT_Bask.Shoot_Number_Last > 0)
-//        {
-//            if(RUI_F_MATH_ABS_float(SPEED_NOW - SPEED_LAST) > 0.1f)
-//                TEMP = Shoot_Speed_P(5.0f, SPEED_NOW, 29.5f, 50);
-//            CONTAL->SHOOT_Bask.Shoot_Number_Last = CONTAL->SHOOT_Bask.Shoot_Number;
-//        }
+//		   else
+//    {
+////        LOCK = 1;
+////        SPEED_LAST = SPEED_NOW;
+////        SPEED_NOW = User_data->shoot_data.initial_speed;
 
-        AIM = (float) CONTAL->SHOOT.Shoot_Speed + TEMP;
+////        /*弹速PID,仅限于修正摩擦轮发热所带来的弹速变化,优化为打一发弹算一次*/
+////        if (CONTAL->SHOOT_Bask.Shoot_Number - CONTAL->SHOOT_Bask.Shoot_Number_Last > 0)
+////        {
+////            if(RUI_F_MATH_ABS_float(SPEED_NOW - SPEED_LAST) > 0.1f)
+////                TEMP = Shoot_Speed_P(5.0f, SPEED_NOW, 29.5f, 50);
+////            CONTAL->SHOOT_Bask.Shoot_Number_Last = CONTAL->SHOOT_Bask.Shoot_Number;
+////        }
 
-    }
+////        AIM = (float) CONTAL->SHOOT.Shoot_Speed + TEMP;
+//			  AIM=2500;
+
+//    }
     return AIM;
 }
 
 /************************************************************万能分隔符**************************************************************
- * 	@author:			//瑞
+ * 	@author:			//豆
  *	@performance:	    //
  *	@parameter:		    //
  *	@time:				//24-2-25 下午1:46
@@ -262,32 +306,33 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
                                   User_Data_T *User_data)
 {
     static uint8_t SINGLE_LOCK = 0;
-    static int64_t AIM = 0;
+    static int64_t AIM = 0; 
     uint8_t MOD = DBUS->Remote.S1_u8; //| DBUS->Mouse.L_State;
 
     //停止
     if (MOD == 2)
     {
         //单发解锁
-       // SINGLE_LOCK = 0;
-        AIM = CONTAL->SHOOT_Bask.Angle;
+        SINGLE_LOCK = 0;
+        AIM =  CONTAL->SHOOT_Bask.Angle;
     }
     else
     {
-        if (MOD == 3 && SINGLE_LOCK == 0)
+       
+            if (MOD == 3 && SINGLE_LOCK == 0)
         {
-//            //单发上锁
-//            SINGLE_LOCK = 1;
-//            int64_t Temp = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
-//            if (Temp > RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)
-//            {
-//                AIM = CONTAL->SHOOT_Bask.Angle - Temp;
-//            } else
-//            {
-//                AIM = CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle + Temp;
-//            }
-					 AIM = CONTAL->SHOOT_Bask.Angle;
-          }
+            //单发上锁
+            SINGLE_LOCK = 1;
+            int64_t Temp = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
+            if (Temp > RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)
+            {
+                AIM = CONTAL->SHOOT_Bask.Angle - Temp;
+            } else
+            {
+                AIM = CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle + Temp;
+            }
+        }
+          
         if (MOD == 1)//连发,简陋的火控
         {   //上限热量-当前热量<10,停火
 //            if(User_data->robot_status.shooter_barrel_heat_limit -
@@ -295,9 +340,9 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 //            {
 //                AIM = (int64_t)CONTAL->SHOOT_Bask.Angle;
 //            }
-//            else
+            
             {
-                AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle;
+               AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.5;
             }
         }
     }

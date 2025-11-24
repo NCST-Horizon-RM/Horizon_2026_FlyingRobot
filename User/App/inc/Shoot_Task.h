@@ -10,5 +10,5 @@
 uint8_t shoot_task(CONTAL_Typedef *CONTAL,
                    RUI_ROOT_STATUS_Typedef *Root,
                    MOTOR_Typdef *MOTOR);
-
+void kadanchack(void);
 #endif

@@ -2,7 +2,7 @@
 #define _VISION_H_
 
 #include "main.h"
-#include "usbd_cdc_if.h"
+#include "usart.h"
 
 typedef union
 {
@@ -21,7 +21,7 @@ typedef struct
 
     float PitchAngle_kal;
     float YawAngle_kal;
-
+    uint16_t offlinetime;
     uint32_t VisionTime;
     uint8_t VisionState : 3;
     uint8_t ShootBool : 1;
