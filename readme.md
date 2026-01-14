@@ -14,3 +14,6 @@
 VisionTxData.PitchAngle = -PitchAngle;
 VisionTxData.YawAngle = -YawAngle;
 ```
+
+### 坑
+注意pid限幅 dt 
