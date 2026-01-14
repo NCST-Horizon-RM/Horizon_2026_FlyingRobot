@@ -31,6 +31,7 @@ extern QEKF_INS_t QEKF_INS;
  *	@time:				//22-11-23 18:50
  *	@ReadMe:			//
  ************************************************************万能分隔符**************************************************************/
+
 void RUI_F_MOTOR_CAN_RX_3508RM(DJI_MOTOR_DATA_Typedef* DATA , uint8_t* can_data)
 {
     DATA->Angle_last = DATA->Angle_now;
@@ -44,6 +45,44 @@ void RUI_F_MOTOR_CAN_RX_3508RM(DJI_MOTOR_DATA_Typedef* DATA , uint8_t* can_data)
     DATA->current   = (int16_t) (((can_data[4] << 8) | can_data[5]) & 0xFFFF);
 
     DATA->temperature = can_data[6];
+	
+	
+
+    if (DATA->Angle_now - DATA->Angle_last < -4000)
+    {
+        DATA->Laps++;
+    }
+    else if (DATA->Angle_now - DATA->Angle_last > 4000)
+    {
+        DATA->Laps--;
+    }
+
+    if ((DATA->Laps > 32500) | (DATA->Laps < -32500))
+    {
+        DATA->Laps = 0;
+        DATA->Aim  = DATA->Angle_now;
+    }
+
+    DATA->ONLINE_JUDGE_TIME = RUI_DF_MOTOR_OFFLINE_TIME;
+
+    DATA->Angle_Infinite = (int32_t) ((DATA->Laps << 13)+ DATA->Angle_now);
+
+}
+void RUI_F_MOTOR_CAN_RX_3508RM_rc(DJI_MOTOR_DATA_Typedef* DATA , uint8_t* can_data)
+{
+    DATA->Angle_last = DATA->Angle_now;
+
+    DATA->Angle_now = (int16_t) (((can_data[0] << 8) | can_data[1]) & 0xFFFF);
+
+    DATA->Speed_last = DATA->Speed_now;
+
+    DATA->Speed_now = (int16_t) (((can_data[2] << 8) | can_data[3]) & 0xFFFF);
+
+    DATA->current   = (int16_t) (((can_data[4] << 8) | can_data[5]) & 0xFFFF);
+
+    DATA->temperature = can_data[6];
+	
+	  DATA->Speed_now = OneFilter1(DATA->Speed_now ,DATA->Speed_last ,500,0.8,0.8);
 
     if (DATA->Angle_now - DATA->Angle_last < -4000)
     {

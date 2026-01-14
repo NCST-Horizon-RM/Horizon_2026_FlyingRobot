@@ -18,14 +18,14 @@ if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<-1000)
 			if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<100&&ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now>-100)
 			{
 			  time++;
-			  if(time>=1500)
+			  if(time>=1200)
 			  {time=0;}
-			  if(time>1300)//卡了四十个单位时间 
+			  if(time>1000)//卡了多长时间
 			  {
 			    kadan=1;//卡弹标志 
 			  }
 		    }
-			  if(time<=1300)
+			  if(time<=1000)
 			  {
 			    kadan=0;//正常标志 
 			  }
@@ -35,7 +35,7 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
     //发射电机初始化
     float PID_F_L[3] = {   0,   0.0f,   0.0f   };
 		float PID_P_L[3] = {  0,   0.0f,   0.0f   };
-    float PID_S_L[3] = {  10,   0.0f,   0.0f   };
+    float PID_S_L[3] = {  9,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_L.PID_F, 3000, PID_F_L,
                      0.5f, 2, 2);
 		PID_Init(&MOTOR->DJI_3508_Shoot_L.PID_P, 6000.0f, 2000.0f,
@@ -43,7 +43,7 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
              0.7f, 0.2f, 2,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
              |DerivativeFilter&00000000);//微分先行,微分滤波器
-    PID_Init(&MOTOR->DJI_3508_Shoot_L.PID_S, 6000.0f, 2000.0f,
+    PID_Init(&MOTOR->DJI_3508_Shoot_L.PID_S, 30000.0f, 2000.0f,
              PID_S_L, 1000.0f, 1000.0f,
              0.7f, 0.7f, 2,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
@@ -52,15 +52,15 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 
     float PID_F_R[3] = {   0.0f,   0.0f,   0.0f   };
 		float PID_P_R[3] = {   0,   0.0f,   0.0f   };
-    float PID_S_R[3] = {   10,   0.0f,   0.0f   };
+    float PID_S_R[3] = {   -40,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_R.PID_F, 3000, PID_F_R,
                      0.5f, 2, 2);
-		PID_Init(&MOTOR->DJI_3508_Shoot_R.PID_P, 6000.0f, 2000.0f,
+		PID_Init(&MOTOR->DJI_3508_Shoot_R.PID_P, 30000.0f, 2000.0f,
              PID_P_R, 1000.0f, 1000.0f,
              0.7f, 0.2f, 2,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
              |DerivativeFilter&00000000);//微分先行,微分滤波器
-    PID_Init(&MOTOR->DJI_3508_Shoot_R.PID_S, 6000.0f, 2000.0f,
+    PID_Init(&MOTOR->DJI_3508_Shoot_R.PID_S, 30000.0f, 2000.0f,
              PID_S_R, 1000.0f, 1000.0f,
              0.7f, 0.7f, 2,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
@@ -68,11 +68,11 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 							|Derivative_On_Measurement|DerivativeFilter&00000000);//微分先行,微分滤波器
 
     float PID_F_M[3] = {   0.0f,   0.0f,   0.0f   };
-    float PID_P_M[3] = {   0.2,   0.0f,   0.0f   };
-    float PID_S_M[3] = {  10,   0.0f,   0.0f   };
+    float PID_P_M[3] = {   0.25,   0.0f,   0.0f   };
+    float PID_S_M[3] = {  9,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_M.PID_F, 3000, PID_F_M,
                      0.5f, 2, 2);
-    PID_Init(&MOTOR->DJI_3508_Shoot_M.PID_P, 6000.0f, 2000.0f,
+    PID_Init(&MOTOR->DJI_3508_Shoot_M.PID_P, 30000.0f, 2000.0f,
              PID_P_M, 1000.0f, 1000.0f,
              0.7f, 0.2f, 2,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
@@ -129,7 +129,8 @@ uint8_t RUI_F_JAM(DJI_MOTOR_DATA_Typedef *DATA, CONTAL_Typedef *CONTAL)
 //        DATA->Stuck_Time = (int64_t)DWT_GetTimeline_ms();
 //        return RUI_DF_READY;
 //    }
-//    return RUI_DF_READY;
+    return RUI_DF_READY;
+
 }
 
 uint8_t shoot_task(CONTAL_Typedef *CONTAL,
@@ -154,13 +155,16 @@ uint8_t shoot_task(CONTAL_Typedef *CONTAL,
 //    }
 
     /*目标值赋值*/
-
+		if(WHW_V_DBUS.Remote.S1_u8==1)
+		{			 kadanchack();}
+   
     MOTOR->DJI_3508_Shoot_L.DATA.Aim = CONTAL->SHOOT.SHOOT_L;
     MOTOR->DJI_3508_Shoot_R.DATA.Aim = CONTAL->SHOOT.SHOOT_R;
-//		if(kadan==0)//没卡单.		
+		if(kadan==0)//没卡单.		
     {MOTOR->DJI_3508_Shoot_M.DATA.Aim = CONTAL->SHOOT.SHOOT_M;}
-//    if(kadan==1)
-//		{MOTOR->DJI_3508_Shoot_M.DATA.Aim=(int64_t)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_now+35;}
+    if(kadan==1)
+		{MOTOR->DJI_3508_Shoot_M.DATA.Aim=(int64_t)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_now+35;}
+		ALL_MOTOR.DJI_3508_Shoot_M.DATA.radspeed=(float)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now*0.0166667*0.0277777*8;
     /*遥控离线保护*/
     if(!Root->RM_DBUS)
     {

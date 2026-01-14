@@ -25,6 +25,7 @@ uint32_t FloatTohex(float HEX);
 int float_to_uint(float x_float, float x_min, float x_max, int bits);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
 float get_vbus_input(uint16_t value);
+int16_t OneFilter1(int16_t last, int16_t now, float thresholdValue,float filter1,float filter2);
 typedef struct
 {
     uint16_t adc_val[2];

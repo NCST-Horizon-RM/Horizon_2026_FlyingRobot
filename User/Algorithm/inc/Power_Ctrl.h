@@ -34,6 +34,18 @@ typedef struct
     float constant;             // a 增大这个系数可以减小功率，反之增加
 }model_t;
 
+typedef struct
+{   
+    uint16_t Residual_heat;
+    uint16_t heat_upper_limit;
+    uint16_t heat_reduction_rate;
+    uint16_t leijia;
+    uint16_t attack_num;
+    uint16_t now_heat;
+    uint8_t shoot_state;//0正常模式 1波蛋减速 2停火 
+}heat_typdef;
+
+
 void Power_control_init(model_t *model);
 uint8_t chassis_power_control(CONTAL_Typedef *RUI_V_CONTAL_V,
                            User_Data_T *usr_data,

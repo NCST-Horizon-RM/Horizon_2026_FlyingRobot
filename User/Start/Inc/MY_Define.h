@@ -44,6 +44,7 @@
 #define RUI_DF_LED_WRITE  6
 
 #define INIT_ANGLE 6680
+#define FIRE_SPEED 5000
 #define WIPE_MAX_SPEED 2500
 #define SINGLE_ANGLE -37000
 /************************************************************万能分隔符**************************************************************

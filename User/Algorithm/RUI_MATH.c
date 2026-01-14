@@ -57,7 +57,22 @@
  *	@parameter:		    //
  *	@time:				//23-04-20 03:38
  *	@ReadMe:			//
- ************************************************************万能分隔符**************************************************************/
+
+************************************************************万能分隔符**************************************************************/
+int16_t OneFilter1(int16_t last, int16_t now, float thresholdValue,float filter1,float filter2)
+{
+		//减小平滑滤波值会增大对于细小毛刺的过滤程度
+		//增加尖峰滤波值会增大对于尖峰数值的响应程度
+	const float sensitivlFilter = filter1;	//尖峰滤波值//小于1//一般为最大值的20%
+	const float numbFilter = filter2;	//平滑滤波值//小于1
+	
+	if((last - now)>= thresholdValue){
+			return (float)( now*sensitivlFilter + last*(1-sensitivlFilter) );
+	}
+	else{
+			return (float)( now*numbFilter + last*(1-numbFilter) );
+	}
+}
 int16_t RUI_F_MATH_ABS_int16_t(int16_t DATA)
 {
 

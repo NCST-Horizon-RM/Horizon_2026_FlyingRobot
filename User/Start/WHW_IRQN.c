@@ -1,70 +1,9 @@
-/*
- * @Author: 王举人 11546637+wang-juren@user.noreply.gitee.com
- * @Date: 2024-11-12 20:51:02
- * @LastEditors: 王举人 11546637+wang-juren@user.noreply.gitee.com
- * @LastEditTime: 2024-11-16 10:21:36
- * @FilePath: \Horizon_Infantry\User\App\WHW_IRQN.c
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-/*
- * @Author: 王举人 11546637+wang-juren@user.noreply.gitee.com
- * @Date: 2024-11-12 20:51:02
- * @LastEditors: 王举人 11546637+wang-juren@user.noreply.gitee.com
- * @LastEditTime: 2024-11-15 22:47:11
- * @FilePath: \Horizon_Infantry\User\App\WHW_IRQN.c
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-/*
- *                        _oo0oo_
- *                       o8888888o
- *                       88" . "88
- *                       (| -_- |)
- *                       0\  =  /0
- *                     ___/`---'\___
- *                   .' \\|     |// '.
- *                  / \\|||  :  |||// \
- *                 / _||||| -:- |||||- \
- *                |   | \\\  - /// |   |
- *                | \_|  ''\---/''  |_/ |
- *                \  .-\__  '-'  ___/-. /
- *              ___'. .'  /--.--\  `. .'___
- *           ."" '<  `.___\_<|>_/___.' >' "".
- *          | | :  `- \`.;`\ _ /`;.`/ - ` : | |
- *          \  \ `_.   \_ __\ /__ _/   .-` /  /
- *      =====`-.____`.___ \_____/___.-`___.-'=====
- *                        `=---='
- * 
- * 
- *      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * 
- *            佛祖保佑     永不宕机     永无BUG
- * 
- *        佛曰:  
- *                写字楼里写字间，写字间里程序员；  
- *                程序人员写程序，又拿程序换酒钱。  
- *                酒醒只在网上坐，酒醉还来网下眠；  
- *                酒醉酒醒日复日，网上网下年复年。  
- *                但愿老死电脑间，不愿鞠躬老板前；  
- *                奔驰宝马贵者趣，公交自行程序员。  
- *                别人笑我忒疯癫，我笑自己命太贱；  
- *                不见满街漂亮妹，哪个归得程序员？
- */
-
-/*
- * @Descripttion: 
- * @version: 
- * @Author: Eugene
- * @Date: 2024-07-04 15:42:35
- * @LastEditors: Andy
- * @LastEditTime: 2024-07-07 11:27:00
- */
-
 #include "WHW_IRQN.h"
 VisionRxDataUnion VisionRxDataTemp={0};
 uint8_t move_G, move_S, move_C, move_P;
 float t1,t2,dt;
 static uint8_t TX[12] = {0xff,0xf1,0xfd,0x90,0x86,0xa7,0xff,0xf1,0xfd,0x90,0x86,0xa7};
-
+uint32_t Residual_heat;
 //34ms,画UI任务
 void StartRobotUITask(void const * argument)
 {
@@ -108,12 +47,12 @@ void StartMoveTask(void const * argument)
     for (;;)
 	{    
         /*底盘*/
-        RobotTask(1, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
-                  &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
-        move_C = chassis_task(&RUI_V_CONTAL,
-                              &RUI_ROOT_STATUS, &User_data, &model,
-                              &CAPDATE.GET, &ALL_MOTOR);
-      
+//        RobotTask(1, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
+//                  &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
+//        move_C = chassis_task(&RUI_V_CONTAL,
+//                              &RUI_ROOT_STATUS, &User_data, &model,
+//                              &CAPDATE.GET, &ALL_MOTOR);
+        
         /*云台*/
         RobotTask(2, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
                  &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
@@ -142,18 +81,19 @@ void StartDefiantTask(void const * argument)
         RobotTask(4, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
                   &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
         move_S = shoot_task(&RUI_V_CONTAL, &RUI_ROOT_STATUS,&ALL_MOTOR);
-
-        osDelayUntil(&currentTimeDefiant, 1);
+        DWT_Delay_us(1000);
+       // osDelayUntil(&currentTimeDefiant, 1);
     }
 }
 
+float dt_pc = 0;
 //陀螺仪解算与自瞄发送任务
 void StartIMUTask(void const * argument)
 {
     portTickType currentTimeIMU;
     currentTimeIMU = xTaskGetTickCount();
 
-    static uint32_t dt_pc = 0;
+    ;
     static uint32_t INS_DWT_Count = 0;
 
     //陀螺仪初始化
@@ -167,7 +107,7 @@ void StartIMUTask(void const * argument)
     for(;;)
     {
         INS_Task(&IMU_Data, &imu_temp);
-        dt_pc = (uint32_t)DWT_GetDeltaT(&INS_DWT_Count);
+        dt_pc = DWT_GetDeltaT(&INS_DWT_Count);
         Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,
                        dt_pc, 1, 1);
         VisionRxDataTemp.offlinetime++;
@@ -227,8 +167,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 		//CAN1
 		switch (can_rx.StdId)
 		{
-            case 0x201://摩擦轮左
-                RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Shoot_L.DATA, rx_data);
+            case 0x202://摩擦轮左
+                RUI_F_MOTOR_CAN_RX_3508RM_rc(&ALL_MOTOR.DJI_3508_Shoot_L.DATA, rx_data);
 				memcpy(test, rx_data, 8);
                 break;
 
@@ -238,14 +178,18 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 //             case 0x202://yaw
 //                RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_6020_Yaw.DATA, rx_data);
                 break;
-            case 0x203://波蛋电机
+             case 0x203://波蛋电机
                 RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Shoot_M.DATA, rx_data);
                 break;
 						
-					 case 0x204://摩擦轮右
-                RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Shoot_R.DATA, rx_data);
+					   case 0x204://摩擦轮右
+                RUI_F_MOTOR_CAN_RX_3508RM_rc(&ALL_MOTOR.DJI_3508_Shoot_R.DATA, rx_data);
                 break;
-
+					 
+             
+					  case 0x142://底盘3
+                LK_MotorResolve(&ALL_MOTOR.MG4005_Pitch, rx_data);
+                break;
 //            case 0x205://云台Pitch
 //                WHW_F_MOTOR_CAN_RX_6020RM(&ALL_MOTOR.DJI_6020_Pitch.DATA, rx_data);
 //                break;
@@ -264,12 +208,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 //            case 0x201://底盘1
 //                RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Chassis_1.DATA, rx_data);
 //                break;
-
-         
-
-            case 0x142://底盘3
-                LK_MotorResolve(&ALL_MOTOR.MG4005_Pitch, rx_data);
+              case 0x305://底盘4
+                dm_RXdata(&ALL_MOTOR.DM_3507_Yaw, rx_data);
                 break;
+            
+
+           
 
             case 0x204://底盘4
                 RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Chassis_4.DATA, rx_data);

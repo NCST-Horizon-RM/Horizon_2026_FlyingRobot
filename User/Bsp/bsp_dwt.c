@@ -143,3 +143,14 @@ void DWT_Delay(float Delay)
     {
     }
 }
+
+void DWT_Delay_us(uint32_t us)
+{
+    uint32_t start_tick = DWT->CYCCNT;
+    uint32_t delay_ticks = us * CPU_FREQ_Hz_us;
+    
+    while ((DWT->CYCCNT - start_tick) < delay_ticks)
+    {
+        // 空循环等待
+    }
+}

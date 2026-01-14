@@ -71,6 +71,7 @@ typedef struct
     float Aim;
     float Aim_last;
     float dt;
+	  float radspeed;
 }DJI_MOTOR_DATA_Typedef;
 
 typedef struct
@@ -81,7 +82,7 @@ typedef struct
     PID_t PID_P;
     PID_t PID_S;
 }DJI_MOTOR_Typedef;
-
+void RUI_F_MOTOR_CAN_RX_3508RM_rc(DJI_MOTOR_DATA_Typedef* DATA , uint8_t* can_data);
 void RUI_F_MOTOR_CAN_RX_3508RM(DJI_MOTOR_DATA_Typedef* DATA , uint8_t* can_data);
 void RUI_F_MOTOR_CAN_RX_2006RM(DJI_MOTOR_DATA_Typedef* MOTOR , uint8_t* can_data);
 void WHW_F_MOTOR_CAN_RX_6020RM(DJI_MOTOR_DATA_Typedef* DATA , uint8_t* can_data);

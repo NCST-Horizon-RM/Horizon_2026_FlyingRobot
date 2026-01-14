@@ -4,6 +4,8 @@ extern MOTOR_Typdef ALL_MOTOR;
 extern IMU_Data_t IMU_Data;
 extern VisionRxDataUnion VisionRxDataTemp;
 int a=0,b=0;
+float yawvison=-22.75;
+float pitchvison=-50;
 void RobotTask(uint8_t mode,
                DBUS_Typedef *DBUS,
                CONTAL_Typedef *CONTAL,
@@ -107,16 +109,16 @@ void RobotTask(uint8_t mode,
 						}
 						else
 						{
-						   if(DBUS->Remote.S2_u8 == 3)
+						   if(DBUS->Remote.S2_u8 == 2)
 						 {	 
 							 if(VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900)
 							 {  
-                                CONTAL->HEAD.Pitch = VisionRxDataTemp.PitchAngle * 50.0f-(float) (DBUS->Remote.CH3_int16) * 0.001f;
-                                CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
+                                CONTAL->HEAD.Pitch = VisionRxDataTemp.PitchAngle *pitchvison-(float) (DBUS->Remote.CH3_int16) * 0.001f;
+																	CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
                                                                             CONTAL->HEAD.Pitch_MIN,
                                                                             CONTAL->HEAD.Pitch);
 
-                                CONTAL->HEAD.Yaw = VisionRxDataTemp.YawAngle * 22.75f-(float) (DBUS->Remote.CH2_int16) * 0.001f;
+                                CONTAL->HEAD.Yaw = VisionRxDataTemp.YawAngle *yawvison-(float) (DBUS->Remote.CH2_int16) * 0.001f;
                                 CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,-700,CONTAL->HEAD.Yaw);
                   a=CONTAL->HEAD.Pitch;
 								  b= CONTAL->HEAD.Yaw;
@@ -134,28 +136,42 @@ void RobotTask(uint8_t mode,
 								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,
                                                           -700,
                                                          CONTAL->HEAD.Yaw);
-                 a=CONTAL->HEAD.Pitch;
-								b= CONTAL->HEAD.Yaw;
-//                                    +RUI_F_MATH_Limit_float(1, -1, DBUS->Mouse.X_Flt * 0.01f) +
+//                 a=CONTAL->HEAD.Pitch;
+//								b= CONTAL->HEAD.Yaw;
+////                                    +RUI_F_MATH_Limit_float(1, -1, DBUS->Mouse.X_Flt * 0.01f) +
 //                                    (float) (DBUS->KeyBoard.E - DBUS->KeyBoard.Q);
 							 }
 						 }
-                     
-             if(DBUS->Remote.S2_u8 == 2)
+                     if(DBUS->Remote.S2_u8 == 3)
 							 {
-								 CONTAL->HEAD.Pitch = a-(float) (DBUS->Remote.CH3_int16) *0.8 -
+								  CONTAL->HEAD.Pitch -= (float) (DBUS->Remote.CH3_int16) * 0.01f -
                                       DBUS->Mouse.Y_Flt * 0.01f;
 
                  CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
                                                             CONTAL->HEAD.Pitch_MIN,
                                                             CONTAL->HEAD.Pitch);
 
-                 CONTAL->HEAD.Yaw = b-(float) (DBUS->Remote.CH2_int16) * 0.8;
+                 CONTAL->HEAD.Yaw -= (float) (DBUS->Remote.CH2_int16) * 0.01f;
 								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,
                                                           -700,
                                                          CONTAL->HEAD.Yaw);
 
-							 }								 
+							 }								
+//             if(DBUS->Remote.S2_u8 == 2)
+//							 {
+//								 CONTAL->HEAD.Pitch = a-(float) (DBUS->Remote.CH3_int16) *0.8 -
+//                                      DBUS->Mouse.Y_Flt * 0.01f;
+
+//                 CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
+//                                                            CONTAL->HEAD.Pitch_MIN,
+//                                                            CONTAL->HEAD.Pitch);
+
+//                 CONTAL->HEAD.Yaw = b-(float) (DBUS->Remote.CH2_int16) * 0.8;
+//								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(700,
+//                                                          -700,
+//                                                         CONTAL->HEAD.Yaw);
+
+//							 }								 
 							
 						}
 						  
@@ -200,8 +216,8 @@ void RobotTask(uint8_t mode,
             /*摩擦轮目标值赋值*/
           float FIRE_WIPE_SPEED = RUI_F_GET_FIRE_WIPE_SPEED(CONTAL, DBUS, User_data, Root);
         
-            CONTAL->SHOOT.SHOOT_L = -FIRE_WIPE_SPEED;
-            CONTAL->SHOOT.SHOOT_R = +FIRE_WIPE_SPEED;
+            CONTAL->SHOOT.SHOOT_L = +FIRE_WIPE_SPEED;
+            CONTAL->SHOOT.SHOOT_R = -FIRE_WIPE_SPEED;
 
 //            //确保摩擦轮到达指定目标速度，再拨弹，防止堵弹
 //            if (RUI_F_MATH_ABS_float(CONTAL->SHOOT_Bask.Speed_err_L) > 2500 || CONTAL->SHOOT_Bask.Speed_Aim_L == 0)
@@ -318,20 +334,20 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
     }
     else
     {
-       
-            if (MOD == 3 && SINGLE_LOCK == 0)
-        {
-            //单发上锁
-            SINGLE_LOCK = 1;
-            int64_t Temp = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
-            if (Temp > RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)
-            {
-                AIM = CONTAL->SHOOT_Bask.Angle - Temp;
-            } else
-            {
-                AIM = CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle + Temp;
-            }
-        }
+//       
+//            if (MOD == 3 && SINGLE_LOCK == 0)
+//        {
+//            //单发上锁
+//            SINGLE_LOCK = 1;
+//            int64_t Temp = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
+//            if (Temp > RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)
+//            {
+//                AIM = CONTAL->SHOOT_Bask.Angle - Temp;
+//            } else
+//            {
+//                AIM = CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle + Temp;
+//            }
+//        }
           
         if (MOD == 1)//连发,简陋的火控
         {   //上限热量-当前热量<10,停火
@@ -342,7 +358,7 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 //            }
             
             {
-               AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.5;
+               AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.62;
             }
         }
     }

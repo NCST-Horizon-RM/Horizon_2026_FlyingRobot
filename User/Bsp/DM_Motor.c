@@ -1,5 +1,5 @@
 #include "DM_Motor.h"
-
+int16_t angleError = 0;
 /**
 ************************************************************************
 * @brief:      	dm4310_fbdata: 获取DM4310电机反馈数据函数
@@ -27,6 +27,53 @@ void dm4310_fbdata(DM_MOTOR_DATA_Typdef *motor, uint8_t *rx_data)
     motor->ONLINE_JUDGE_TIME = RUI_DF_MOTOR_OFFLINE_TIME;
   
 }
+
+
+int16_t spd_int16;
+int16_t cur_int16;
+void dm_RXdata(DM_MOTOR_Typdef *motor, uint8_t *rx_data) //一拖四模式下
+{
+	 
+	motor->DATA .Angle_last  = motor->DATA .Angle_now ;
+	motor->DATA .Angle_now  = ((rx_data[0] << 8)|(rx_data[1]));
+	 spd_int16= ((rx_data[2] << 8)|(rx_data[3]));
+	 cur_int16 = (rx_data[4] << 8)|(rx_data[5]);
+	motor->DATA.initialAngle  =INIT_ANGLE;/////////初始位置
+	angleError =	motor->DATA .Angle_now -motor->DATA .initialAngle ;
+	if(angleError > 4096){
+			angleError -= 8192;
+	}
+	else if (angleError < -4096){
+			angleError += 8192;
+	}
+	motor->DATA.ralativeAngle = angleError * 0.044f;
+	if(( motor->DATA .Angle_now - 	motor->DATA .Angle_last )<-4096)
+	{
+		motor->DATA .round++;
+	}
+	else if(( motor->DATA .Angle_now  - 	motor->DATA .Angle_last )>4096)
+	{
+	  motor->DATA .round--;
+	}
+	
+	/*圈数清零保证不会疯转*/
+	if((motor->DATA .round > 32000) | (motor->DATA .round < -32000))
+	{
+    motor->DATA .round = 0;
+		motor->DATA .Aim  = motor->DATA.Angle_now ;
+	}
+	motor->DATA .Speed_last = motor->DATA .Speed_now ;
+	motor->DATA .Speed_now =  spd_int16/100;
+	
+	motor->DATA .Speed_now = OneFilter1(motor->DATA .Speed_now ,motor->DATA .Speed_last ,500,0.8,0.8);
+	motor->DATA .current  =  ((float)cur_int16)/(16384.0f/20.0f);
+	motor->DATA .Tcoil = (float)(rx_data[6]);
+	motor->DATA .Tmos = (float)(rx_data[7]);
+  motor->DATA .reality = (int32_t)(( motor->DATA .round * 8192)+(float)(motor->DATA .Angle_now ));///8192.0f*360.0f;	
+	//////连续编码值
+}
+
+
 
 //电机模式选择
 void motor_mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id, DMMotor_Mode_e what)
@@ -143,3 +190,5 @@ void speed_ctrl(hcan_t* hcan,uint16_t motor_id, float vel)
 
   canx_send_data(hcan, id, data);
 }
+			//motor_mode(&hcan2,0x01,0x200,0xfc);达秒点击使能
+//motor_mode(&hcan2,0x01,0x200,0xfd);达妙电机失能

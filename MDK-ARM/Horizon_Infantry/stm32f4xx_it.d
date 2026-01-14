@@ -90,10 +90,10 @@ horizon_infantry/stm32f4xx_it.o: ..\Core\Src\stm32f4xx_it.c \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
-  ..\User\Bsp\inc\RGBctrl.h ..\User\Bsp\inc\Power_CAP.h \
-  ..\User\Bsp\inc\bsp_adc.h ..\User\App\inc\Shoot_Task.h \
-  ..\User\App\inc\Chassis_Task.h ..\User\Algorithm\inc\Power_Ctrl.h \
-  ..\User\Bsp\inc\Vision.h ..\User\App\inc\RobotUI_Ctrl.h \
+  ..\User\Bsp\inc\Vision.h ..\User\Bsp\inc\RGBctrl.h \
+  ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\bsp_adc.h \
+  ..\User\App\inc\Shoot_Task.h ..\User\App\inc\Chassis_Task.h \
+  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\App\inc\RobotUI_Ctrl.h \
   ..\User\UI\ui.h ..\User\UI\ui_interface.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h ..\User\UI\ui_types.h \
   ..\User\UI\ui_default_init0_0.h ..\User\UI\ui_default_init0_1.h \

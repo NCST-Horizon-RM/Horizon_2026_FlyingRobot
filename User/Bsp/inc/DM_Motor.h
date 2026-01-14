@@ -23,22 +23,44 @@
 
 typedef struct
 {
-    uint16_t mode;
-    uint16_t id;
-    uint16_t state;
-    int p_int;
-    int v_int;
-    int t_int;
-    int kp_int;
-    int kd_int;
-    float pos;
-    float vel;
-    float tor;
-    float Kp;
-    float Kd;
-    float Tmos;
-    float Tcoil;
+		int id;
+	int state;
+	int p_int;
+	int v_int;
+	int t_int;
+	int kp_int;
+	int kd_int;
+	float pos;
+	float vel;
+	float tor;
+	float Kp;
+	float Kd;
+	float Tmos;
+	float Tcoil;
+
+    int16_t Angle_last; // 上一个角度值
+    int16_t Angle_now;  // 现在的角度值
+    int16_t Speed_last; // 上一个速度值
+    int16_t Speed_now;  // 现在的速度值
+	  int16_t acceleration;//加速度
+    int16_t current;
+    int8_t temperature;
+    int32_t Angle_Infinite;
+    int64_t Stuck_Time;
+    uint16_t Stuck_Flag[2];
+    int16_t Laps;
+    float Error;
+    float Aim;
+    float Aim_last;
+    float dt;
+
     int8_t ONLINE_JUDGE_TIME;
+	uint16_t initialAngle;
+		float ralativeAngle;
+	int16_t round;
+		int32_t reality;////连续编码器
+
+
 }DM_MOTOR_DATA_Typdef;
 
 typedef struct
@@ -64,5 +86,5 @@ void motor_mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id, DMMotor_Mode_
 void mit_ctrl(hcan_t* hcan, uint16_t motor_id, float pos, float vel,float kp, float kd, float torq);
 void pos_speed_ctrl(hcan_t* hcan,uint16_t motor_id, float pos, float vel);
 void speed_ctrl(hcan_t* hcan,uint16_t motor_id, float vel);
-
+void dm_RXdata(DM_MOTOR_Typdef *motor, uint8_t *rx_data);
 #endif

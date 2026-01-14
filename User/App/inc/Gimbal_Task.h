@@ -7,6 +7,7 @@
 #include "RUI_ROOT_INIT.h"
 #include "Motors.h"
 #include "IMU_Task.h"
+#include "Vision.h"
 
 uint8_t gimbal_task(CONTAL_Typedef *CONTAL,
                     RUI_ROOT_STATUS_Typedef *Root,

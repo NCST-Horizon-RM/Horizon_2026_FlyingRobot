@@ -114,7 +114,8 @@ void Everying_Init(void)
     HAL_UART_DMAStop(&huart6);
     __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);//裁判系统串口
     HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);
-	
+
+	 
 	//USB初始化
 //	MX_USB_DEVICE_Init();
 
@@ -123,6 +124,7 @@ void Everying_Init(void)
     HAL_Delay(500);
     TIM4->CCR3 = 0;
 
+ 
 }
 
 void StartDefaultTask(void const * argument)

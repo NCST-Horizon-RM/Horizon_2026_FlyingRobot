@@ -56,8 +56,8 @@ void Vision_Tx_Data(float PitchAngle, float YawAngle, uint32_t Time, uint8_t Sta
     uint8_t i = 0;
 
     VisionTxData.Head_frame = 0xCD;
-    VisionTxData.PitchAngle = PitchAngle;
-    VisionTxData.YawAngle = YawAngle;
+    VisionTxData.PitchAngle = -PitchAngle;
+    VisionTxData.YawAngle = -YawAngle;
     VisionTxData.VisionTime = Time;
     VisionTxData.VisionState = State;
     VisionTxData.Rate_of_fire = Rate_of_fire;

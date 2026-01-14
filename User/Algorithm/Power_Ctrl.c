@@ -220,3 +220,20 @@ uint8_t chassis_power_control(CONTAL_Typedef *RUI_V_CONTAL_V,
     }
     return RUI_DF_READY;
 }
+void heat_control_task(heat_typdef *heat,uint8_t level)
+{   
+	heat->heat_upper_limit = 90 + level * 10; 
+	heat->heat_reduction_rate = 10 + level * 10;
+	if(heat->now_heat>0)
+	{   heat->leijia++;
+	  if(heat->leijia>=1000)//在1ms的任务里执行1000次就是1s
+      {heat->leijia=0;heat->now_heat-=heat->heat_reduction_rate;}
+    }
+    if(heat->now_heat<=0){heat->now_heat=0;}
+	 while (heat->attack_num!= 0) 
+	 {
+        heat->now_heat+= 10; 
+        heat-> attack_num--;   
+     }
+	heat->Residual_heat=heat->heat_upper_limit-heat->now_heat;
+}
