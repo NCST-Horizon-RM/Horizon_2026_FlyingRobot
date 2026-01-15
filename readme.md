@@ -17,3 +17,6 @@ VisionTxData.YawAngle = -YawAngle;
 
 ### 坑
 注意pid限幅 dt 
+
+### 安装
+桨叶电机线序 在桨叶电机的 电调正放置，电机转子孔位朝上时 三相线依次对应
