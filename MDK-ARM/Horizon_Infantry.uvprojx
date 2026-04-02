@@ -664,6 +664,16 @@
               <FileType>5</FileType>
               <FilePath>..\User\Algorithm\inc\user_lib.h</FilePath>
             </File>
+            <File>
+              <FileName>heat_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Algorithm\heat_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>heat_control.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\User\Algorithm\inc\heat_control.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

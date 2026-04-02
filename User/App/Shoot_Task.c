@@ -11,31 +11,57 @@
 extern DBUS_Typedef WHW_V_DBUS;
 extern MOTOR_Typdef ALL_MOTOR;
 uint16_t kadan=0,time=0;
+uint16_t timedanfa=10;kadanfa=0;
 void kadanchack(void)
 {//kadan=1是卡弹  kadan=0是没有卡单
-if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<-1000)
-		{time=0;}
-			if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<100&&ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now>-100)
-			{
-			  time++;
-			  if(time>=1200)
-			  {time=0;}
-			  if(time>1000)//卡了多长时间
-			  {
-			    kadan=1;//卡弹标志 
-			  }
-		    }
-			  if(time<=1000)
-			  {
-			    kadan=0;//正常标志 
-			  }
+	uint8_t suo=0;
+   if(WHW_V_DBUS.Remote.S1_u8==1)
+   { 
+		if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<-1000)
+				{time=0;}
+					if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<100&&ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now>-100)
+					{
+						time++;
+						if(time>=1200)
+						{time=0;}
+						if(time>1000)//卡了多长时间
+						{
+							kadan=1;//卡弹标志 
+						}
+						}
+						if(time<=1000)
+						{
+							kadan=0;//正常标志 
+						}	
+    }
+//	 if(WHW_V_DBUS.Remote.S1_u8==3)
+//	 { 
+//		    timedanfa--;
+//				 if(timedanfa<=10)
+//				{
+//						timedanfa=10;suo=0;
+//						ALL_MOTOR.DJI_3508_Shoot_M.DATA.Aim = ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite;
+//				}
+//	   if((ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite-ALL_MOTOR.DJI_3508_Shoot_M.DATA.Aim)<-25000&&suo==0)
+//		   {
+//			   timedanfa=300;suo=1;
+//			 }
+//		 if(timedanfa>=13)
+//		 {kadanfa=1;}//卡弹
+//		 else
+//		 {kadanfa=0;}//没卡弹
+//	 }
+//	 else
+//	 {kadanfa=3;}
 }
+
+
 uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 {   
     //发射电机初始化
     float PID_F_L[3] = {   0,   0.0f,   0.0f   };
 		float PID_P_L[3] = {  0,   0.0f,   0.0f   };
-    float PID_S_L[3] = {  9,   0.0f,   0.0f   };
+    float PID_S_L[3] = {  4,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_L.PID_F, 3000, PID_F_L,
                      0.5f, 2, 2);
 		PID_Init(&MOTOR->DJI_3508_Shoot_L.PID_P, 6000.0f, 2000.0f,
@@ -52,7 +78,7 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 
     float PID_F_R[3] = {   0.0f,   0.0f,   0.0f   };
 		float PID_P_R[3] = {   0,   0.0f,   0.0f   };
-    float PID_S_R[3] = {   -40,   0.0f,   0.0f   };
+    float PID_S_R[3] = {   5.5,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_R.PID_F, 3000, PID_F_R,
                      0.5f, 2, 2);
 		PID_Init(&MOTOR->DJI_3508_Shoot_R.PID_P, 30000.0f, 2000.0f,
@@ -68,8 +94,8 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 							|Derivative_On_Measurement|DerivativeFilter&00000000);//微分先行,微分滤波器
 
     float PID_F_M[3] = {   0.0f,   0.0f,   0.0f   };
-    float PID_P_M[3] = {   0.25,   0.0f,   0.0f   };
-    float PID_S_M[3] = {  9,   0.0f,   0.0f   };
+    float PID_P_M[3] = {   0.2,   0.000f,   0.0f   };
+    float PID_S_M[3] = {  8.5,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_M.PID_F, 3000, PID_F_M,
                      0.5f, 2, 2);
     PID_Init(&MOTOR->DJI_3508_Shoot_M.PID_P, 30000.0f, 2000.0f,
@@ -155,8 +181,8 @@ uint8_t shoot_task(CONTAL_Typedef *CONTAL,
 //    }
 
     /*目标值赋值*/
-		if(WHW_V_DBUS.Remote.S1_u8==1)
-		{			 kadanchack();}
+		
+		kadanchack();
    
     MOTOR->DJI_3508_Shoot_L.DATA.Aim = CONTAL->SHOOT.SHOOT_L;
     MOTOR->DJI_3508_Shoot_R.DATA.Aim = CONTAL->SHOOT.SHOOT_R;
@@ -164,6 +190,10 @@ uint8_t shoot_task(CONTAL_Typedef *CONTAL,
     {MOTOR->DJI_3508_Shoot_M.DATA.Aim = CONTAL->SHOOT.SHOOT_M;}
     if(kadan==1)
 		{MOTOR->DJI_3508_Shoot_M.DATA.Aim=(int64_t)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_now+35;}
+//		if(kadanfa==0)//没卡单.		
+//    {MOTOR->DJI_3508_Shoot_M.DATA.Aim = CONTAL->SHOOT.SHOOT_M;}
+//    if(kadanfa==1)
+//		{MOTOR->DJI_3508_Shoot_M.DATA.Aim=(int64_t)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_now+35;}
 		ALL_MOTOR.DJI_3508_Shoot_M.DATA.radspeed=(float)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now*0.0166667*0.0277777*8;
     /*遥控离线保护*/
     if(!Root->RM_DBUS)
@@ -181,6 +211,7 @@ uint8_t shoot_task(CONTAL_Typedef *CONTAL,
         PID_INIT = RUI_DF_ERROR;
         AIM_INIT = RUI_DF_ERROR;
     }
+		
 
     /*堵转处理*/
 //    if(MOTOR->DJI_3508_Shoot_L.PID_P.ERRORHandler.ERRORType & Motor_Blocked)
@@ -227,8 +258,9 @@ uint8_t shoot_task(CONTAL_Typedef *CONTAL,
                MOTOR->DJI_3508_Shoot_M.PID_S.Output;
               
   
-    /*CAN发送*/
-//	
+   //热量控制更新
+  
+									
     /*发射机构信息反馈*/
     CONTAL->SHOOT_Bask.Speed_Aim_L = MOTOR->DJI_3508_Shoot_L.DATA.Aim;
     CONTAL->SHOOT_Bask.Speed_Aim_R = MOTOR->DJI_3508_Shoot_R.DATA.Aim;

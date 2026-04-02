@@ -26,6 +26,7 @@
 "horizon_infantry\quaternionekf.o"
 "horizon_infantry\rui_math.o"
 "horizon_infantry\user_lib.o"
+"horizon_infantry\heat_control.o"
 "horizon_infantry\chassis_task.o"
 "horizon_infantry\gimbal_task.o"
 "horizon_infantry\imu_task.o"

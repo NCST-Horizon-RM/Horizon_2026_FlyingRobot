@@ -88,6 +88,7 @@ horizon_infantry/rui_root_init.o: ..\User\App\RUI_ROOT_INIT.c \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
-  ..\User\Bsp\inc\Vision.h ..\User\Bsp\inc\RGBctrl.h \
-  ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\Referee.h \
-  ..\User\Algorithm\inc\CRC_DJI.h ..\User\Bsp\inc\bsp_adc.h
+  ..\User\Bsp\inc\Vision.h ..\User\Algorithm\inc\Power_Ctrl.h \
+  ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h \
+  ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\bsp_adc.h \
+  ..\User\Bsp\inc\RGBctrl.h

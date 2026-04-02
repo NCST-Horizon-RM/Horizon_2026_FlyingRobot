@@ -34,10 +34,10 @@ int8_t Vision_Rx_Data(uint8_t* buffer, VisionRxDataUnion *VisionRx)
     Union_temp.Data[2] = buffer[i++];
     Union_temp.Data[3] = buffer[i++];
     VisionRx->VisionTime = Union_temp.Data_u32;
-
+    i++;
     VisionRx->End_frame = buffer[i];
     VisionRx->offlinetime=0;
-
+      
     //  VisionRxData.PitchAngle_kal =0;//kalmanFilter(&kfp_visionPitch,VisionRxData.PitchAngle);
     //  VisionRxData.YawAngle_kal =0;//kalmanFilter(&kfp_visionYaw,VisionRxData.YawAngle);
 
@@ -78,22 +78,23 @@ void Vision_Tx_Data(float PitchAngle, float YawAngle, uint32_t Time, uint8_t Sta
     VisionTxData.data[i++] = Union_temp.Data[2];
     VisionTxData.data[i++] = Union_temp.Data[3];
 
-//    VisionTxData.data[i++] &= VisionTxData.VisionState;
-		VisionTxData.data[i++] = 0;
+    VisionTxData.data[i++] &= VisionTxData.VisionState;
+		//VisionTxData.data[i++] = 0;
 
-    //Union_temp.Data_u32 = VisionTxData.VisionTime;
+    Union_temp.Data_u32 = VisionTxData.VisionTime;
 		
-		Union_temp.Data_u32 = 0;
+		//Union_temp.Data_u32 = 0;
     VisionTxData.data[i++] = Union_temp.Data[0];
     VisionTxData.data[i++] = Union_temp.Data[1];
     VisionTxData.data[i++] = Union_temp.Data[2];
     VisionTxData.data[i++] = Union_temp.Data[3];
 
     //VisionTxData.data[i++] = VisionTxData.Rate_of_fire;
-		VisionTxData.data[i++] = 23;
+		VisionTxData.data[i++] = 20;
 
     VisionTxData.data[i++] = VisionTxData.End_frame;
-    HAL_UART_Transmit_DMA(&huart1, VisionTxData.data, sizeof(VisionTxData.data));
+//    HAL_UART_Transmit_DMA(&huart1, VisionTxData.data, sizeof(VisionTxData.data));
+    HAL_UART_Transmit_DMA(&huart1, VisionTxData.data, 16);
 
    // CDC_Transmit_FS(VisionTxData.data, sizeof(VisionTxData.data));
 }

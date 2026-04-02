@@ -87,4 +87,5 @@ horizon_infantry/robot.o: ..\User\App\Robot.c ..\User\App\inc\Robot.h \
   ..\User\Algorithm\inc\QuaternionEKF.h \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
-  ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h
+  ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
+  ..\User\Algorithm\inc\heat_control.h

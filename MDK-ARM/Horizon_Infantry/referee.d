@@ -37,4 +37,5 @@ horizon_infantry/referee.o: ..\User\Bsp\Referee.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
-  ..\User\Algorithm\inc\CRC_DJI.h
+  ..\User\Algorithm\inc\CRC_DJI.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h

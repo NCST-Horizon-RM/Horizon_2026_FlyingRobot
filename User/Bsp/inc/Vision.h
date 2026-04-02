@@ -23,6 +23,7 @@ typedef struct
     float YawAngle_kal;
     uint16_t offlinetime;
     uint32_t VisionTime;
+	  uint32_t ShootBoolac;
     uint8_t VisionState : 3;
     uint8_t ShootBool : 1;
     uint8_t Target : 1;

@@ -45,6 +45,20 @@ typedef struct
     uint8_t shoot_state;//0正常模式 1波蛋减速 2停火 
 }heat_typdef;
 
+typedef struct {
+    float shunt_volt;
+    float bus_volt;
+    float current;
+    float power;
+} Power_Typedef;
+
+typedef struct {
+    Power_Typedef P1, P2, P3, P4, P5;
+} ALL_POWER_RX;
+
+extern ALL_POWER_RX All_Power;
+
+void CAN_POWER_Rx(Power_Typedef* pPower, uint8_t *rx_data);
 
 void Power_control_init(model_t *model);
 uint8_t chassis_power_control(CONTAL_Typedef *RUI_V_CONTAL_V,

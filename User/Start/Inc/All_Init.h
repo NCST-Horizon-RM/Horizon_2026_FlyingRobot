@@ -28,6 +28,7 @@
 #include "Robot.h"
 #include "CANSPI.h"
 #include "MCP2515.h"
+#include "IMU_Task.h"
 
 #include "music.h"
 #include "log.h"

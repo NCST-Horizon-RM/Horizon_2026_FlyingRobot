@@ -4,6 +4,7 @@ uint8_t move_G, move_S, move_C, move_P;
 float t1,t2,dt;
 static uint8_t TX[12] = {0xff,0xf1,0xfd,0x90,0x86,0xa7,0xff,0xf1,0xfd,0x90,0x86,0xa7};
 uint32_t Residual_heat;
+
 //34ms,画UI任务
 void StartRobotUITask(void const * argument)
 {
@@ -15,6 +16,7 @@ void StartRobotUITask(void const * argument)
 
     for (;;)
     {     
+			  
         RobotUI_Dynamic(RUI_ROOT_STATUS.RM_DBUS,
                         RUI_V_CONTAL.SHOOT_Bask.Shoot_Number,
                         IMU_Data.pitch,
@@ -24,6 +26,10 @@ void StartRobotUITask(void const * argument)
                         ALL_MOTOR.DJI_3508_Shoot_R.DATA.Speed_now,
                         &VisionRxData);
 
+			  Update_Robot_Level(5);
+			  Update_Heat_Predictor(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite,SysTime.ms);
+			
+			
         osDelayUntil(&currentTimeRobotUI, 40);
     }
 }
@@ -42,7 +48,7 @@ void StartMoveTask(void const * argument)
 
     //Pitch轴限幅
     RUI_V_CONTAL.HEAD.Pitch_MAX = 2400;
-    RUI_V_CONTAL.HEAD.Pitch_MIN = 50;
+    RUI_V_CONTAL.HEAD.Pitch_MIN = -50;
 
     for (;;)
 	{    
@@ -72,29 +78,29 @@ void StartDefiantTask(void const * argument)
     RUI_V_CONTAL.SHOOT.Shoot_Speed = WIPE_MAX_SPEED;
     RUI_V_CONTAL.SHOOT.Single_Angle = SINGLE_ANGLE;
 
-    for(;;)
-    {
-        /*电容*/
-        //Power_CAP_CAN_TX(&hcan2, 0x308, &CAPDATE.SET, &User_data);
+	for(;;)
+	{
+			/*电容*/
+			//Power_CAP_CAN_TX(&hcan2, 0x308, &CAPDATE.SET, &User_data);
 
-        /*发射*/
-        RobotTask(4, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
-                  &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
-        move_S = shoot_task(&RUI_V_CONTAL, &RUI_ROOT_STATUS,&ALL_MOTOR);
-        DWT_Delay_us(1000);
-       // osDelayUntil(&currentTimeDefiant, 1);
-    }
+			/*发射*/
+			RobotTask(4, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
+								&CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
+			move_S = shoot_task(&RUI_V_CONTAL, &RUI_ROOT_STATUS,&ALL_MOTOR);
+		
+		 osDelayUntil(&currentTimeDefiant, 1);
+	}
 }
 
-float dt_pc = 0;
+
 //陀螺仪解算与自瞄发送任务
 void StartIMUTask(void const * argument)
 {
     portTickType currentTimeIMU;
     currentTimeIMU = xTaskGetTickCount();
 
-    ;
-    static uint32_t INS_DWT_Count = 0;
+    
+    
 
     //陀螺仪初始化
     const float imu_temp_PID[3] = TEMPERATURE_PID;
@@ -107,13 +113,18 @@ void StartIMUTask(void const * argument)
     for(;;)
     {
         INS_Task(&IMU_Data, &imu_temp);
-        dt_pc = DWT_GetDeltaT(&INS_DWT_Count);
-        Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,
-                       dt_pc, 1, 1);
+        
+//        Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,
+//                       dt_pc, 1, 1);
         VisionRxDataTemp.offlinetime++;
         if(VisionRxDataTemp.offlinetime>=1000)
         {VisionRxDataTemp.offlinetime=1000;}
+				
+				voltage = get_battery_voltage();
+       
+				
         osDelayUntil(&currentTimeIMU, 1);
+				
     }
 }
 
@@ -127,19 +138,24 @@ void StartRootTask(void const * argument)
     init_vrefint_reciprocal();
 
     for(;;)
-    {
+    {   
         RUI_F_ROOT(&RUI_ROOT_STATUS, &WHW_V_DBUS, &ALL_MOTOR, &CAPDATE.GET);
-        voltage = get_battery_voltage();
-
+        
         osDelayUntil(&currentTimeRoot, 5);
     }
 }
-
+float dt_pc;
+//static uint32_t INS_DWT_Count = 0;
 void BSP_TIM_IRQHandler(TIM_HandleTypeDef *htim)
 {
-	if (htim->Instance == TIM7) {
-		TX[0]++;
-		CANSPI_SEND(&hspi2, 0x201, TX);
+	if (htim->Instance == TIM7) 
+	{
+//		TX[0]++;
+//		CANSPI_SEND(&hspi2, 0x201, TX);
+	
+//	 dt_pc = DWT_GetDeltaT(&INS_DWT_Count);
+//   Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,dt_pc, 1, 1);
+	
 	}
 }
 
@@ -186,7 +202,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
                 RUI_F_MOTOR_CAN_RX_3508RM_rc(&ALL_MOTOR.DJI_3508_Shoot_R.DATA, rx_data);
                 break;
 					 
-             
+        
 					  case 0x142://底盘3
                 LK_MotorResolve(&ALL_MOTOR.MG4005_Pitch, rx_data);
                 break;
@@ -208,13 +224,14 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 //            case 0x201://底盘1
 //                RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Chassis_1.DATA, rx_data);
 //                break;
-              case 0x305://底盘4
+            case 0x305://底盘4
                 dm_RXdata(&ALL_MOTOR.DM_3507_Yaw, rx_data);
                 break;
             
-
-           
-
+        case 0x604:
+				CAN_POWER_Rx(&All_Power.P1, rx_data);
+                break;
+			
             case 0x204://底盘4
                 RUI_F_MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Chassis_4.DATA, rx_data);
                 break;
@@ -284,7 +301,7 @@ void BSP_UART_IRQHandler(UART_HandleTypeDef *huart)
             HAL_UART_DMAStop(&huart6);//暂时停止本次DMA传输，进行数据处理
             
             data_length_6  = BUFFER_SIZE_6 - __HAL_DMA_GET_COUNTER(&hdma_usart6_rx);//计算接收到的数据长度
-		    Read_Data_first(&ALL_RX , &User_data , data_length_6);//测试函数：待修改
+		    //Read_Data_first(&ALL_RX , &User_data , data_length_6);//测试函数：待修改
 		    memset((uint8_t*)ALL_RX.Data,0,data_length_6);//清零接收缓冲区
 
             HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);  //重启开始DMA传输
@@ -296,21 +313,22 @@ void BSP_UART_IRQHandler(UART_HandleTypeDef *huart)
 			static uint8_t data_length_1=1;
         if (RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
         {
-						uint16_t temp = 0;
-            __HAL_UART_CLEAR_IDLEFLAG(&huart1);  //清除空闲中断标志（否则会一直不断进入中断）
-					temp = huart1.Instance -> SR; // 清除SR状态寄存器
-					temp = huart1.Instance -> DR; // 清除DR数据寄存器，用来清除中断
-            // 下面进行空闲中断相关处理
-            HAL_UART_DMAStop(&huart1);//暂时停止本次DMA传输，进行数据处理
+//						uint16_t temp = 0;
+//            __HAL_UART_CLEAR_IDLEFLAG(&huart1);  //清除空闲中断标志（否则会一直不断进入中断）
+//					temp = huart1.Instance -> SR; // 清除SR状态寄存器
+//					temp = huart1.Instance -> DR; // 清除DR数据寄存器，用来清除中断
+//            // 下面进行空闲中断相关处理
+//            HAL_UART_DMAStop(&huart1);//暂时停止本次DMA传输，进行数据处理
             
-            data_length_1  = BUFFER_SIZE_1 - __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);//计算接收到的数据长度
-					
+//            data_length_1  = BUFFER_SIZE_1 - __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);//计算接收到的数据长度
+					HAL_UARTEx_ReceiveToIdle_DMA(&huart1, (uint8_t *)VisionRx, 16); 
 					Vision_Rx_Data(VisionRx, &VisionRxDataTemp);
+					VisionRxDataTemp.ShootBoolac+=VisionRxDataTemp.ShootBool;
 //				
 //						memset((uint8_t *)VisionRx, 0, data_length_1);
 						
 					
-            HAL_UART_Receive_DMA(&huart1, (uint8_t *)VisionRx, 15);  //重启开始DMA传输
+           // HAL_UART_Receive_DMA(&huart1, (uint8_t *)VisionRx, 16);  //重启开始DMA传输
 				}
 //						Vision_Rx_Data(VisionRx, &VisionRxData,df_normal_com);
 				

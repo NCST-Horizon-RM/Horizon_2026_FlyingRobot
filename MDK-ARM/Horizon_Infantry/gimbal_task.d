@@ -90,4 +90,5 @@ horizon_infantry/gimbal_task.o: ..\User\App\Gimbal_Task.c \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
-  ..\User\Bsp\inc\Vision.h ..\User\Bsp\inc\VOFA.h
+  ..\User\Bsp\inc\Vision.h ..\User\Algorithm\inc\Power_Ctrl.h \
+  ..\User\Bsp\inc\VOFA.h

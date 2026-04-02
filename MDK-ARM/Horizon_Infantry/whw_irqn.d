@@ -90,20 +90,20 @@ horizon_infantry/whw_irqn.o: ..\User\Start\WHW_IRQN.c \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
-  ..\User\Bsp\inc\Vision.h ..\User\Bsp\inc\RGBctrl.h \
+  ..\User\Bsp\inc\Vision.h ..\User\Algorithm\inc\Power_Ctrl.h \
   ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\bsp_adc.h \
-  ..\User\App\inc\Shoot_Task.h ..\User\App\inc\Chassis_Task.h \
-  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\App\inc\RobotUI_Ctrl.h \
-  ..\User\UI\ui.h ..\User\UI\ui_interface.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h ..\User\UI\ui_types.h \
-  ..\User\UI\ui_default_init0_0.h ..\User\UI\ui_default_init0_1.h \
-  ..\User\UI\ui_default_init0_2.h ..\User\UI\ui_default_init1_0.h \
-  ..\User\UI\ui_default_init2_0.h ..\User\UI\ui_default_init3_0.h \
-  ..\User\UI\ui_default_init4_0.h ..\User\UI\ui_default_init5_0.h \
-  ..\User\UI\ui_default_init5_1.h ..\User\UI\ui_default_init5_2.h \
-  ..\User\UI\ui_default_init5_3.h ..\User\UI\ui_default_init6_0.h \
-  ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h ..\Core\Inc\spi.h \
-  ..\User\Bsp\inc\MCP2515.h \
+  ..\User\Bsp\inc\RGBctrl.h ..\User\App\inc\Shoot_Task.h \
+  ..\User\Algorithm\inc\heat_control.h ..\User\App\inc\Chassis_Task.h \
+  ..\User\App\inc\RobotUI_Ctrl.h ..\User\UI\ui.h \
+  ..\User\UI\ui_interface.h D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  ..\User\UI\ui_types.h ..\User\UI\ui_default_init0_0.h \
+  ..\User\UI\ui_default_init0_1.h ..\User\UI\ui_default_init0_2.h \
+  ..\User\UI\ui_default_init1_0.h ..\User\UI\ui_default_init2_0.h \
+  ..\User\UI\ui_default_init3_0.h ..\User\UI\ui_default_init4_0.h \
+  ..\User\UI\ui_default_init5_0.h ..\User\UI\ui_default_init5_1.h \
+  ..\User\UI\ui_default_init5_2.h ..\User\UI\ui_default_init5_3.h \
+  ..\User\UI\ui_default_init6_0.h ..\User\App\inc\Robot.h \
+  ..\User\Bsp\inc\CANSPI.h ..\Core\Inc\spi.h ..\User\Bsp\inc\MCP2515.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h ..\User\Bsp\inc\music.h \
   ..\User\Start\Inc\log.h ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \

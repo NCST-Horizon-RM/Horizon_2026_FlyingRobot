@@ -46,7 +46,7 @@
 #define INIT_ANGLE 6680
 #define FIRE_SPEED 5000
 #define WIPE_MAX_SPEED 2500
-#define SINGLE_ANGLE -37000
+#define SINGLE_ANGLE -36864
 /************************************************************万能分隔符**************************************************************
  * 	@author:			//小瑞
  *	@performance:	    //离线检测宏定义
