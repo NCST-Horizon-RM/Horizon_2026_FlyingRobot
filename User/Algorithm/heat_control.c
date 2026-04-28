@@ -1,4 +1,8 @@
 #include <heat_control.h>
+
+
+ShootDet_t g_det = {0};
+
 static const LevelConfig_t Level_Table[11] = {
     {100, 20},  // Level 1: 上限50, 冷却40/s
     {110, 30},  // Level 2: 上限100, 冷却60/s
@@ -41,11 +45,16 @@ void Update_Heat_Predictor(int32_t current_motor_pos, uint32_t current_ms) {
     if (dt <= 0 || dt > 0.5f) return; 
 
     // 2. 计算发弹增量
-    int32_t delta_pos = current_motor_pos - g_heat_watcher.last_motor_pos;
-    if (delta_pos < 0) delta_pos = -delta_pos; // 绝对值处理
-    
-    float shots_fired = (float)delta_pos / MOTOR_TICKS_PER_SHOT;
-    g_heat_watcher.last_motor_pos = current_motor_pos;
+//	注释掉的为采用波蛋电机编码器值检测
+//    int32_t delta_pos = current_motor_pos - g_heat_watcher.last_motor_pos;
+//    if (delta_pos < 0) delta_pos = -delta_pos; // 绝对值处理
+//    
+//    float shots_fired = (float)delta_pos / MOTOR_TICKS_PER_SHOT;
+//    g_heat_watcher.last_motor_pos = current_motor_pos;
+	 
+	 uint32_t delta_shots = g_det.cnt - g_det.last_cnt;
+	 g_det.last_cnt=g_det.cnt;
+	 float shots_fired = (float)delta_shots;
 
     // 3. 热量更新核心公式
     // 热量 = 现有热量 + (新发数 * 单发热量) - (当前等级冷却值 * 时间增量)
@@ -72,5 +81,62 @@ void Update_Heat_Predictor(int32_t current_motor_pos, uint32_t current_ms) {
  */
 void Calibrate_Heat_With_Referee(uint16_t ref_heat) {
     g_heat_watcher.local_heat = (float)ref_heat;
+}
+
+
+
+
+
+
+bool Update_Shoot_Det(float speed1, float speed2, ShootDet_t *det) {
+    float val = (fabsf(speed1) + fabsf(speed2)) / 2.0f;
+    if (!det->init) {
+        det->base = val;
+        det->last_val = val;
+        det->max_drop_in_round = 0;
+        det->cool_down_cnt = 0;
+        det->init = true;
+        return false;
+    }
+    float slope = det->last_val - val;
+    det->last_val = val;
+    if (val > det->base) {
+        det->base = (K_UP * val) + (1.0f - K_UP) * det->base;
+    } else {
+        det->base = (K_DN * val) + (1.0f - K_DN) * det->base;
+    }
+    float drop = det->base - val;
+    bool shoot_done = false;
+    if (det->cool_down_cnt > 0) {
+        det->cool_down_cnt--;
+        det->armed = false;
+        return false;
+    }
+    if (!det->armed) {
+        if (drop > TH_FIRE && slope > MIN_SLOPE) {
+            det->armed = true;
+            det->max_drop_in_round = drop;
+            det->t_out = 0;
+        }
+    } else {
+        det->t_out++;
+        if (drop > det->max_drop_in_round) {
+            det->max_drop_in_round = drop;
+        }
+        bool condition_relative = (drop < det->max_drop_in_round * (1.0f - RELATIVE_RECOVER));
+        bool condition_absolute = (drop < TH_RST_SAFE);
+        if (condition_relative || condition_absolute) {
+            det->armed = false;
+            det->cnt++;
+            det->cool_down_cnt = COOL_DOWN_TICKS;
+            det->max_drop_in_round = 0;
+            shoot_done = true;
+        }
+        else if (det->t_out >= TIMEOUT_TICKS) {
+            det->armed = false;
+            det->max_drop_in_round = 0;
+        }
+    }
+    return shoot_done;
 }
 

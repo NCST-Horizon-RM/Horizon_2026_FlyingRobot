@@ -3,7 +3,7 @@
 
 #include "main.h"
 #include "usart.h"
-
+#include "usbd_cdc_if.h"
 typedef union
 {
   uint8_t Data[4];
@@ -29,11 +29,13 @@ typedef struct
     uint8_t Target : 1;
     uint16_t FPS;
     uint8_t End_frame;
+	  float Pitch_plan;
+	  float Yaw_plan;  
 }VisionRxDataUnion;
 
 typedef struct
 {
-  uint8_t data[16];
+  uint8_t data[20];
 
   uint8_t Head_frame;
   float PitchAngle;
@@ -42,6 +44,7 @@ typedef struct
   uint8_t VisionState : 3;
   uint8_t Rate_of_fire;
   uint8_t End_frame;
+	uint8_t buff_flag;
 }VisionTxDataUnion;
 
 int8_t Vision_Rx_Data(uint8_t* buffer, VisionRxDataUnion *VisionRx);

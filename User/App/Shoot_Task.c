@@ -1,5 +1,6 @@
 #include "Shoot_Task.h"
 #include "VOFA.h"
+#include "VT13.h"
 /************************************************************万能分隔符**************************************************************
  * 	@author:			//小瑞
  *	@performance:	    //头部PID+前馈总初始化函数
@@ -11,11 +12,12 @@
 extern DBUS_Typedef WHW_V_DBUS;
 extern MOTOR_Typdef ALL_MOTOR;
 uint16_t kadan=0,time=0;
-uint16_t timedanfa=10;kadanfa=0;
+uint16_t timedanfa=10;
+int kadanfa=0;
 void kadanchack(void)
 {//kadan=1是卡弹  kadan=0是没有卡单
 	uint8_t suo=0;
-   if(WHW_V_DBUS.Remote.S1_u8==1)
+   if(WHW_V_DBUS.Remote.S1_u8==1||VT13_DBUS.Mouse.L_State==2)
    { 
 		if(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now<-1000)
 				{time=0;}
@@ -61,7 +63,7 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
     //发射电机初始化
     float PID_F_L[3] = {   0,   0.0f,   0.0f   };
 		float PID_P_L[3] = {  0,   0.0f,   0.0f   };
-    float PID_S_L[3] = {  4,   0.0f,   0.0f   };
+    float PID_S_L[3] = {  5.5,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_L.PID_F, 3000, PID_F_L,
                      0.5f, 2, 2);
 		PID_Init(&MOTOR->DJI_3508_Shoot_L.PID_P, 6000.0f, 2000.0f,
@@ -94,8 +96,8 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 							|Derivative_On_Measurement|DerivativeFilter&00000000);//微分先行,微分滤波器
 
     float PID_F_M[3] = {   0.0f,   0.0f,   0.0f   };
-    float PID_P_M[3] = {   0.2,   0.000f,   0.0f   };
-    float PID_S_M[3] = {  8.5,   0.0f,   0.0f   };
+    float PID_P_M[3] = {   0.21,   0.000f,   0.0f   };
+    float PID_S_M[3] = {  9,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_M.PID_F, 3000, PID_F_M,
                      0.5f, 2, 2);
     PID_Init(&MOTOR->DJI_3508_Shoot_M.PID_P, 30000.0f, 2000.0f,

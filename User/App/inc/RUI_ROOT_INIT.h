@@ -23,6 +23,49 @@
 #include "Motors.h"
 #include "Power_CAP.h"
 
+
+typedef struct
+{  
+    uint8_t RM_DBUS;
+    
+    uint8_t RM_MOD;
+
+    uint8_t MOTOR_HEAD_Pitch;
+    uint8_t MOTOR_HEAD_Yaw;
+
+    uint8_t MOTOR_Shoot_L;
+    uint8_t MOTOR_Shoot_R;
+    uint8_t MOTOR_Shoot_M;
+	  uint16_t five_status;
+	    struct {
+        uint8_t RM_DBUS_State          : 1; // 占 1 位 (0 或 1)
+        uint8_t RM_MOD_State           : 1;
+        uint8_t MOTOR_HEAD_Pitch_State : 1;
+        uint8_t MOTOR_HEAD_Yaw_State   : 1;
+        uint8_t MOTOR_Shoot_L_State    : 1;
+        uint8_t MOTOR_Shoot_R_State    : 1;
+        uint8_t MOTOR_Shoot_M_State    : 1;
+        uint8_t reserved               : 1; // 剩余 1 位补齐
+    } Is_Online; 
+}online_judge;
+typedef struct
+{
+ uint16_t all_motor_status;  
+ float  yaw_data;
+ float  pitch_data;
+ uint8_t aim_stutas;
+ uint8_t shoot_stutas;
+ uint8_t shoot_bool1;
+ uint8_t shoot_bool2;
+ uint8_t shoot_bool3;
+ uint8_t shoot_bool4;
+ uint8_t shoot_number;
+ uint8_t heat;
+}all_ui_variable;
+extern all_ui_variable all_ui;
+extern online_judge online_status;
+void all_ui_Assign(void);
+void online_time_control(online_judge *ctrl);
 //在定时器调用这一个函数即可
 void RUI_F_ROOT(RUI_ROOT_STATUS_Typedef *Root, DBUS_Typedef *DBUS, MOTOR_Typdef *MOTOR, CAP_RXDATA *CAP_GET);
 //总的状态监测

@@ -38,6 +38,9 @@ horizon_infantry/robot.o: ..\User\App\Robot.c ..\User\App\inc\Robot.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\Core\Inc\usart.h ..\User\Start\Inc\Motors.h \
   ..\User\Bsp\inc\DJI_Motor.h ..\User\Algorithm\inc\controller.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdlib.h \
@@ -83,9 +86,31 @@ horizon_infantry/robot.o: ..\User\App\Robot.c ..\User\App\inc\Robot.h \
   ..\User\Bsp\inc\can_bsp.h ..\Core\Inc\can.h ..\User\Bsp\inc\DM_Motor.h \
   ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\Referee.h \
   ..\User\Algorithm\inc\CRC_DJI.h ..\User\Bsp\inc\bsp_adc.h \
-  ..\User\Bsp\inc\Vision.h ..\User\App\inc\IMU_Task.h ..\Core\Inc\tim.h \
+  ..\User\Bsp\inc\Vision.h ..\USB_DEVICE\App\usbd_cdc_if.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
+  ..\USB_DEVICE\Target\usbd_conf.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\User\App\inc\IMU_Task.h ..\Core\Inc\tim.h \
   ..\User\Algorithm\inc\QuaternionEKF.h \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
-  ..\User\Algorithm\inc\heat_control.h
+  ..\User\Algorithm\inc\heat_control.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\User\Start\Inc\All_Init.h ..\User\App\inc\RUI_ROOT_INIT.h \
+  ..\User\App\inc\Gimbal_Task.h ..\User\Algorithm\inc\Power_Ctrl.h \
+  ..\User\Bsp\inc\RGBctrl.h ..\User\App\inc\Shoot_Task.h \
+  ..\User\App\inc\Chassis_Task.h ..\User\App\inc\RobotUI_Ctrl.h \
+  ..\User\UI\ui.h ..\User\UI\ui_interface.h ..\User\UI\ui_types.h \
+  ..\User\UI\ui_g.h ..\User\Bsp\inc\CANSPI.h ..\Core\Inc\spi.h \
+  ..\User\Bsp\inc\MCP2515.h ..\User\Start\Inc\WHW_IRQN.h \
+  ..\User\Bsp\inc\music.h ..\User\Start\Inc\log.h \
+  ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
+  ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
+  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h \
+  ..\User\Bsp\inc\VT13.h

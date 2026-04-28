@@ -38,12 +38,23 @@ horizon_infantry/robotui_ctrl.o: ..\User\App\RobotUI_Ctrl.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
-  ..\Core\Inc\usart.h ..\User\Bsp\inc\Vision.h ..\User\Bsp\inc\Referee.h \
-  ..\User\Algorithm\inc\CRC_DJI.h ..\User\Bsp\inc\Power_CAP.h \
-  ..\User\Bsp\inc\can_bsp.h ..\Core\Inc\can.h ..\User\Bsp\inc\bsp_adc.h \
-  ..\User\Start\Inc\Motors.h ..\User\Bsp\inc\DJI_Motor.h \
-  ..\User\Algorithm\inc\controller.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
+  ..\Core\Inc\usart.h ..\User\Bsp\inc\Vision.h \
+  ..\USB_DEVICE\App\usbd_cdc_if.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
+  ..\USB_DEVICE\Target\usbd_conf.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h \
+  ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\can_bsp.h \
+  ..\Core\Inc\can.h ..\User\Bsp\inc\bsp_adc.h ..\User\Start\Inc\Motors.h \
+  ..\User\Bsp\inc\DJI_Motor.h ..\User\Algorithm\inc\controller.h \
   ..\User\Bsp\inc\bsp_dwt.h ..\User\Algorithm\inc\user_lib.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\FreeRTOS.h \
@@ -84,10 +95,9 @@ horizon_infantry/robotui_ctrl.o: ..\User\App\RobotUI_Ctrl.c \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\quaternion_math_functions.h \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\window_functions.h \
   ..\User\Bsp\inc\DM_Motor.h ..\User\UI\ui.h ..\User\UI\ui_interface.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h ..\User\UI\ui_types.h \
-  ..\User\UI\ui_default_init0_0.h ..\User\UI\ui_default_init0_1.h \
-  ..\User\UI\ui_default_init0_2.h ..\User\UI\ui_default_init1_0.h \
-  ..\User\UI\ui_default_init2_0.h ..\User\UI\ui_default_init3_0.h \
-  ..\User\UI\ui_default_init4_0.h ..\User\UI\ui_default_init5_0.h \
-  ..\User\UI\ui_default_init5_1.h ..\User\UI\ui_default_init5_2.h \
-  ..\User\UI\ui_default_init5_3.h ..\User\UI\ui_default_init6_0.h
+  ..\User\UI\ui_types.h ..\User\App\inc\IMU_Task.h ..\Core\Inc\tim.h \
+  ..\User\Algorithm\inc\QuaternionEKF.h \
+  ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
+  ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
+  ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
+  ..\User\UI\ui_g.h

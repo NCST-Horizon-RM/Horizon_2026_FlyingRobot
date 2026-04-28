@@ -28,7 +28,7 @@ typedef struct
     uint8_t attitude_flag;
     uint32_t correct_times;
 }IMU_Data_t;
-
+extern IMU_Data_t IMU_Data;
 void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid);
 
 #endif

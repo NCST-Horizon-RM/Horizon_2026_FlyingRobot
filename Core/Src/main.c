@@ -26,18 +26,23 @@
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
+#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "All_Init.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-extern float dt_pc;
+
 extern VisionRxDataUnion VisionRxDataTemp;
+float dt_pc;
 static uint32_t INS_DWT_Count = 0;
+uint64_t cnt=0;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -110,6 +115,8 @@ int main(void)
   MX_TIM7_Init();
   MX_SPI2_Init();
   MX_TIM1_Init();
+  MX_TIM3_Init();
+  MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -201,9 +208,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 1 */
 	if (htim->Instance == TIM1) 
 	{ 
-   dt_pc = DWT_GetDeltaT(&INS_DWT_Count);
+  cnt++;
   Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,VisionRxDataTemp.VisionTime, 1, 1);
 	}
+	 if (htim->Instance == TIM3) 
+	{
+		
+    Update_Shoot_Det(ALL_MOTOR.DJI_3508_Shoot_L.DATA.Speed_now, ALL_MOTOR.DJI_3508_Shoot_R.DATA.Speed_now, &g_det);
+  }
   /* USER CODE END Callback 1 */
 }
 

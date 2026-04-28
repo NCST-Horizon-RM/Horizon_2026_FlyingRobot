@@ -36,6 +36,9 @@ horizon_infantry/rui_root_init.o: ..\User\App\RUI_ROOT_INIT.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\User\Algorithm\inc\RUI_MATH.h ..\User\Start\Inc\MY_define.h \
   ..\User\Bsp\inc\RUI_DBUS.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h ..\Core\Inc\gpio.h \
@@ -88,7 +91,14 @@ horizon_infantry/rui_root_init.o: ..\User\App\RUI_ROOT_INIT.c \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
-  ..\User\Bsp\inc\Vision.h ..\User\Algorithm\inc\Power_Ctrl.h \
-  ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h \
-  ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\bsp_adc.h \
-  ..\User\Bsp\inc\RGBctrl.h
+  ..\User\Bsp\inc\Vision.h ..\USB_DEVICE\App\usbd_cdc_if.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
+  ..\USB_DEVICE\Target\usbd_conf.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\Referee.h \
+  ..\User\Algorithm\inc\CRC_DJI.h ..\User\Bsp\inc\Power_CAP.h \
+  ..\User\Bsp\inc\bsp_adc.h ..\User\Bsp\inc\RGBctrl.h

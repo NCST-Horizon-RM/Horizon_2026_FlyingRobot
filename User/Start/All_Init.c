@@ -38,10 +38,12 @@ CONTAL_Typedef RUI_V_CONTAL = { 0 };
 //遥控相关变量
 uint8_t DBUS_RX_DATA[19] = { 0 };
 DBUS_Typedef WHW_V_DBUS = { 0 };
-
+uint8_t VT13_RX_DATA[21]={0};
+VT13_Typedef VT13_DBUS={0};
 //裁判系统相关变量
 ALL_RX_Data_T ALL_RX;
 User_Data_T User_data;
+uint8_t Referee_Rx_Buf[2][REFEREE_RXFRAME_LENGTH];
 
 //测试
 uint8_t RX[20];
@@ -84,23 +86,20 @@ void Everying_Init(void)
 	flag2 = CANSPI_Initialize(&hspi2);
 
     //定时器初始化
-	HAL_TIM_Base_Start_IT(&htim7);
+	  HAL_TIM_Base_Start_IT(&htim7);
 		HAL_TIM_Base_Start_IT(&htim1);
-
+	  HAL_TIM_Base_Start_IT(&htim3);
+    HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1);
     //蜂鸣器PWM初始化
  //   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
-
-    //串口初始化
-    // HAL库的BUG处理，对于DMA需要先DeInit再Init，不然GG
+    
     HAL_DMA_DeInit(&hdma_usart1_rx);
     HAL_DMA_DeInit(&hdma_usart1_tx);
     HAL_DMA_Init(&hdma_usart1_rx);
     HAL_DMA_Init(&hdma_usart1_tx);
-    HAL_UART_DMAStop(&huart1);
-    //使能串口空闲中断
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);//上位机
-    //开启DMA接收
-    HAL_UART_Receive_DMA(&huart1,(uint8_t *)RX,20);
+    HAL_UART_DMAStop(&huart1);	
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, (uint8_t *)VT13_RX_DATA,sizeof(VT13_RX_DATA));  //重启开始DMA传输
+		__HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
 	
     HAL_DMA_DeInit(&hdma_usart3_rx);
     HAL_DMA_Init(&hdma_usart3_rx);
@@ -113,18 +112,19 @@ void Everying_Init(void)
     HAL_DMA_Init(&hdma_usart6_rx);
     HAL_DMA_Init(&hdma_usart6_tx);
     HAL_UART_DMAStop(&huart6);
-    __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);//裁判系统串口
-    HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);
+  //  HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart6,Referee_Rx_Buf[0],REFEREE_RXFRAME_LENGTH);
+		__HAL_DMA_DISABLE_IT(huart6.hdmarx, DMA_IT_HT);//关闭 DMA 半传中断
 
-	 
 	//USB初始化
-//	MX_USB_DEVICE_Init();
-
+  	MX_USB_DEVICE_Init();
+   
+    
     //蜂鸣器指示初始化完成
     TIM4->CCR3 = 50;
     HAL_Delay(500);
     TIM4->CCR3 = 0;
-
+  
  
 }
 

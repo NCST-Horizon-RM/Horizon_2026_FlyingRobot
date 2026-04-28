@@ -149,54 +149,129 @@ uint8_t RUI_F_MASTER_LOCATION_JUDGE(RUI_ROOT_STATUS_Typedef *Root)
  ************************************************************万能分隔符**************************************************************/
 void RUI_F_LED_SHOW_STATUS(RUI_ROOT_STATUS_Typedef *Root)
 {
-    switch (Root->MASTER_LOCATION)
-    {
-        case RUI_DF_MASTER_LOCATION_JUDGEING:
-            RUI_F_LED(RUI_DF_LED_YELLOW, 100);
-        break;
+//    switch (Root->MASTER_LOCATION)
+//    {
+//        case RUI_DF_MASTER_LOCATION_JUDGEING:
+//            RUI_F_LED(RUI_DF_LED_YELLOW, 100);
+//        break;
 
-        case RUI_DF_MASTER_LOCATION_HEAD:
-        {
-            if (Root->RM_DBUS           == RUI_DF_ONLINE &&
-            Root->MOTOR_HEAD_Pitch      == RUI_DF_ONLINE &&
-            Root->MOTOR_HEAD_Yaw        == RUI_DF_ONLINE &&
-            Root->MOTOR_Chassis_1       == RUI_DF_ONLINE &&
-            Root->MOTOR_Chassis_2       == RUI_DF_ONLINE &&
-            Root->MOTOR_Chassis_3       == RUI_DF_ONLINE &&
-            Root->MOTOR_Chassis_4       == RUI_DF_ONLINE &&
-            Root->MOTOR_Shoot_L         == RUI_DF_ONLINE &&
-            Root->MOTOR_Shoot_R         == RUI_DF_ONLINE &&
-            Root->MOTOR_Shoot_M         == RUI_DF_ONLINE)
-            {
-                RUI_F_LED(RUI_DF_LED_CYAN, 200);
-            }
-            if (Root->RM_DBUS           == RUI_DF_OFFLINE &&
-            (Root->MOTOR_HEAD_Pitch     == RUI_DF_OFFLINE ||
-            Root->MOTOR_HEAD_Yaw        == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_1       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_2       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_3       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_4       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Shoot_L         == RUI_DF_OFFLINE ||
-            Root->MOTOR_Shoot_R         == RUI_DF_OFFLINE ||
-            Root->MOTOR_Shoot_M	        == RUI_DF_OFFLINE))
-            {
-                RUI_F_LED(RUI_DF_LED_PURPLE, 50);
-            }
-            if (Root->RM_DBUS           == RUI_DF_ONLINE &&
-            (Root->MOTOR_HEAD_Pitch     == RUI_DF_OFFLINE ||
-            Root->MOTOR_HEAD_Yaw        == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_1       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_2       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_3       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Chassis_4       == RUI_DF_OFFLINE ||
-            Root->MOTOR_Shoot_L         == RUI_DF_OFFLINE ||
-            Root->MOTOR_Shoot_R         == RUI_DF_OFFLINE ||
-            Root->MOTOR_Shoot_M	        == RUI_DF_OFFLINE))
-            {
-                RUI_F_LED(RUI_DF_LED_CYAN, 50);
-            }
-        }
-        break;
-    }
+//        case RUI_DF_MASTER_LOCATION_HEAD:
+//        {
+//            if (Root->RM_DBUS           == RUI_DF_ONLINE &&
+//            Root->MOTOR_HEAD_Pitch      == RUI_DF_ONLINE &&
+//            Root->MOTOR_HEAD_Yaw        == RUI_DF_ONLINE &&
+//            Root->MOTOR_Chassis_1       == RUI_DF_ONLINE &&
+//            Root->MOTOR_Chassis_2       == RUI_DF_ONLINE &&
+//            Root->MOTOR_Chassis_3       == RUI_DF_ONLINE &&
+//            Root->MOTOR_Chassis_4       == RUI_DF_ONLINE &&
+//            Root->MOTOR_Shoot_L         == RUI_DF_ONLINE &&
+//            Root->MOTOR_Shoot_R         == RUI_DF_ONLINE &&
+//            Root->MOTOR_Shoot_M         == RUI_DF_ONLINE)
+//            {
+//                RUI_F_LED(RUI_DF_LED_CYAN, 200);
+//            }
+//            if (Root->RM_DBUS           == RUI_DF_OFFLINE &&
+//            (Root->MOTOR_HEAD_Pitch     == RUI_DF_OFFLINE ||
+//            Root->MOTOR_HEAD_Yaw        == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_1       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_2       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_3       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_4       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Shoot_L         == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Shoot_R         == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Shoot_M	        == RUI_DF_OFFLINE))
+//            {
+//                RUI_F_LED(RUI_DF_LED_PURPLE, 50);
+//            }
+//            if (Root->RM_DBUS           == RUI_DF_ONLINE &&
+//            (Root->MOTOR_HEAD_Pitch     == RUI_DF_OFFLINE ||
+//            Root->MOTOR_HEAD_Yaw        == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_1       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_2       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_3       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Chassis_4       == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Shoot_L         == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Shoot_R         == RUI_DF_OFFLINE ||
+//            Root->MOTOR_Shoot_M	        == RUI_DF_OFFLINE))
+//            {
+//                RUI_F_LED(RUI_DF_LED_CYAN, 50);
+//            }
+//        }
+//        break;
+//    }
+}
+
+all_ui_variable all_ui={0};
+void all_ui_Assign(void)
+{
+  
+}
+online_judge online_status={0};
+void online_time_control(online_judge *ctrl)
+{ 
+    ctrl->RM_DBUS++;
+    ctrl->RM_MOD++;
+    ctrl->MOTOR_HEAD_Pitch++;
+    ctrl->MOTOR_HEAD_Yaw++;
+    ctrl->MOTOR_Shoot_L++;
+    ctrl->MOTOR_Shoot_R++;
+    ctrl->MOTOR_Shoot_M++;
+    if (ctrl->RM_DBUS >= 200) 
+    {
+        ctrl->RM_DBUS = 200;
+        ctrl->Is_Online.RM_DBUS_State = 0; 
+    }   else{ctrl->Is_Online.RM_DBUS_State = 1; }
+    if (ctrl->RM_MOD >= 200) 
+    {
+        ctrl->RM_MOD = 200;
+        ctrl->Is_Online.RM_MOD_State = 0; 
+    }   else{ctrl->Is_Online.RM_MOD_State = 1; }
+    if (ctrl->MOTOR_HEAD_Pitch >= 200) 
+    {
+        ctrl->MOTOR_HEAD_Pitch = 200;
+        ctrl->Is_Online.MOTOR_HEAD_Pitch_State = 0; 
+    }   else{ctrl->Is_Online.MOTOR_HEAD_Pitch_State = 1; }
+    if (ctrl->MOTOR_HEAD_Yaw >= 200) 
+    {
+        ctrl->MOTOR_HEAD_Yaw = 200;
+        ctrl->Is_Online.MOTOR_HEAD_Yaw_State = 0; 
+    }   else{ctrl->Is_Online.MOTOR_HEAD_Yaw_State = 1; }
+    if (ctrl->MOTOR_Shoot_L >= 200) 
+    {
+        ctrl->MOTOR_Shoot_L = 200;
+        ctrl->Is_Online.MOTOR_Shoot_L_State = 0; 
+    }   else{ctrl->Is_Online.MOTOR_Shoot_L_State = 1; } 
+    if (ctrl->MOTOR_Shoot_R >= 200) 
+    {
+        ctrl->MOTOR_Shoot_R = 200;
+        ctrl->Is_Online.MOTOR_Shoot_R_State = 0; 
+    }   else{ctrl->Is_Online.MOTOR_Shoot_R_State = 1; }
+    if (ctrl->MOTOR_Shoot_M >= 200) 
+    {
+        ctrl->MOTOR_Shoot_M = 200;
+        ctrl->Is_Online.MOTOR_Shoot_M_State = 0; 
+    }   else{ctrl->Is_Online.MOTOR_Shoot_M_State = 1; }
+		
+		 //RUI_F_LED(RUI_DF_LED_YELLOW, 100);
+		  //RUI_F_LED(RUI_DF_LED_GREEN, 50);
+		 if(ctrl->Is_Online.MOTOR_Shoot_M_State&&
+			  ctrl->Is_Online.MOTOR_Shoot_R_State&&
+		    ctrl->Is_Online.MOTOR_Shoot_L_State&&
+		    ctrl->Is_Online.MOTOR_HEAD_Yaw_State&&
+		    ctrl->Is_Online.MOTOR_HEAD_Pitch_State)
+		    {RUI_F_LED(RUI_DF_LED_RED, 50);}
+		 else
+		    {RUI_F_LED(RUI_DF_LED_RED, 150);}
+		     
+		// RUI_F_LED(RUI_DF_LED_BLUE, 50);
+		 //RUI_F_LED(RUI_DF_LED_WRITE, 50);
+			// RUI_F_LED(RUI_DF_LED_PURPLE, 50);
+			// RUI_F_LED(RUI_DF_LED_CYAN, 50);
+		ctrl->five_status = 0;
+    ctrl->five_status += ctrl->Is_Online.MOTOR_HEAD_Pitch_State * 1;
+    ctrl->five_status += ctrl->Is_Online.MOTOR_HEAD_Yaw_State   * 10;
+    ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_L_State    * 100;
+    ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_R_State    * 1000;
+    ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_M_State    * 10000;
+	
 }

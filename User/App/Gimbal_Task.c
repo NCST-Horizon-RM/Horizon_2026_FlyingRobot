@@ -1,6 +1,7 @@
 #include "Gimbal_Task.h"
 #include "math.h"
 #include "VOFA.h"
+#include "All_Init.h"
 extern float dt_pc;
 extern DBUS_Typedef WHW_V_DBUS;
 extern MOTOR_Typdef ALL_MOTOR;
@@ -16,28 +17,32 @@ uint8_t lock=0;
  *	@time:				//23-04-13 12:42
  *	@ReadMe:			//
  ************************************************************万能分隔符**************************************************************/
-//float PID_P_Yaw_4_shou[3]= {  1.7,   0.07f,   0.0f };
-//float PID_P_Yaw_3_shou[3] = {  1.7,   0.25f,   0.0f };
-//float PID_P_Yaw_2_shou[3] = {  1.7,   0.3f,   0.0f };
-//float PID_P_Yaw_1_shou[3] = {  2.3,   0.4f,   0.0f };
+float PID_P_Yaw_4_shou[3]= {  1.7,   0.07f,   0.0f };
+float PID_P_Yaw_3_shou[3] = {  1.7,   0.25f,   0.0f };
+float PID_P_Yaw_2_shou[3] = {  1.7,   0.3f,   0.0f };
+float PID_P_Yaw_1_shou[3] = {  2.3,   0.4f,   0.0f };
 
-//float PID_P_Yaw_4_zimiao[3]= {  1.8,   0.07f,   0.0f };
-//float PID_P_Yaw_3_zimiao[3] = {  1.8,   0.25f,   0.0f };
-//float PID_P_Yaw_2_zimiao[3] = {  1.8,   0.3f,   0.0f };
-//float PID_P_Yaw_1_zimiao[3] = {  2.3,   0.4f,   0.0f };
+float PID_P_Yaw_4_zimiao[3]= {  1.8,   0.07f,   0.0f };
+float PID_P_Yaw_3_zimiao[3] = {  1.8,   0.25f,   0.0f };
+float PID_P_Yaw_2_zimiao[3] = {  1.8,   0.3f,   0.0f };
+float PID_P_Yaw_1_zimiao[3] = {  2.3,   0.4f,   0.0f };
 
 float PID_P_Yaw_shou[3] = {  1.1,   0.003f,   0.0f };
 float PID_S_Yaw_shou[3] = {  0.08,   0.0f,   0.0f   }; 
 			
-float PID_P_Pitch_shou[3] = {   0.3,   0.01f,   0   };
-float PID_S_Pitch_shou[3] = {   0.3,   0.0f,   0.01   };
+float PID_P_Pitch_shou[3] = {   0.6,   0.01f,   0   };
+float PID_S_Pitch_shou[3] = {   0.6,   0.0f,   0.01   };
 
-float PID_P_Yaw_zimiao[3] = {  1.5,   0.003f,   0.0f };
-float PID_S_Yaw_zimiao[3] = {  0.1,   0.0f,   0.0f   };
+//float PID_P_Yaw_zimiao[3] = {  2.0,   0.003f,   0.0f };
+//float PID_S_Yaw_zimiao[3] = {  0.13,   0.0f,   0.0f   };
+float PID_P_Yaw_zimiao[3] = {  1.2,   0.003f,   0.0f };
+float PID_S_Yaw_zimiao[3] = {  0.12,   0.0f,   0.0f   };
+
 				 
-float PID_P_Pitch_zimiao[3] = {   0.3,   0.03f,   0   };
-float PID_S_Pitch_zimiao[3] = {   0.3,   0.0f,   0.01   };
-
+//float PID_P_Pitch_zimiao[3] = {   1.0,   0.03f,   0   };
+//float PID_S_Pitch_zimiao[3] = {   0.6,   0.0f,   0.01   };
+float PID_P_Pitch_zimiao[3] = {   0.8,   0.03f,   0   };
+float PID_S_Pitch_zimiao[3] = {   0.6,   0.0f,   0.01   };
 
 uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
 {
@@ -261,18 +266,18 @@ if(WHW_V_DBUS.Remote.S2_u8==2)
 			//	Visual_can_ctrl(&hcan1,0x001);
 
 //	 LKMF_Data_Read(&hcan2,2);//翎控电机获取数据
-VOFA_justfloat(
-WHW_V_DBUS.Remote.CH3_int16,//0
-WHW_V_DBUS.Remote.CH2_int16,//1  p速度环误差
-MOTOR->DJI_6020_Yaw.PID_S.Err,//2  y速度环误差
-MOTOR->DJI_6020_Yaw.DATA.Aim,//3 y期望
-IMU->YawTotalAngle*22.75,//4  y实际
-IMU->pitch * 50.0,//5 p实际
-MOTOR->DJI_3508_Shoot_M.DATA.Aim,//6 p实际
-MOTOR->DJI_6020_Pitch.DATA.Aim,//7
-(float)MOTOR->DJI_3508_Shoot_L.DATA.Speed_now,//8
--(float)MOTOR->DJI_3508_Shoot_R.DATA.Speed_now);//9		
-		
+//VOFA_justfloat(
+//(float)g_det.cnt,//0
+//WHW_V_DBUS.Remote.CH2_int16,//1  p速度环误差
+//MOTOR->DJI_6020_Yaw.PID_S.Err,//2  y速度环误差
+//MOTOR->DJI_6020_Yaw.DATA.Aim,//3 y期望
+//IMU->YawTotalAngle*22.75,//4  y实际
+//IMU->pitch * 50.0,//5 p实际
+//MOTOR->DJI_3508_Shoot_M.DATA.Aim,//6 p实际
+//MOTOR->DJI_6020_Pitch.DATA.Aim,//7
+//(float)MOTOR->DJI_3508_Shoot_L.DATA.Speed_now,//8
+//-(float)MOTOR->DJI_3508_Shoot_R.DATA.Speed_now);//9		
+//		
 //VOFA_justfloat(
 //-MOTOR->DJI_6020_Yaw.PID_S.Output,//0
 //IMU->YawTotalAngle,//1  p速度环误差
@@ -327,7 +332,7 @@ MOTOR->DJI_6020_Pitch.DATA.Aim,//7
 		{	
 			pitch_F=0.48252*cos(IMU->pitch*0.017453)/0.07/33*2048;
 			pitch_F=RUI_F_MATH_ABS_float(pitch_F);
-	    LKMF_iq_ctrl(&hcan1,2,-MOTOR->DJI_6020_Pitch.PID_S.Output+pitch_F*0.2);
+	    LKMF_iq_ctrl(&hcan1,2,-MOTOR->DJI_6020_Pitch.PID_S.Output+pitch_F*0);
 			DJI_Current_Ctrl(&hcan2,0x4fe,-(int16_t)MOTOR->DJI_6020_Yaw.PID_S.Output,0,0,0);
 			DWT_Delay_us(15);
 			

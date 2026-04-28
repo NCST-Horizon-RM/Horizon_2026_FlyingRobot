@@ -36,6 +36,9 @@ horizon_infantry/power_cap.o: ..\User\Bsp\Power_CAP.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\User\Start\Inc\MY_Define.h ..\User\Bsp\inc\can_bsp.h \
   ..\Core\Inc\can.h D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\User\Bsp\inc\Referee.h ..\Core\Inc\usart.h \

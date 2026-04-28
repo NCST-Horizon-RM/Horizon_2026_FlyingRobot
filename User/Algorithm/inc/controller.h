@@ -59,7 +59,7 @@ typedef struct __packed
     float KiRatio;
     float KdRatio;
 
-    float eStep;
+    float eStep;  //误差步长
     float ecStep;
 
     float e;
