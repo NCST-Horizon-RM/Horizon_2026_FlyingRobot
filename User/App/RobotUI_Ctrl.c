@@ -18,8 +18,8 @@ void RobotUI_Dynamic(uint8_t RM_DBUS,
 {
     static uint8_t UI_Init = RUI_DF_READY;
      
-     ui_init_g_UngroupNUM();
-     ui_update_g_UngroupNUM();
+//     ui_init_g_UngroupNUM();
+//     ui_update_g_UngroupNUM();
     //ui_remove_g_Ungroup();
 
 }

@@ -102,9 +102,9 @@ horizon_infantry/usbd_cdc_if.o: ..\USB_DEVICE\App\usbd_cdc_if.c \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
   ..\User\Bsp\inc\Vision.h ..\User\Algorithm\inc\Power_Ctrl.h \
   ..\User\Bsp\inc\Power_CAP.h ..\User\Bsp\inc\bsp_adc.h \
-  ..\User\Bsp\inc\RGBctrl.h ..\User\App\inc\Shoot_Task.h \
-  ..\User\Algorithm\inc\heat_control.h \
+  ..\User\Bsp\inc\RGBctrl.h ..\User\Bsp\inc\VT13.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\User\App\inc\Shoot_Task.h ..\User\Algorithm\inc\heat_control.h \
   ..\User\App\inc\Chassis_Task.h ..\User\App\inc\RobotUI_Ctrl.h \
   ..\User\UI\ui.h ..\User\UI\ui_interface.h ..\User\UI\ui_types.h \
   ..\User\UI\ui_g.h ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h \
@@ -113,5 +113,4 @@ horizon_infantry/usbd_cdc_if.o: ..\USB_DEVICE\App\usbd_cdc_if.c \
   ..\User\Start\Inc\log.h ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
-  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h \
-  ..\User\Bsp\inc\VT13.h
+  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h

@@ -9,8 +9,97 @@ uint32_t ui_cnt=0;
 
 
 
+void UI_Task_1ms(void)
+{
+    // 用于产生 33ms 滴答的计时器
+    static uint16_t time_ms = 0;
+    // 33ms 专属槽位计数器
+    static uint16_t tick_33ms = 0; 
+    
+    // ==========================================
+    // 严格限制：每 33ms 只允许弹出并执行一次发送
+    // ==========================================
+    if (time_ms % 33 == 0)
+    {
+        // 10秒一个大循环 (10000ms / 33ms ≈ 303)
+        uint16_t loop_index = tick_33ms % 303; 
+        
+        // 1. 慢速任务槽位 (0 ~ 8)
+        // 将所有 6个 init 和 3个慢速 update 安排在 10 秒循环的开头
+        if      (loop_index == 0) { ui_init_g_Ungroup(); }
+        else if (loop_index == 1) { ui_init_g_Ungroup1(); }
+        else if (loop_index == 2) { ui_init_g_Ungroup2(); }
+        else if (loop_index == 3) { ui_init_g_Ungroupfast(); }
+        else if (loop_index == 4) { ui_init_g_Ungroupyawpitch(); }
+        else if (loop_index == 5) { ui_init_g_Ungroupmid(); }
+        else if (loop_index == 6) { ui_update_g_Ungroup(); }
+        else if (loop_index == 7) { ui_update_g_Ungroup1(); }
+        else if (loop_index == 8) { ui_update_g_Ungroup2(); }
+        
+        // 2. 高频任务槽位 (9 ~ 302)
+        // 避开了 0~8 的慢速槽位，剩余槽位按 4:2:1 比例持续轮询
+        else 
+        {
+            uint8_t fast_slot = loop_index % 4;
+            
+            if (fast_slot == 1 || fast_slot == 3) 
+            {
+                // 最高频 fast (占 2/4)
+                ui_update_g_Ungroupfast();
+            }
+            else if (fast_slot == 2) 
+            {
+                // 进一步细分以满足比例
+                if (loop_index % 8 == 2)
+                {
+                    // 次高频 yawpitch (占 1/8)
+                    ui_update_g_Ungroupyawpitch();
+                }
+                else 
+                {
+                    // 最低频 mid (占 1/8)
+                    ui_update_g_Ungroupmid();
+                }
+            }
+            // fast_slot == 0 会和部分慢速任务的余数重叠，直接跳过不发，留作带宽安全余量
+        }
+        
+        tick_33ms++;
+    }
 
+    // 维持计时器循环，防止溢出（33000 既是 33 的倍数，又不会超出 uint16_t 的 65535）
+    time_ms++;
+    if (time_ms >= 33000)
+    {
+        time_ms = 0;
+    }
+}
 
+void ui_updata()
+{
+  	  ui_init_g_Ungroupfast();
+			osDelay(34);
+			ui_init_g_Ungroupyawpitch();
+			osDelay(34);
+			ui_update_g_Ungroupfast();
+			osDelay(34);
+      ui_update_g_Ungroupyawpitch();
+      osDelay(34);
+			ui_init_g_Ungroupmid();
+			osDelay(34);
+			ui_update_g_Ungroupmid();
+			osDelay(34);
+}
+void ui_staic()
+{
+  ui_init_g_Ungroup();//这个里面有7个发送函数
+	ui_init_g_Ungroup1();//这个里面有7个发送函数
+	ui_init_g_Ungroup2();//这个里面有2个发送函数
+	ui_update_g_Ungroup();//这个里面有7个发送函数
+	ui_update_g_Ungroup1();//这个里面有7个发送函数
+	ui_update_g_Ungroup2();//这个里面有2个发送函数
+}
+uint8_t uicnt=0;
 //34ms,画UI任务
 void StartRobotUITask(void const * argument)
 {   
@@ -19,42 +108,34 @@ void StartRobotUITask(void const * argument)
 
     //初始化UI界面
  //  RobotUI_Static_Init();
-
-	
+  ui_init_g_Ungroup();//这个里面有7个发送函数
+	ui_init_g_Ungroup1();//这个里面有7个发送函数
+	ui_init_g_Ungroup2();//这个里面有2个发送函数
+	ui_init_g_Ungroupfast();//这个里面有1个发送函数
+	ui_init_g_Ungroupmid();//这个里面有1个发送函数
+	ui_init_g_Ungroupyawpitch();//这个里面有1个发送函数
+	ui_update_g_Ungroup();//这个里面有7个发送函数
+	ui_update_g_Ungroup1();//这个里面有7个发送函数
+	ui_update_g_Ungroup2();//这个里面有2个发送函数
+	ui_update_g_Ungroupfast();//这个里面有1个发送函数
+	ui_update_g_Ungroupmid();//这个里面有1个发送函数
+	ui_update_g_Ungroupyawpitch();//这个里面有1个发送函数
     for (;;)
     {     
-			  ui_cnt++;
-			switch(ALL_state.ui_state) {
-				case 0:
-				 ui_init_g_Ungroup();
-         ui_update_g_Ungroup();
-         ui_remove_g_Ungroup();
-			   ui_init_g_UngroupNUM();
-				 ui_remove_g_UngroupNUM();
-            break;
-        case 1:
-            
-            break;
-        case 2:
-            
-            break;
-        case 3:
-             
-            break;
-        default:
-         
-            break;
-    }
-			 if(ui_cnt%3000==0)
-			 { 
-			   ui_remove_g_Ungroup();
-			   ui_init_g_UngroupNUM();
-				 ui_remove_g_UngroupNUM();
-			 }
-//        ui_init_g_UngroupNUM();
-//        ui_update_g_UngroupNUM();
-        osDelay(1);
-    }
+	  if(uicnt>=5)
+		{ui_cnt=5;}
+		else
+		{uicnt++;}
+		
+
+    all_ui.pitch_data=IMU_Data.pitch;
+		all_ui.yaw_data=IMU_Data.yaw;
+    if(uicnt>4)
+		{ui_updata();}
+		else{ui_staic();}
+   //UI_Task_1ms();
+		
+		}
 }
 
 //运动控制任务
@@ -76,11 +157,11 @@ void StartMoveTask(void const * argument)
     for (;;)
 	{    
         /*底盘*/
-//        RobotTask(1, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
-//                  &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
-//        move_C = chassis_task(&RUI_V_CONTAL,
-//                              &RUI_ROOT_STATUS, &User_data, &model,
-//                              &CAPDATE.GET, &ALL_MOTOR);
+        RobotTask(1, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
+                  &CAPDATE, &VisionRxData, &RUI_ROOT_STATUS);
+        move_C = chassis_task(&RUI_V_CONTAL,
+                              &RUI_ROOT_STATUS, &User_data, &model,
+                              &CAPDATE.GET, &ALL_MOTOR);
         
         /*云台*/
         RobotTask(2, &WHW_V_DBUS, &RUI_V_CONTAL, &User_data,
@@ -116,8 +197,8 @@ void StartDefiantTask(void const * argument)
 		 osDelayUntil(&currentTimeDefiant, 1);
 	}
 }
-//float dt_pc;
-//static uint32_t INS_DWT_Count = 0;
+float dt_pc;
+static uint32_t INS_DWT_Count = 0;
 
 //陀螺仪解算与自瞄发送任务
 void StartIMUTask(void const * argument)
@@ -140,8 +221,8 @@ void StartIMUTask(void const * argument)
     {
         INS_Task(&IMU_Data, &imu_temp);
         
-//        Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,
-//                       dt_pc, 1, 1);
+        Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,
+                       dt_pc, 1, 1);
         VisionRxDataTemp.offlinetime++;
       //  dt_pc = DWT_GetDeltaT(&INS_DWT_Count);			
 			
@@ -200,11 +281,11 @@ void BSP_TIM_IRQHandler(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM7) 
 	{
-//		TX[0]++;
-//		CANSPI_SEND(&hspi2, 0x201, TX);
+		TX[0]++;
+		CANSPI_SEND(&hspi2, 0x201, TX);
 	
-//	 
-//   Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,dt_pc, 1, 1);
+	 
+   Vision_Tx_Data(IMU_Data.pitch, IMU_Data.yaw,dt_pc, 1, 1);
 	
 	}
 }
@@ -321,40 +402,40 @@ void BSP_UART_IRQHandler(UART_HandleTypeDef *huart)
         }
         
     }
-//		   if(huart->Instance ==USART1)//遥控接收串口
-//    {
-//        if (RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
-//        {
-//			uint16_t temp = 0;
-//            __HAL_UART_CLEAR_IDLEFLAG(&huart1);  //清除空闲中断标志（否则会一直不断进入中断）
-//			temp = huart1.Instance -> SR; // 清除SR状态寄存器
-//			temp = huart1.Instance -> DR; // 清除DR数据寄存器，用来清除中断
-//            // 下面进行空闲中断相关处理
-//            HAL_UART_DMAStop(&huart1);//暂时停止本次DMA传输，进行数据处理
-//            data_length_1=BUFFER_SIZE_1 - __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);
+		   if(huart->Instance ==USART1)//遥控接收串口
+    {
+        if (RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
+        {
+			uint16_t temp = 0;
+            __HAL_UART_CLEAR_IDLEFLAG(&huart1);  //清除空闲中断标志（否则会一直不断进入中断）
+			temp = huart1.Instance -> SR; // 清除SR状态寄存器
+			temp = huart1.Instance -> DR; // 清除DR数据寄存器，用来清除中断
+            // 下面进行空闲中断相关处理
+            HAL_UART_DMAStop(&huart1);//暂时停止本次DMA传输，进行数据处理
+            data_length_1=BUFFER_SIZE_1 - __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);
 
-//                VT13_Resovled(VT13_RX_DATA , &VT13_DBUS,&VT13_UNION);
+                VT13_Resovled(VT13_RX_DATA , &VT13_DBUS,&VT13_UNION);
 
-//             HAL_UART_Receive_DMA(&huart1, (uint8_t *)VT13_RX_DATA,sizeof(VT13_RX_DATA));  //重启开始DMA传输
-//        }
-//        
-//    }
-//    if(huart->Instance ==USART6)//裁判系统串口
-//    {
-//		uint8_t data_length_6;
-//        if (RESET != __HAL_UART_GET_FLAG(&huart6, UART_FLAG_IDLE))
-//        {
-//            __HAL_UART_CLEAR_IDLEFLAG(&huart6);  //清除空闲中断标志（否则会一直不断进入中断）
-//            // 下面进行空闲中断相关处理
-//            HAL_UART_DMAStop(&huart6);//暂时停止本次DMA传输，进行数据处理
-//            
-//            data_length_6  = BUFFER_SIZE_6 - __HAL_DMA_GET_COUNTER(&hdma_usart6_rx);//计算接收到的数据长度
-//		    //Read_Data_first(&ALL_RX , &User_data , data_length_6);//测试函数：待修改
-//		    memset((uint8_t*)ALL_RX.Data,0,data_length_6);//清零接收缓冲区
+             HAL_UART_Receive_DMA(&huart1, (uint8_t *)VT13_RX_DATA,sizeof(VT13_RX_DATA));  //重启开始DMA传输
+        }
+        
+    }
+    if(huart->Instance ==USART6)//裁判系统串口
+    {
+		uint8_t data_length_6;
+        if (RESET != __HAL_UART_GET_FLAG(&huart6, UART_FLAG_IDLE))
+        {
+            __HAL_UART_CLEAR_IDLEFLAG(&huart6);  //清除空闲中断标志（否则会一直不断进入中断）
+            // 下面进行空闲中断相关处理
+            HAL_UART_DMAStop(&huart6);//暂时停止本次DMA传输，进行数据处理
+            
+            data_length_6  = BUFFER_SIZE_6 - __HAL_DMA_GET_COUNTER(&hdma_usart6_rx);//计算接收到的数据长度
+		    //Read_Data_first(&ALL_RX , &User_data , data_length_6);//测试函数：待修改
+		    memset((uint8_t*)ALL_RX.Data,0,data_length_6);//清零接收缓冲区
 
-//            HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);  //重启开始DMA传输
-//        }
-//    }
+            HAL_UART_Receive_DMA(&huart6,(uint8_t *)ALL_RX.Data,255);  //重启开始DMA传输
+        }
+    }
 
 
 }

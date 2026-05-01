@@ -273,5 +273,24 @@ void online_time_control(online_judge *ctrl)
     ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_L_State    * 100;
     ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_R_State    * 1000;
     ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_M_State    * 10000;
+		all_ui.all_motor_status=ctrl->five_status;
+		if(VT13_DBUS.KeyBoard.Z_PreeNumber)
+    {all_ui.led_state=0;all_ui.qianjin=20;}	
+    else{all_ui.qianjin=5;}		
+		if(VT13_DBUS.KeyBoard.X_PreeNumber)
+    {all_ui.led_state=1;all_ui.houtui=20;}
+    else{all_ui.houtui=5;}			
+		if(VT13_DBUS.KeyBoard.C_PreeNumber)
+    {all_ui.led_state=2;all_ui.daiming=20;}		
+		else{all_ui.daiming=5;}	
+		if(VT13_DBUS.KeyBoard.V_PreeNumber)
+    {all_ui.led_state=3;all_ui.qifei=20;}	
+		else{all_ui.qifei=5;}	
+    if(VT13_DBUS.KeyBoard.B_PreeNumber)
+    {all_ui.led_state=3;all_ui.jiangluo=20;}		
+    else{all_ui.jiangluo=5;}			
+		
+		
+		
 	
 }

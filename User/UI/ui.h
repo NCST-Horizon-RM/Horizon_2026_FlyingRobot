@@ -16,9 +16,21 @@ extern "C" {
 void ui_init_g_Ungroup();
 void ui_update_g_Ungroup();
 void ui_remove_g_Ungroup();
-void ui_init_g_UngroupNUM();
-void ui_update_g_UngroupNUM();
-void ui_remove_g_UngroupNUM();
+void ui_init_g_Ungroup1();
+void ui_update_g_Ungroup1();
+void ui_remove_g_Ungroup1();
+void ui_init_g_Ungroup2();
+void ui_update_g_Ungroup2();
+void ui_remove_g_Ungroup2();
+void ui_init_g_Ungroupfast();
+void ui_update_g_Ungroupfast();
+void ui_remove_g_Ungroupfast();
+void ui_init_g_Ungroupmid();
+void ui_update_g_Ungroupmid();
+void ui_remove_g_Ungroupmid();
+void ui_init_g_Ungroupyawpitch();
+void ui_update_g_Ungroupyawpitch();
+void ui_remove_g_Ungroupyawpitch();
 
 #ifdef __cplusplus
 }

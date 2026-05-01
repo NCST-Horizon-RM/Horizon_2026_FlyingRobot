@@ -41,8 +41,8 @@ float PID_S_Yaw_zimiao[3] = {  0.12,   0.0f,   0.0f   };
 				 
 //float PID_P_Pitch_zimiao[3] = {   1.0,   0.03f,   0   };
 //float PID_S_Pitch_zimiao[3] = {   0.6,   0.0f,   0.01   };
-float PID_P_Pitch_zimiao[3] = {   0.8,   0.03f,   0   };
-float PID_S_Pitch_zimiao[3] = {   0.6,   0.0f,   0.01   };
+float PID_P_Pitch_zimiao[3] = {   0.85,   0.03f,   0   };
+float PID_S_Pitch_zimiao[3] = {   0.65,   0.0f,   0.01   };
 
 uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
 {

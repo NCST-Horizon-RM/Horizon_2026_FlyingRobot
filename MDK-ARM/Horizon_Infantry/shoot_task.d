@@ -102,16 +102,15 @@ horizon_infantry/shoot_task.o: ..\User\App\Shoot_Task.c \
   ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\Referee.h \
   ..\User\Algorithm\inc\CRC_DJI.h ..\User\Bsp\inc\Power_CAP.h \
   ..\User\Bsp\inc\bsp_adc.h ..\User\Bsp\inc\RGBctrl.h \
-  ..\User\Algorithm\inc\heat_control.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  ..\User\Start\Inc\All_Init.h ..\User\App\inc\Chassis_Task.h \
-  ..\User\App\inc\RobotUI_Ctrl.h ..\User\UI\ui.h \
-  ..\User\UI\ui_interface.h ..\User\UI\ui_types.h ..\User\UI\ui_g.h \
-  ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h ..\Core\Inc\spi.h \
-  ..\User\Bsp\inc\MCP2515.h ..\User\Start\Inc\WHW_IRQN.h \
-  ..\User\Bsp\inc\music.h ..\User\Start\Inc\log.h \
-  ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
+  ..\User\Bsp\inc\VT13.h D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\User\Algorithm\inc\heat_control.h ..\User\Start\Inc\All_Init.h \
+  ..\User\App\inc\Chassis_Task.h ..\User\App\inc\RobotUI_Ctrl.h \
+  ..\User\UI\ui.h ..\User\UI\ui_interface.h ..\User\UI\ui_types.h \
+  ..\User\UI\ui_g.h ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h \
+  ..\Core\Inc\spi.h ..\User\Bsp\inc\MCP2515.h \
+  ..\User\Start\Inc\WHW_IRQN.h ..\User\Bsp\inc\music.h \
+  ..\User\Start\Inc\log.h ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h \
-  ..\User\Bsp\inc\VT13.h ..\User\Bsp\inc\VOFA.h
+  ..\User\Bsp\inc\VOFA.h

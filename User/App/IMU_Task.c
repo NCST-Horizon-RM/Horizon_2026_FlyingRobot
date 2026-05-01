@@ -75,9 +75,9 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
 #endif
 
 #ifdef User_Release
-         IMU->gyro_correct[0] = -0.00310394168;
-           IMU->gyro_correct[1] = -0.00429262919;
-           IMU->gyro_correct[2] = -4.30367509e-05;
+         IMU->gyro_correct[0] = 0.00296077156;
+           IMU->gyro_correct[1] = -0.002338877881;
+           IMU->gyro_correct[2] = 0.00114898745;
            IMU->attitude_flag=2; //go to 2 state
 #endif
         }

@@ -103,8 +103,8 @@ horizon_infantry/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
   ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\Power_CAP.h \
   ..\User\Bsp\inc\bsp_adc.h ..\User\Bsp\inc\RGBctrl.h \
+  ..\User\Bsp\inc\VT13.h D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\User\App\inc\Shoot_Task.h ..\User\Algorithm\inc\heat_control.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\User\App\inc\Chassis_Task.h ..\User\App\inc\RobotUI_Ctrl.h \
   ..\User\UI\ui.h ..\User\UI\ui_interface.h ..\User\UI\ui_types.h \
   ..\User\UI\ui_g.h ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h \
@@ -112,5 +112,4 @@ horizon_infantry/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\User\Bsp\inc\music.h ..\User\Start\Inc\log.h \
   ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h ..\User\Bsp\inc\WS2812.h \
-  ..\User\Bsp\inc\VT13.h
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h ..\User\Bsp\inc\WS2812.h

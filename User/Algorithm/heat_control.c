@@ -29,6 +29,7 @@ void Update_Robot_Level(uint8_t level) {
     // 从查表获取对应等级的属性
     g_heat_watcher.heat_limit = Level_Table[level - 1].heat_limit;
     g_heat_watcher.cooling_rate = Level_Table[level - 1].cooling_rate;
+	  all_ui.heat=g_heat_watcher.remain_heat/(float)(g_heat_watcher.heat_limit)*350.0f;
 }
 
 /**
@@ -128,6 +129,7 @@ bool Update_Shoot_Det(float speed1, float speed2, ShootDet_t *det) {
         if (condition_relative || condition_absolute) {
             det->armed = false;
             det->cnt++;
+					  all_ui.shoot_number=det->cnt;
             det->cool_down_cnt = COOL_DOWN_TICKS;
             det->max_drop_in_round = 0;
             shoot_done = true;

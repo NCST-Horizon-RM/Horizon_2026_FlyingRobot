@@ -100,4 +100,7 @@ horizon_infantry/robotui_ctrl.o: ..\User\App\RobotUI_Ctrl.c \
   ..\User\Algorithm\inc\kalman_filter.h ..\User\Algorithm\inc\pid_temp.h \
   ..\User\Bsp\inc\bsp_imu_pwm.h ..\User\Bsp\inc\BMI088driver.h \
   ..\User\Bsp\inc\BMI088reg.h ..\User\Bsp\inc\BMI088Middleware.h \
+  ..\User\App\inc\RUI_ROOT_INIT.h ..\User\App\inc\Gimbal_Task.h \
+  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\RGBctrl.h \
+  ..\User\Bsp\inc\VT13.h D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\User\UI\ui_g.h

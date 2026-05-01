@@ -22,7 +22,7 @@
 #include "RGBctrl.h"
 #include "Motors.h"
 #include "Power_CAP.h"
-
+#include "VT13.h"
 
 typedef struct
 {  
@@ -53,14 +53,20 @@ typedef struct
  uint16_t all_motor_status;  
  float  yaw_data;
  float  pitch_data;
- uint8_t aim_stutas;
- uint8_t shoot_stutas;
+ uint8_t aim_stutas;//
+ uint8_t shoot_stutas;//
  uint8_t shoot_bool1;
  uint8_t shoot_bool2;
  uint8_t shoot_bool3;
  uint8_t shoot_bool4;
- uint8_t shoot_number;
- uint8_t heat;
+ uint8_t shoot_number;//
+ uint8_t qifei;
+ uint8_t daiming;
+ uint8_t jiangluo;
+ uint8_t qianjin;
+ uint8_t houtui;
+ int16_t heat;
+ uint8_t led_state;
 }all_ui_variable;
 extern all_ui_variable all_ui;
 extern online_judge online_status;

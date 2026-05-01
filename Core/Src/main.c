@@ -39,7 +39,7 @@
 /* USER CODE BEGIN PTD */
 
 extern VisionRxDataUnion VisionRxDataTemp;
-float dt_pc;
+//float dt_pc;
 static uint32_t INS_DWT_Count = 0;
 uint64_t cnt=0;
 
