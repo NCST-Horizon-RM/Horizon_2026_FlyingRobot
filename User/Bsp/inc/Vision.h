@@ -4,6 +4,7 @@
 #include "main.h"
 #include "usart.h"
 #include "usbd_cdc_if.h"
+#include "Referee.h"
 typedef union
 {
   uint8_t Data[4];

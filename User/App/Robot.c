@@ -6,11 +6,37 @@ extern MOTOR_Typdef ALL_MOTOR;
 extern IMU_Data_t IMU_Data;
 extern VisionRxDataUnion VisionRxDataTemp;
 extern HeatObserver_t g_heat_watcher;
-
+uint8_t vt13_state_gimbal=0;
+uint8_t vt13_state_shoot=0;
 int a=0,b=0;
 float yawvison=-22.75;
 float pitchvison=-50;
 float fireaim=0;
+void vt13_state(void)
+{
+  if(VT13_DBUS.Remote.mode_sw==0)
+	{
+	  vt13_state_gimbal=0;
+		vt13_state_shoot=0;
+	}
+	if(VT13_DBUS.Remote.mode_sw==1)
+	{
+			if(VT13_DBUS.Remote.pause==1)
+			{vt13_state_gimbal=2;}
+			else
+			{vt13_state_gimbal=1;}
+			vt13_state_shoot=0;
+	}	
+	if(VT13_DBUS.Remote.mode_sw==2)
+	{
+	  	if(VT13_DBUS.Remote.pause==1)
+			{vt13_state_gimbal=2;}
+			else
+			{vt13_state_gimbal=1;}
+		vt13_state_shoot=1;
+	}
+	
+}
 void RobotTask(uint8_t mode,
                DBUS_Typedef *DBUS,
                CONTAL_Typedef *CONTAL,
@@ -106,8 +132,8 @@ void RobotTask(uint8_t mode,
         } break;
 
   case 2://云台
-          { 
-						if(DBUS->Remote.S2_u8 == 1)
+          { vt13_state();
+						if(vt13_state_gimbal==0)
 						{
 							CONTAL->HEAD.Pitch=IMU_Data.pitch * 50.0f;
 						  CONTAL->HEAD.Yaw= IMU_Data.YawTotalAngle * 22.75f;
@@ -115,34 +141,34 @@ void RobotTask(uint8_t mode,
 			  		b= CONTAL->HEAD.Yaw;
 						all_ui.aim_stutas=5;
 						}
-						else
-						{
-						   if(DBUS->Remote.S2_u8 == 2||VT13_DBUS.Mouse.R_State==2)
+						
+						
+						   if(vt13_state_gimbal==2||VT13_DBUS.Mouse.R_State==2)
 						 {	 
 							 if(VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900)
 							 {                all_ui.aim_stutas=20;
-                                CONTAL->HEAD.Pitch = VisionRxDataTemp.PitchAngle *pitchvison-(float) (DBUS->Remote.CH3_int16) * 0.001f;
+                                CONTAL->HEAD.Pitch = VisionRxDataTemp.PitchAngle *pitchvison-(float) (VT13_DBUS.Remote.Channel[3]) * 0.001f;
 								            
 																CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
                                                                             CONTAL->HEAD.Pitch_MIN,
                                                                             CONTAL->HEAD.Pitch);
 								                
 
-                                CONTAL->HEAD.Yaw = VisionRxDataTemp.YawAngle *yawvison-(float) (DBUS->Remote.CH2_int16) * 0.001f;
+                                CONTAL->HEAD.Yaw = VisionRxDataTemp.YawAngle *yawvison-(float) (VT13_DBUS.Remote.Channel[2]) * 0.001f;
 								    
                                 CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(b+900,b-900,CONTAL->HEAD.Yaw);
                            
 							 }
 								else
 							 {
-								 CONTAL->HEAD.Pitch -= (float) (DBUS->Remote.CH3_int16) * 0.01f +
+								 CONTAL->HEAD.Pitch -= (float) (VT13_DBUS.Remote.Channel[3]) * 0.01f +
                                       VT13_DBUS.Mouse.Y_Flt*0.06;
 
                          CONTAL->HEAD.Pitch = RUI_F_MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,
                                                             CONTAL->HEAD.Pitch_MIN,
                                                             CONTAL->HEAD.Pitch);
 
-                                CONTAL->HEAD.Yaw -= (float) (DBUS->Remote.CH2_int16) * 0.01f+
+                                CONTAL->HEAD.Yaw -= (float) (VT13_DBUS.Remote.Channel[2]) * 0.006f+
 																	VT13_DBUS.Mouse.X_Flt*0.04;
 								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(b+900,
                                                           b-900,
@@ -150,10 +176,11 @@ void RobotTask(uint8_t mode,
                 all_ui.aim_stutas=5;
 							 }
 						 }
+						 
                    //  if(DBUS->Remote.S2_u8 == 3)
-						   else
+						  if(vt13_state_gimbal==1)
 							 {
-								  CONTAL->HEAD.Pitch -= (float) (DBUS->Remote.CH3_int16) * 0.01f +
+								  CONTAL->HEAD.Pitch -= (float) (VT13_DBUS.Remote.Channel[3]) * 0.01f +
                                       VT13_DBUS.Mouse.Y_Flt*0.06;
 
 
@@ -161,7 +188,7 @@ void RobotTask(uint8_t mode,
                                                             CONTAL->HEAD.Pitch_MIN,
                                                             CONTAL->HEAD.Pitch);
 
-                 CONTAL->HEAD.Yaw -= (float) (DBUS->Remote.CH2_int16) * 0.01f+
+                 CONTAL->HEAD.Yaw -= (float) (VT13_DBUS.Remote.Channel[2]) * 0.006f+
 									 VT13_DBUS.Mouse.X_Flt*0.04;
 								CONTAL->HEAD.Yaw= RUI_F_MATH_Limit_float(b+900,
                                                           b-900,
@@ -169,9 +196,7 @@ void RobotTask(uint8_t mode,
                 all_ui.aim_stutas=5;
 							 }														 
 							
-						}
-						  
-
+						
 
         } break;
 
@@ -247,12 +272,12 @@ float RUI_F_GET_FIRE_WIPE_SPEED(CONTAL_Typedef *CONTAL, DBUS_Typedef *DBUS, User
 	static float AIM = 0.0f;
    
 	
-	if(DBUS->Remote.S1_u8==1||DBUS->Remote.S1_u8==3)
+	if(vt13_state_shoot==1)
 	{
 	//	fireaim=7000;
 		fireaim+=1.7;
-		if(fireaim>=7000)
-		{fireaim=7000;}
+		if(fireaim>=6500)
+		{fireaim=6500;}
 	}
    else
 	{
@@ -280,15 +305,11 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 	  static uint8_t SINGLE_LOCK2 = 0;
     static int64_t AIM = 0; 
     uint8_t MOD = DBUS->Remote.S1_u8; //| DBUS->Mouse.L_State;
-	  if(MOD == 2)
-		{AIM =  CONTAL->SHOOT_Bask.Angle;}
-    if (MOD == 3)
-    {			
-								// 单发解锁逻辑（不会重置AIM，只解锁单发标志）
-					if (VT13_DBUS.Mouse.L_State == 0) {
+	  if(VT13_DBUS.Remote.mode_sw==2)
+		{if (VT13_DBUS.Mouse.L_State == 0) {
 							SINGLE_LOCK2 = 0;
 					}
-					if (DBUS->Remote.Dial_int16 < 300 && DBUS->Remote.Dial_int16 > -300) {
+					if (-VT13_DBUS.Remote.wheel < 300 && -VT13_DBUS.Remote.wheel > -300) {
 							SINGLE_LOCK1 = 0;
 					}
 
@@ -304,7 +325,7 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 					}else{all_ui.shoot_bool4=0;}
 
 					// 遥控器单发触发（仅首次到达生效）
-					if (DBUS->Remote.Dial_int16 > 650 && SINGLE_LOCK1 == 0) {
+					if (-VT13_DBUS.Remote.wheel > 620 && SINGLE_LOCK1 == 0) {
 							SINGLE_LOCK1 = 1;
 							int64_t Temp = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
 							if (Temp > (RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)) {
@@ -316,32 +337,35 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 
 					// 只有当鼠标和遥控“都松开”才重置AIM
 					if (VT13_DBUS.Mouse.L_State == 0 && 
-							DBUS->Remote.Dial_int16 < 300 && DBUS->Remote.Dial_int16 > -300) {
+							-VT13_DBUS.Remote.wheel < 300 && -VT13_DBUS.Remote.wheel > -300) {
 							AIM = CONTAL->SHOOT_Bask.Angle;
 					}
 				//停止			
-				if (DBUS->Remote.Dial_int16<-650 && SINGLE_LOCK1 == 0)
+				if (-VT13_DBUS.Remote.wheel<-620 && SINGLE_LOCK1 == 0)
 				{
 							//单发上锁
 					  SINGLE_LOCK1 = 1;
 				    AIM = CONTAL->SHOOT_Bask.Angle +15000;
 				}	 
-	
-//				if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&(DBUS->Remote.S2_u8==2||VT13_DBUS.Mouse.R_State==2)&&fireaim>=6990)//鼠标进自瞄开火
-				if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&DBUS->Remote.S2_u8==2&&fireaim>=6990)// 鼠标进自瞄不开火 遥控器进才开火
+		
+     if(all_ui.shoot_bool1||all_ui.shoot_bool2||all_ui.shoot_bool3||all_ui.shoot_bool4)
+		 {all_ui.shoot_stutas=20;}else{all_ui.shoot_stutas=5;}
+		 
+		 		//if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&(VT13_DBUS.Remote.pause==1||VT13_DBUS.Mouse.R_State==2)&&fireaim>=6990&&g_heat_watcher.state==1)//鼠标进自瞄开火
+				if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&VT13_DBUS.Remote.pause==1&&fireaim>=6490&&g_heat_watcher.state==1)// 鼠标进自瞄不开火 遥控器进才开火
 				    { AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.23;all_ui.shoot_bool3=1;}
 						 else{all_ui.shoot_bool3=0;}
-					
-				
-   	}
-        if ((VT13_DBUS.Mouse.L_State==2||MOD == 1)&&fireaim>=6990&&g_heat_watcher.state==1)
+					 if ((VT13_DBUS.Mouse.L_State==2||VT13_DBUS.Remote.trigger == 1)&&fireaim>=6490&&g_heat_watcher.state==1)
         {               
             {
                AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.35;
             }all_ui.shoot_bool1=1;
         }else{all_ui.shoot_bool1=0;}
-     if(all_ui.shoot_bool1||all_ui.shoot_bool2||all_ui.shoot_bool3||all_ui.shoot_bool4)
-		 {all_ui.shoot_stutas=20;}else{all_ui.shoot_stutas=5;}
+		    
+		}
+		
+		else
+		{AIM =  CONTAL->SHOOT_Bask.Angle;}
     return AIM;
 }
 

@@ -93,7 +93,7 @@ void Vision_Tx_Data(float PitchAngle, float YawAngle, uint32_t Time, uint8_t Sta
 		
 		VisionTxData.data[9]=VisionTxData.buff_flag;//mode
 		
-		VisionTxData.data[10]=20*10;
+		VisionTxData.data[10]=User_data.shoot_data.initial_speed*10;
 		
 		Union_temp.Data_f =0;//pitch_speed
 		VisionTxData.data[11]=Union_temp.Data[0];

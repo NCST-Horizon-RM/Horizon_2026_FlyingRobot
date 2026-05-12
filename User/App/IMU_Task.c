@@ -1,9 +1,9 @@
 #include "IMU_Task.h"
 
-#define correct_Time_define 5000    //上电去0飘 1000次取平均
+#define correct_Time_define 1000    //上电去0飘 1000次取平均
 #define temp_times 300       //探测温度阈值
-#define Destination_TEMPERATURE 40.f
-
+#define Destination_TEMPERATURE 45.0f
+float imu=0;
 /**
   * @brief          bmi088温度控制
   * @param[in]      argument: NULL
@@ -36,7 +36,7 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
         {
 			IMU->gyro[0]-=IMU->gyro_correct[0];   //减去陀螺仪0飘
 			IMU->gyro[1]-=IMU->gyro_correct[1];
-			IMU->gyro[2]-=IMU->gyro_correct[2];
+			IMU->gyro[2]-=(IMU->gyro_correct[2]);
           
 			//===========================================================================
 			//ekf姿态解算部分
@@ -75,9 +75,9 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
 #endif
 
 #ifdef User_Release
-         IMU->gyro_correct[0] = 0.00296077156;
-           IMU->gyro_correct[1] = -0.002338877881;
-           IMU->gyro_correct[2] = 0.00114898745;
+           IMU->gyro_correct[0] = 0;
+           IMU->gyro_correct[1] = 0;
+           IMU->gyro_correct[2] = 0;
            IMU->attitude_flag=2; //go to 2 state
 #endif
         }
@@ -89,7 +89,8 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
         IMU_Temperature_Ctrl(IMU, imu_temp_pid);
         static uint32_t temp_Ticks=0;
 #ifdef User_Debug
-        if((fabsf(IMU->temp-Destination_TEMPERATURE)<0.5f)&&IMU->attitude_flag==0) //接近额定温度之差小于0.5° 开始计数
+//        if((fabsf(IMU->temp-Destination_TEMPERATURE)<0.5f)&&IMU->attitude_flag==0) //接近额定温度之差小于0.5° 开始计数
+          if(IMU->attitude_flag==0)
 #endif
 #ifdef User_Release
         if(IMU->attitude_flag==0)//快速初始化

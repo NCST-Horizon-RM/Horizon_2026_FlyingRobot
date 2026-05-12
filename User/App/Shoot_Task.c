@@ -96,8 +96,8 @@ uint8_t MOTOR_PID_Shoot_INIT(MOTOR_Typdef *MOTOR)
 							|Derivative_On_Measurement|DerivativeFilter&00000000);//微分先行,微分滤波器
 
     float PID_F_M[3] = {   0.0f,   0.0f,   0.0f   };
-    float PID_P_M[3] = {   0.21,   0.000f,   0.0f   };
-    float PID_S_M[3] = {  9,   0.0f,   0.0f   };
+    float PID_P_M[3] = {   0.23,   0.000f,   0.0f   };
+    float PID_S_M[3] = {  10,   0.0f,   0.0f   };
     Feedforward_Init(&MOTOR->DJI_3508_Shoot_M.PID_F, 3000, PID_F_M,
                      0.5f, 2, 2);
     PID_Init(&MOTOR->DJI_3508_Shoot_M.PID_P, 30000.0f, 2000.0f,
@@ -198,21 +198,21 @@ uint8_t shoot_task(CONTAL_Typedef *CONTAL,
 //		{MOTOR->DJI_3508_Shoot_M.DATA.Aim=(int64_t)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_now+35;}
 		ALL_MOTOR.DJI_3508_Shoot_M.DATA.radspeed=(float)ALL_MOTOR.DJI_3508_Shoot_M.DATA.Speed_now*0.0166667*0.0277777*8;
     /*遥控离线保护*/
-    if(!Root->RM_DBUS)
-    {
-        MOTOR->DJI_3508_Shoot_L.PID_S.IntegralLimit = 0;
-        MOTOR->DJI_3508_Shoot_L.DATA.Aim = (float)MOTOR->DJI_3508_Shoot_L.DATA.Speed_now;
+//    if(!Root->RM_DBUS)
+//    {
+//        MOTOR->DJI_3508_Shoot_L.PID_S.IntegralLimit = 0;
+//        MOTOR->DJI_3508_Shoot_L.DATA.Aim = (float)MOTOR->DJI_3508_Shoot_L.DATA.Speed_now;
 
-        MOTOR->DJI_3508_Shoot_R.PID_S.IntegralLimit = 0;
-        MOTOR->DJI_3508_Shoot_R.DATA.Aim = (float)MOTOR->DJI_3508_Shoot_R.DATA.Speed_now;
+//        MOTOR->DJI_3508_Shoot_R.PID_S.IntegralLimit = 0;
+//        MOTOR->DJI_3508_Shoot_R.DATA.Aim = (float)MOTOR->DJI_3508_Shoot_R.DATA.Speed_now;
 
-        MOTOR->DJI_3508_Shoot_M.PID_P.IntegralLimit = 0;
-        MOTOR->DJI_3508_Shoot_M.PID_S.IntegralLimit = 0;
-        MOTOR->DJI_3508_Shoot_M.DATA.Aim = (float)MOTOR->DJI_3508_Shoot_M.DATA.Angle_Infinite;
+//        MOTOR->DJI_3508_Shoot_M.PID_P.IntegralLimit = 0;
+//        MOTOR->DJI_3508_Shoot_M.PID_S.IntegralLimit = 0;
+//        MOTOR->DJI_3508_Shoot_M.DATA.Aim = (float)MOTOR->DJI_3508_Shoot_M.DATA.Angle_Infinite;
 
-        PID_INIT = RUI_DF_ERROR;
-        AIM_INIT = RUI_DF_ERROR;
-    }
+//        PID_INIT = RUI_DF_ERROR;
+//        AIM_INIT = RUI_DF_ERROR;
+//    }
 		
 
     /*堵转处理*/

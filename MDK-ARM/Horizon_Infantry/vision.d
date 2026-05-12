@@ -47,4 +47,5 @@ horizon_infantry/vision.o: ..\User\Bsp\Vision.c ..\User\Bsp\inc\Vision.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
-  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h

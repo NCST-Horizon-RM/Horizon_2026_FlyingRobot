@@ -217,7 +217,7 @@ void online_time_control(online_judge *ctrl)
     ctrl->MOTOR_Shoot_R++;
     ctrl->MOTOR_Shoot_M++;
     if (ctrl->RM_DBUS >= 200) 
-    {
+    {   VT13_DBUS.Remote.mode_sw=0;
         ctrl->RM_DBUS = 200;
         ctrl->Is_Online.RM_DBUS_State = 0; 
     }   else{ctrl->Is_Online.RM_DBUS_State = 1; }
@@ -278,16 +278,16 @@ void online_time_control(online_judge *ctrl)
     {all_ui.led_state=0;all_ui.qianjin=20;}	
     else{all_ui.qianjin=5;}		
 		if(VT13_DBUS.KeyBoard.X_PreeNumber)
-    {all_ui.led_state=1;all_ui.houtui=20;}
+    {all_ui.led_state=3;all_ui.houtui=20;}
     else{all_ui.houtui=5;}			
 		if(VT13_DBUS.KeyBoard.C_PreeNumber)
-    {all_ui.led_state=2;all_ui.daiming=20;}		
+    {all_ui.led_state=5;all_ui.daiming=20;}		
 		else{all_ui.daiming=5;}	
 		if(VT13_DBUS.KeyBoard.V_PreeNumber)
-    {all_ui.led_state=3;all_ui.qifei=20;}	
+    {all_ui.led_state=2;all_ui.qifei=20;}	
 		else{all_ui.qifei=5;}	
     if(VT13_DBUS.KeyBoard.B_PreeNumber)
-    {all_ui.led_state=3;all_ui.jiangluo=20;}		
+    {all_ui.led_state=4;all_ui.jiangluo=20;}		
     else{all_ui.jiangluo=5;}			
 		
 		

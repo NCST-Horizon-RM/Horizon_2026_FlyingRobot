@@ -24,5 +24,6 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 float RUI_F_CHASSIS_GET_MAX_TARGET(float MAX_POWER);
 
 float RUI_F_CHASSIS_PID(int16_t RELATIVE_ANGLE, float KP, float KI, float KD);
-
+extern uint8_t vt13_state_gimbal;
+extern uint8_t vt13_state_shoot;
 #endif

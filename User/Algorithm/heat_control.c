@@ -88,7 +88,7 @@ void Calibrate_Heat_With_Referee(uint16_t ref_heat) {
 
 
 
-
+//检测打了多少发弹
 bool Update_Shoot_Det(float speed1, float speed2, ShootDet_t *det) {
     float val = (fabsf(speed1) + fabsf(speed2)) / 2.0f;
     if (!det->init) {

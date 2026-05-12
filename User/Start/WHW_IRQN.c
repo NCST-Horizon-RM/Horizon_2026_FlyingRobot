@@ -4,77 +4,7 @@ uint8_t move_G, move_S, move_C, move_P;
 float t1,t2,dt;
 static uint8_t TX[12] = {0xff,0xf1,0xfd,0x90,0x86,0xa7,0xff,0xf1,0xfd,0x90,0x86,0xa7};
 uint32_t Residual_heat;
-
 uint32_t ui_cnt=0;
-
-
-
-void UI_Task_1ms(void)
-{
-    // 用于产生 33ms 滴答的计时器
-    static uint16_t time_ms = 0;
-    // 33ms 专属槽位计数器
-    static uint16_t tick_33ms = 0; 
-    
-    // ==========================================
-    // 严格限制：每 33ms 只允许弹出并执行一次发送
-    // ==========================================
-    if (time_ms % 33 == 0)
-    {
-        // 10秒一个大循环 (10000ms / 33ms ≈ 303)
-        uint16_t loop_index = tick_33ms % 303; 
-        
-        // 1. 慢速任务槽位 (0 ~ 8)
-        // 将所有 6个 init 和 3个慢速 update 安排在 10 秒循环的开头
-        if      (loop_index == 0) { ui_init_g_Ungroup(); }
-        else if (loop_index == 1) { ui_init_g_Ungroup1(); }
-        else if (loop_index == 2) { ui_init_g_Ungroup2(); }
-        else if (loop_index == 3) { ui_init_g_Ungroupfast(); }
-        else if (loop_index == 4) { ui_init_g_Ungroupyawpitch(); }
-        else if (loop_index == 5) { ui_init_g_Ungroupmid(); }
-        else if (loop_index == 6) { ui_update_g_Ungroup(); }
-        else if (loop_index == 7) { ui_update_g_Ungroup1(); }
-        else if (loop_index == 8) { ui_update_g_Ungroup2(); }
-        
-        // 2. 高频任务槽位 (9 ~ 302)
-        // 避开了 0~8 的慢速槽位，剩余槽位按 4:2:1 比例持续轮询
-        else 
-        {
-            uint8_t fast_slot = loop_index % 4;
-            
-            if (fast_slot == 1 || fast_slot == 3) 
-            {
-                // 最高频 fast (占 2/4)
-                ui_update_g_Ungroupfast();
-            }
-            else if (fast_slot == 2) 
-            {
-                // 进一步细分以满足比例
-                if (loop_index % 8 == 2)
-                {
-                    // 次高频 yawpitch (占 1/8)
-                    ui_update_g_Ungroupyawpitch();
-                }
-                else 
-                {
-                    // 最低频 mid (占 1/8)
-                    ui_update_g_Ungroupmid();
-                }
-            }
-            // fast_slot == 0 会和部分慢速任务的余数重叠，直接跳过不发，留作带宽安全余量
-        }
-        
-        tick_33ms++;
-    }
-
-    // 维持计时器循环，防止溢出（33000 既是 33 的倍数，又不会超出 uint16_t 的 65535）
-    time_ms++;
-    if (time_ms >= 33000)
-    {
-        time_ms = 0;
-    }
-}
-
 void ui_updata()
 {
   	  ui_init_g_Ungroupfast();
@@ -108,18 +38,18 @@ void StartRobotUITask(void const * argument)
 
     //初始化UI界面
  //  RobotUI_Static_Init();
-  ui_init_g_Ungroup();//这个里面有7个发送函数
-	ui_init_g_Ungroup1();//这个里面有7个发送函数
-	ui_init_g_Ungroup2();//这个里面有2个发送函数
-	ui_init_g_Ungroupfast();//这个里面有1个发送函数
-	ui_init_g_Ungroupmid();//这个里面有1个发送函数
-	ui_init_g_Ungroupyawpitch();//这个里面有1个发送函数
-	ui_update_g_Ungroup();//这个里面有7个发送函数
-	ui_update_g_Ungroup1();//这个里面有7个发送函数
-	ui_update_g_Ungroup2();//这个里面有2个发送函数
-	ui_update_g_Ungroupfast();//这个里面有1个发送函数
-	ui_update_g_Ungroupmid();//这个里面有1个发送函数
-	ui_update_g_Ungroupyawpitch();//这个里面有1个发送函数
+//  ui_init_g_Ungroup();//这个里面有7个发送函数
+//	ui_init_g_Ungroup1();//这个里面有7个发送函数
+//	ui_init_g_Ungroup2();//这个里面有2个发送函数
+//	ui_init_g_Ungroupfast();//这个里面有1个发送函数
+//	ui_init_g_Ungroupmid();//这个里面有1个发送函数
+//	ui_init_g_Ungroupyawpitch();//这个里面有1个发送函数
+//	ui_update_g_Ungroup();//这个里面有7个发送函数
+//	ui_update_g_Ungroup1();//这个里面有7个发送函数
+//	ui_update_g_Ungroup2();//这个里面有2个发送函数
+//	ui_update_g_Ungroupfast();//这个里面有1个发送函数
+//	ui_update_g_Ungroupmid();//这个里面有1个发送函数
+//	ui_update_g_Ungroupyawpitch();//这个里面有1个发送函数
     for (;;)
     {     
 	  if(uicnt>=5)
@@ -127,14 +57,11 @@ void StartRobotUITask(void const * argument)
 		else
 		{uicnt++;}
 		
-
     all_ui.pitch_data=IMU_Data.pitch;
 		all_ui.yaw_data=IMU_Data.yaw;
     if(uicnt>4)
 		{ui_updata();}
 		else{ui_staic();}
-   //UI_Task_1ms();
-		
 		}
 }
 
@@ -152,7 +79,7 @@ void StartMoveTask(void const * argument)
 
     //Pitch轴限幅
     RUI_V_CONTAL.HEAD.Pitch_MAX = 2400;
-    RUI_V_CONTAL.HEAD.Pitch_MIN = -50;
+    RUI_V_CONTAL.HEAD.Pitch_MIN = -500;
 
     for (;;)
 	{    
@@ -258,16 +185,22 @@ void StartRootTask(void const * argument)
               ws2812_double_flash_loop_param(colors_orange,colors_off);
             break;
         case 2:
-              ws2812_blink_alternate(colors_red, colors_off, 100);
+              ws2812_blink_alternate(colors_green, colors_off, 100);
             break;
         case 3:
-              ws2812_double_flash_loop_param(colors_orange,colors_cyan);
+              ws2812_double_flash_loop_param(colors_cyan,colors_off);
+            break;
+				case 4:
+              ws2812_blink_alternate(colors_purple, colors_off, 100);
+            break;
+				 case 5:
+              ws2812_blink_alternate(colors_green, colors_off, 100);
             break;
         default:
               ws2812_set_colors(colors_off);
             break;
     }
-        Update_Robot_Level(1);
+        Update_Robot_Level(User_data.robot_status.robot_level);
 			  Update_Heat_Predictor(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite,SysTime.ms);  
 
 		}
@@ -460,6 +393,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
         if (Size == 21){
             VT13_Resovled(VT13_RX_DATA , &VT13_DBUS,&VT13_UNION);
         }
+				online_status.RM_DBUS=0;
     }
 	if (huart->Instance == USART6){
         uint8_t *next_buf = (pData == Referee_Rx_Buf[0]) ? Referee_Rx_Buf[1] : Referee_Rx_Buf[0];

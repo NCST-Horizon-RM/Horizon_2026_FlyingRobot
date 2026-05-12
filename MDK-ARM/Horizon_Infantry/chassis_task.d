@@ -99,7 +99,7 @@ horizon_infantry/chassis_task.o: ..\User\App\Chassis_Task.c \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
-  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\Referee.h \
-  ..\User\Algorithm\inc\CRC_DJI.h ..\User\Bsp\inc\Power_CAP.h \
+  ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h \
+  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\Power_CAP.h \
   ..\User\Bsp\inc\bsp_adc.h ..\User\Bsp\inc\RGBctrl.h \
   ..\User\Bsp\inc\VT13.h D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h
