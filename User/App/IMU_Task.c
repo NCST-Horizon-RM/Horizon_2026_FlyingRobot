@@ -36,7 +36,7 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
         {
 			IMU->gyro[0]-=IMU->gyro_correct[0];   //减去陀螺仪0飘
 			IMU->gyro[1]-=IMU->gyro_correct[1];
-			IMU->gyro[2]-=(IMU->gyro_correct[2]);
+			IMU->gyro[2]-=(IMU->gyro_correct[2]+imu);
           
 			//===========================================================================
 			//ekf姿态解算部分

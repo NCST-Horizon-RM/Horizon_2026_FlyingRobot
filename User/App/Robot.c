@@ -306,15 +306,15 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
     static int64_t AIM = 0; 
     uint8_t MOD = DBUS->Remote.S1_u8; //| DBUS->Mouse.L_State;
 	  if(VT13_DBUS.Remote.mode_sw==2)
-		{if (VT13_DBUS.Mouse.L_State == 0) {
+		{if (VT13_DBUS.Mouse.L_State==0) {
 							SINGLE_LOCK2 = 0;
 					}
-					if (-VT13_DBUS.Remote.wheel < 300 && -VT13_DBUS.Remote.wheel > -300) {
+					if (-VT13_DBUS.Remote.wheel < 300 && -VT13_DBUS.Remote.wheel > -300&&VT13_DBUS.KeyBoard.S==0&&VT13_DBUS.KeyBoard.A==0) {
 							SINGLE_LOCK1 = 0;
 					}
 
 					// 鼠标单发触发（仅首次按下生效）
-					if (VT13_DBUS.Mouse.L_State == 1 && SINGLE_LOCK2 == 0) {
+					if ((VT13_DBUS.Mouse.L_State == 1&&VT13_DBUS.Mouse.R_State==0) && SINGLE_LOCK2 == 0) {
 							SINGLE_LOCK2 = 1;
 							int64_t Temp1 = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
 							if (Temp1 > (RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)) {
@@ -325,7 +325,7 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 					}else{all_ui.shoot_bool4=0;}
 
 					// 遥控器单发触发（仅首次到达生效）
-					if (-VT13_DBUS.Remote.wheel > 620 && SINGLE_LOCK1 == 0) {
+					if ((-VT13_DBUS.Remote.wheel > 620||VT13_DBUS.KeyBoard.A==1)&& SINGLE_LOCK1 == 0) {
 							SINGLE_LOCK1 = 1;
 							int64_t Temp = RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT_Bask.Angle % CONTAL->SHOOT.Single_Angle);
 							if (Temp > (RUI_F_MATH_ABS_int64_t(CONTAL->SHOOT.Single_Angle) >> 1)) {
@@ -336,12 +336,12 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 					}else{all_ui.shoot_bool2=0;}
 
 					// 只有当鼠标和遥控“都松开”才重置AIM
-					if (VT13_DBUS.Mouse.L_State == 0 && 
-							-VT13_DBUS.Remote.wheel < 300 && -VT13_DBUS.Remote.wheel > -300) {
+					if (VT13_DBUS.Mouse.L_State == 0 && -VT13_DBUS.Remote.wheel < 300 && -VT13_DBUS.Remote.wheel > -300&&VT13_DBUS.KeyBoard.A==0&&VT13_DBUS.KeyBoard.S==0)
+						{
 							AIM = CONTAL->SHOOT_Bask.Angle;
-					}
+					  }
 				//停止			
-				if (-VT13_DBUS.Remote.wheel<-620 && SINGLE_LOCK1 == 0)
+				if ((-VT13_DBUS.Remote.wheel<-620||VT13_DBUS.KeyBoard.S==1) && SINGLE_LOCK1 == 0)
 				{
 							//单发上锁
 					  SINGLE_LOCK1 = 1;
@@ -352,10 +352,10 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 		 {all_ui.shoot_stutas=20;}else{all_ui.shoot_stutas=5;}
 		 
 		 		//if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&(VT13_DBUS.Remote.pause==1||VT13_DBUS.Mouse.R_State==2)&&fireaim>=6990&&g_heat_watcher.state==1)//鼠标进自瞄开火
-				if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&VT13_DBUS.Remote.pause==1&&fireaim>=6490&&g_heat_watcher.state==1)// 鼠标进自瞄不开火 遥控器进才开火
-				    { AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.23;all_ui.shoot_bool3=1;}
+				if(VisionRxDataTemp.ShootBool&&VisionRxDataTemp.Target==1&&VisionRxDataTemp.offlinetime<=900&&(VT13_DBUS.Remote.pause==1||(VT13_DBUS.Mouse.L_State==2&&VT13_DBUS.Mouse.R_State==2))&&fireaim>=6490&&g_heat_watcher.state==1)//鼠标右键进自瞄 左右键同时摁开火
+				    { AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.3;all_ui.shoot_bool3=1;}
 						 else{all_ui.shoot_bool3=0;}
-					 if ((VT13_DBUS.Mouse.L_State==2||VT13_DBUS.Remote.trigger == 1)&&fireaim>=6490&&g_heat_watcher.state==1)
+					 if (((VT13_DBUS.Mouse.L_State==2&&VT13_DBUS.Mouse.R_State==0)||VT13_DBUS.Remote.trigger == 1)&&fireaim>=6490&&g_heat_watcher.state==1)
         {               
             {
                AIM = (int64_t)CONTAL->SHOOT_Bask.Angle + CONTAL->SHOOT.Single_Angle*0.35;

@@ -6,7 +6,7 @@
 #include <string.h>
 
 uint8_t seq = 0;
-int ui_self_id = 6;
+int ui_self_id = 106;
 
 void print_message(const uint8_t *message, const int length) {
     for (int i = 0; i < length; i++) {

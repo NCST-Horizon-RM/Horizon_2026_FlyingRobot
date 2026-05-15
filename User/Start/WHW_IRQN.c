@@ -177,7 +177,7 @@ void StartRootTask(void const * argument)
 				
 		static uint32_t led_tick = 0;
     if (led_tick++ % 5 == 0) {
-	    switch(ALL_state.led_state) {
+	    switch(all_ui.led_state) {
 				case 0:
             ws2812_set_colors(colors_off);
             break;
@@ -200,9 +200,10 @@ void StartRootTask(void const * argument)
               ws2812_set_colors(colors_off);
             break;
     }
-        Update_Robot_Level(User_data.robot_status.robot_level);
+//         Update_Robot_Level(User_data.robot_status.robot_level);
+		    Update_Robot_Level(5);
 			  Update_Heat_Predictor(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite,SysTime.ms);  
-
+        ui_self_id=User_data.robot_status.robot_id;
 		}
         RUI_F_ROOT(&RUI_ROOT_STATUS, &WHW_V_DBUS, &ALL_MOTOR, &CAPDATE.GET);
         online_time_control(&online_status);
