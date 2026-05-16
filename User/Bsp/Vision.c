@@ -91,7 +91,7 @@ void Vision_Tx_Data(float PitchAngle, float YawAngle, uint32_t Time, uint8_t Sta
     //VisionTxData.buff_flag=0b000;
 		VisionTxData.buff_flag=0b100;
 		
-		VisionTxData.data[9]=VisionTxData.buff_flag;//mode
+		VisionTxData.data[9]=0;//mode
 		
 		VisionTxData.data[10]=User_data.shoot_data.initial_speed*10;
 		
@@ -108,6 +108,8 @@ void Vision_Tx_Data(float PitchAngle, float YawAngle, uint32_t Time, uint8_t Sta
 		VisionTxData.data[18]=Union_temp.Data[3];
 		
 		VisionTxData.data[19]=0xdc;
+		
+
 		
 		CDC_Transmit_FS(VisionTxData.data, sizeof(VisionTxData.data));
 }

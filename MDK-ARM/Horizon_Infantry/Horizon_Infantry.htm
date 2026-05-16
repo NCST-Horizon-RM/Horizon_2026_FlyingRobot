@@ -3,7 +3,7 @@
 <title>Static Call Graph - [Horizon_Infantry\Horizon_Infantry.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Horizon_Infantry\Horizon_Infantry.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6180002: Last Updated: Fri May 15 11:46:04 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6180002: Last Updated: Sat May 16 19:21:59 2026
 <BR><P>
 <H3>Maximum Stack Usage =        480 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2292,7 +2292,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;INS_Task
 </UL>
 
-<P><STRONG><a name="[1b5]"></a>INS_Task</STRONG> (Thumb, 488 bytes, Stack size 16 bytes, imu_task.o(.text.INS_Task))
+<P><STRONG><a name="[1b5]"></a>INS_Task</STRONG> (Thumb, 398 bytes, Stack size 16 bytes, imu_task.o(.text.INS_Task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 364 + Unknown Stack Size
 <LI>Call Chain = INS_Task &rArr; IMU_QuaternionEKF_Update &rArr; Kalman_Filter_Update &rArr; Kalman_Filter_SetK &rArr; arm_mat_inverse_f32
 </UL>
@@ -3159,7 +3159,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.rodata..L__const.MX_FREERTOS_Init.os_thread_def_RobotUITask)
 </UL>
-<P><STRONG><a name="[87]"></a>StartRootTask</STRONG> (Thumb, 344 bytes, Stack size 24 bytes, whw_irqn.o(.text.StartRootTask))
+<P><STRONG><a name="[87]"></a>StartRootTask</STRONG> (Thumb, 350 bytes, Stack size 24 bytes, whw_irqn.o(.text.StartRootTask))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = StartRootTask &rArr; ws2812_double_flash_loop_param &rArr; ws2812_set_colors &rArr; HAL_TIM_PWM_Start_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Update_Heat_Predictor
@@ -4089,7 +4089,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[14]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CDC_Receive_FS
 </UL>
 
-<P><STRONG><a name="[ba]"></a>Vision_Tx_Data</STRONG> (Thumb, 288 bytes, Stack size 40 bytes, vision.o(.text.Vision_Tx_Data))
+<P><STRONG><a name="[ba]"></a>Vision_Tx_Data</STRONG> (Thumb, 284 bytes, Stack size 40 bytes, vision.o(.text.Vision_Tx_Data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = Vision_Tx_Data &rArr; CDC_Transmit_FS &rArr; USBD_CDC_TransmitPacket &rArr; USBD_LL_Transmit &rArr; HAL_PCD_EP_Transmit &rArr; USB_EPStartXfer &rArr; USB_WritePacket
 </UL>
 <BR>[Calls]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CDC_Transmit_FS

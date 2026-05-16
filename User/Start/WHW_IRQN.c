@@ -200,8 +200,8 @@ void StartRootTask(void const * argument)
               ws2812_set_colors(colors_off);
             break;
     }
-//         Update_Robot_Level(User_data.robot_status.robot_level);
-		    Update_Robot_Level(5);
+         Update_Robot_Level(User_data.robot_status.robot_level);
+		   // Update_Robot_Level(5);
 			  Update_Heat_Predictor(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite,SysTime.ms);  
         ui_self_id=User_data.robot_status.robot_id;
 		}

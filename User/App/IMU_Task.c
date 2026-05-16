@@ -75,9 +75,9 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
 #endif
 
 #ifdef User_Release
-           IMU->gyro_correct[0] = 0;
-           IMU->gyro_correct[1] = 0;
-           IMU->gyro_correct[2] = 0;
+           IMU->gyro_correct[0] = 0.00326608913;
+           IMU->gyro_correct[1] = -0.00281442143;
+           IMU->gyro_correct[2] = 0.00124636071;
            IMU->attitude_flag=2; //go to 2 state
 #endif
         }
@@ -89,8 +89,8 @@ void INS_Task(IMU_Data_t *IMU, pid_type_def *imu_temp_pid)
         IMU_Temperature_Ctrl(IMU, imu_temp_pid);
         static uint32_t temp_Ticks=0;
 #ifdef User_Debug
-//        if((fabsf(IMU->temp-Destination_TEMPERATURE)<0.5f)&&IMU->attitude_flag==0) //接近额定温度之差小于0.5° 开始计数
-          if(IMU->attitude_flag==0)
+        if((fabsf(IMU->temp-Destination_TEMPERATURE)<0.5f)&&IMU->attitude_flag==0) //接近额定温度之差小于0.5° 开始计数
+//         if(IMU->attitude_flag==0)
 #endif
 #ifdef User_Release
         if(IMU->attitude_flag==0)//快速初始化

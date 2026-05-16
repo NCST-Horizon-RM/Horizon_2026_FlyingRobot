@@ -405,6 +405,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>SINGLE_LOCK1,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>50</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>VisionTxData,0x10</ItemText>
+        </Ww>
       </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
