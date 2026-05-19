@@ -111,7 +111,9 @@ void Vision_Tx_Data(float PitchAngle, float YawAngle, uint32_t Time, uint8_t Sta
 		
 
 		
+		extern USBD_HandleTypeDef hUsbDeviceFS;
 		CDC_Transmit_FS(VisionTxData.data, sizeof(VisionTxData.data));
+	
 }
 		
     //VisionTxData.data[i++] &= VisionTxData.VisionState;

@@ -28,21 +28,16 @@ float PID_P_Yaw_2_zimiao[3] = {  1.8,   0.3f,   0.0f };
 float PID_P_Yaw_1_zimiao[3] = {  2.3,   0.4f,   0.0f };
 
 float PID_P_Yaw_shou[3] = {  2.2,   0.003f,   0.0f };
-float PID_S_Yaw_shou[3] = {  0.18,   0.0f,   0.0f   }; 
+float PID_S_Yaw_shou[3] = {  0.15,   0.0f,   0.0f   }; 
 			
-float PID_P_Pitch_shou[3] = {   1.3,   0.01f,   0   };
-float PID_S_Pitch_shou[3] = {   1.2,   0.0f,   0.01   };
+float PID_P_Pitch_shou[3] = {   1.2,   0.01f,   0   };
+float PID_S_Pitch_shou[3] = {   0.98,   0.0f,   0.  };
 
-//float PID_P_Yaw_zimiao[3] = {  2.0,   0.003f,   0.0f };
-//float PID_S_Yaw_zimiao[3] = {  0.13,   0.0f,   0.0f   };
 float PID_P_Yaw_zimiao[3] = {  2.2,   0.003f,   0.0f };
-float PID_S_Yaw_zimiao[3] = {  0.18,   0.0f,   0.0f   };
+float PID_S_Yaw_zimiao[3] = {  0.15,   0.0f,   0.0f   };
 
-				 
-//float PID_P_Pitch_zimiao[3] = {   1.0,   0.03f,   0   };
-//float PID_S_Pitch_zimiao[3] = {   0.6,   0.0f,   0.01   };
-float PID_P_Pitch_zimiao[3] = {   1.3,   0.03f,   0   };
-float PID_S_Pitch_zimiao[3] = {   1.2,   0.0f,   0.01   };
+float PID_P_Pitch_zimiao[3] = {   1.2,   0.03f,   0   };
+float PID_S_Pitch_zimiao[3] = {   0.98,   0.0f,   0   };
 
 uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
 {
