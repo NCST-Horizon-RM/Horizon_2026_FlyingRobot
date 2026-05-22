@@ -60,7 +60,12 @@ void StartRobotUITask(void const * argument)
     all_ui.pitch_data=IMU_Data.pitch;
 		all_ui.yaw_data=IMU_Data.yaw;
     if(uicnt>4)
-		{ui_updata();}
+		{ 
+			if(VT13_DBUS.KeyBoard.W==1)
+			{ui_staic();}
+			else
+		  {ui_updata();}
+		}
 		else{ui_staic();}
 		}
 }
@@ -181,8 +186,8 @@ void StartRootTask(void const * argument)
 				case 0:
             ws2812_set_colors(colors_off);
             break;
-        case 1:
-              ws2812_double_flash_loop_param(colors_orange,colors_off);
+        case 1:              
+				     ws2812_blink_alternate(colors_orange, colors_off, 100);
             break;
         case 2:
               ws2812_blink_alternate(colors_green, colors_off, 100);

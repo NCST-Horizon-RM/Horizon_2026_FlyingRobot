@@ -27,17 +27,17 @@ float PID_P_Yaw_3_zimiao[3] = {  1.8,   0.25f,   0.0f };
 float PID_P_Yaw_2_zimiao[3] = {  1.8,   0.3f,   0.0f };
 float PID_P_Yaw_1_zimiao[3] = {  2.3,   0.4f,   0.0f };
 
-float PID_P_Yaw_shou[3] = {  2.2,   0.003f,   0.0f };
+float PID_P_Yaw_shou[3] = {  2.0,   0.003f,   0.0f };
 float PID_S_Yaw_shou[3] = {  0.175,   0.0f,   0.0f   }; 
 			
 float PID_P_Pitch_shou[3] = {   1.3,   0.01f,   0   };
-float PID_S_Pitch_shou[3] = {   1.2,   0.0f,   0  }; 
+float PID_S_Pitch_shou[3] = {   1.22,   0.0f,   0  }; 
 
-float PID_P_Yaw_zimiao[3] = {  2.2,   0.003f,   0.0f };
+float PID_P_Yaw_zimiao[3] = {  2.0,   0.003f,   0.0f };
 float PID_S_Yaw_zimiao[3] = {  0.175,   0.0f,   0.0f   };
 
 float PID_P_Pitch_zimiao[3] = {   1.3,   0.03f,   0   };
-float PID_S_Pitch_zimiao[3] = {   1.2,   0.0f,   0   };
+float PID_S_Pitch_zimiao[3] = {   1.22,   0.0f,   0   };
 
 uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
 {
@@ -306,6 +306,7 @@ if(vt13_state_gimbal==2)
 //MOTOR->DJI_6020_Pitch.DATA.Aim,//7
 //(float)MOTOR->DJI_3508_Shoot_L.DATA.current,//8
 //-(float)MOTOR->DJI_3508_Shoot_R.DATA.current);//9
+pitch_F=0.48252*cos(IMU->pitch*0.017453)/0.07/33*2048;
   if(VT13_DBUS.Remote.mode_sw==0)
 	{   
 		  LKMF_iq_ctrl(&hcan1,2,00);

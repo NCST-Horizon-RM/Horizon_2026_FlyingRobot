@@ -60,11 +60,11 @@ typedef struct
  uint8_t shoot_bool3;
  uint8_t shoot_bool4;
  uint8_t shoot_number;//
- uint8_t qifei;
  uint8_t daiming;
- uint8_t jiangluo;
  uint8_t qianjin;
  uint8_t houtui;
+ uint8_t zuozhuan;
+ uint8_t youzhuan;
  int16_t heat;
  uint8_t led_state;
 }all_ui_variable;

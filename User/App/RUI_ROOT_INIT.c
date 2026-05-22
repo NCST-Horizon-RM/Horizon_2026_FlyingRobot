@@ -274,23 +274,92 @@ void online_time_control(online_judge *ctrl)
     ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_R_State    * 1000;
     ctrl->five_status += ctrl->Is_Online.MOTOR_Shoot_M_State    * 10000;
 		all_ui.all_motor_status=ctrl->five_status;
-		if(VT13_DBUS.KeyBoard.Z_PreeNumber)
-    {all_ui.led_state=0;all_ui.qianjin=20;}	
-    else{all_ui.qianjin=5;}		
-		if(VT13_DBUS.KeyBoard.X_PreeNumber)
-    {all_ui.led_state=3;all_ui.houtui=20;}
-    else{all_ui.houtui=5;}			
-		if(VT13_DBUS.KeyBoard.C_PreeNumber)
-    {all_ui.led_state=5;all_ui.daiming=20;}		
-		else{all_ui.daiming=5;}	
-		if(VT13_DBUS.KeyBoard.V_PreeNumber)
-    {all_ui.led_state=2;all_ui.qifei=20;}	
-		else{all_ui.qifei=5;}	
-    if(VT13_DBUS.KeyBoard.B_PreeNumber)
-    {all_ui.led_state=4;all_ui.jiangluo=20;}		
-    else{all_ui.jiangluo=5;}			
-		
-		
-		
-	
+	    
+    uint8_t k0 = VT13_DBUS.KeyBoard.Z;   // 0
+    uint8_t k1 = VT13_DBUS.KeyBoard.X;   // 2
+    uint8_t k2 = VT13_DBUS.KeyBoard.C;   // 3
+	  uint8_t k3 = VT13_DBUS.KeyBoard.V;
+    uint8_t k4 = VT13_DBUS.KeyBoard.B;   // 4
+
+    uint8_t count = k0 + k1 + k2 + k3 + k4;
+
+    all_ui.qianjin   = 5;
+    all_ui.houtui    = 5;
+    all_ui.zuozhuan  = 5;
+    all_ui.youzhuan  = 5;
+    all_ui.daiming   = 5;  
+
+    if(count == 1)
+    {
+        if(k0)
+        {
+            all_ui.led_state = 0;           
+        }
+				else if(k1)
+        {
+            all_ui.led_state = 1;           
+        }
+        else if(k2)
+        {
+            all_ui.led_state = 2;           
+        }
+        else if(k3)
+        {
+            all_ui.led_state = 3;           
+        }
+        else if(k4)
+        {
+            all_ui.led_state = 4;      
+        }
+    }			
+    switch(all_ui.led_state)
+    {
+        case 0:
+            all_ui.daiming   = 20;
+            all_ui.qianjin   = 5;
+            all_ui.houtui    = 5;
+            all_ui.zuozhuan  = 5;
+            all_ui.youzhuan  = 5;
+            break;
+
+        case 1:
+            all_ui.daiming   = 5;
+            all_ui.qianjin   = 20;
+            all_ui.houtui    = 5;
+            all_ui.zuozhuan  = 5;
+            all_ui.youzhuan  = 5;
+            break;
+
+        case 2:
+            all_ui.daiming   = 5;
+            all_ui.qianjin   = 5;
+            all_ui.houtui    = 20;
+            all_ui.zuozhuan  = 5;
+            all_ui.youzhuan  = 5;
+            break;
+
+        case 3:
+            all_ui.daiming   = 5;
+            all_ui.qianjin   = 5;
+            all_ui.houtui    = 5;
+            all_ui.zuozhuan  = 20;
+            all_ui.youzhuan  = 5;
+            break;
+
+        case 4:
+            all_ui.daiming   = 5;
+            all_ui.qianjin   = 5;
+            all_ui.houtui    = 5;
+            all_ui.zuozhuan  = 5;
+            all_ui.youzhuan  = 20;
+            break;
+
+        default: 
+            all_ui.daiming   = 5;
+            all_ui.qianjin   = 5;
+            all_ui.houtui    = 5;
+            all_ui.zuozhuan  = 5;
+            all_ui.youzhuan  = 5;
+            break;
+    }
 }

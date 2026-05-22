@@ -954,7 +954,7 @@ void _ui_init_g_Ungroupmid_0() {
     ui_g_Ungroupmid_fly04->color = 3;
     ui_g_Ungroupmid_fly04->start_x = 450;
     ui_g_Ungroupmid_fly04->start_y = 595;
-    ui_g_Ungroupmid_fly04->width = all_ui.qifei;//起飞
+    ui_g_Ungroupmid_fly04->width = all_ui.zuozhuan;//起飞
     ui_g_Ungroupmid_fly04->r = 10;
 
     ui_g_Ungroupmid_fly05->figure_type = 2;
@@ -963,7 +963,7 @@ void _ui_init_g_Ungroupmid_0() {
     ui_g_Ungroupmid_fly05->color = 4;
     ui_g_Ungroupmid_fly05->start_x = 450;
     ui_g_Ungroupmid_fly05->start_y = 535;
-    ui_g_Ungroupmid_fly05->width = all_ui.jiangluo;//降落
+    ui_g_Ungroupmid_fly05->width = all_ui.youzhuan;//降落
     ui_g_Ungroupmid_fly05->r = 10;
 
 
