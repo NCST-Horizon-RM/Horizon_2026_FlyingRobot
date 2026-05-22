@@ -112,4 +112,5 @@ horizon_infantry/whw_irqn.o: ..\User\Start\WHW_IRQN.c \
   ..\User\Start\Inc\log.h ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
-  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h
+  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h \
+  ..\User\Algorithm\inc\mahony_filter.h

@@ -55,4 +55,63 @@ horizon_infantry/imu_task.o: ..\User\App\IMU_Task.c \
   ..\Middlewares\CMSIS\DSP\Inc\dsp\basic_math_functions.h \
   ..\User\Algorithm\inc\pid_temp.h ..\User\Bsp\inc\bsp_imu_pwm.h \
   ..\User\Bsp\inc\BMI088driver.h ..\User\Bsp\inc\BMI088reg.h \
-  ..\User\Bsp\inc\BMI088Middleware.h
+  ..\User\Bsp\inc\BMI088Middleware.h \
+  ..\User\Algorithm\inc\mahony_filter.h ..\User\Start\Inc\All_Init.h \
+  ..\User\Bsp\inc\can_bsp.h ..\Core\Inc\can.h \
+  ..\User\Start\Inc\MY_define.h ..\User\Bsp\inc\bsp_dwt.h \
+  ..\Core\Inc\usart.h ..\User\Bsp\inc\RUI_DBUS.h \
+  ..\User\Algorithm\inc\RUI_MATH.h ..\Core\Inc\gpio.h \
+  ..\User\Bsp\inc\Referee.h ..\User\Algorithm\inc\CRC_DJI.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\FreeRTOS.h \
+  ..\Core\Inc\FreeRTOSConfig.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\projdefs.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\portable.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\deprecated_definitions.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\portable\RVDS\ARM_CM4F\portmacro.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\mpu_wrappers.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\task.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\event_groups.h \
+  ..\User\App\inc\RUI_ROOT_INIT.h ..\User\Bsp\inc\DJI_Motor.h \
+  ..\User\Algorithm\inc\controller.h ..\User\Algorithm\inc\user_lib.h \
+  ..\Middlewares\CMSIS\DSP\Inc\arm_math.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\interpolation_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\bayes_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\statistics_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\complex_math_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\controller_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\support_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\distance_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\svm_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\svm_defines.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\transform_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\filtering_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\quaternion_math_functions.h \
+  ..\Middlewares\CMSIS\DSP\Inc\dsp\window_functions.h \
+  ..\User\Bsp\inc\DM_Motor.h ..\User\App\inc\Gimbal_Task.h \
+  ..\User\Start\Inc\Motors.h ..\User\Bsp\inc\Vision.h \
+  ..\USB_DEVICE\App\usbd_cdc_if.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
+  ..\USB_DEVICE\Target\usbd_conf.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\User\Algorithm\inc\Power_Ctrl.h ..\User\Bsp\inc\Power_CAP.h \
+  ..\User\Bsp\inc\bsp_adc.h ..\User\Bsp\inc\RGBctrl.h \
+  ..\User\Bsp\inc\VT13.h D:\kevil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\User\App\inc\Shoot_Task.h ..\User\Algorithm\inc\heat_control.h \
+  ..\User\App\inc\Chassis_Task.h ..\User\App\inc\RobotUI_Ctrl.h \
+  ..\User\UI\ui.h ..\User\UI\ui_interface.h ..\User\UI\ui_types.h \
+  ..\User\UI\ui_g.h ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h \
+  ..\Core\Inc\spi.h ..\User\Bsp\inc\MCP2515.h \
+  ..\User\Start\Inc\WHW_IRQN.h ..\User\Bsp\inc\music.h \
+  ..\User\Start\Inc\log.h ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
+  ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
+  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h

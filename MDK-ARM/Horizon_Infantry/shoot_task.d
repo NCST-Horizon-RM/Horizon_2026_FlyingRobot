@@ -113,4 +113,4 @@ horizon_infantry/shoot_task.o: ..\User\App\Shoot_Task.c \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h \
-  ..\User\Bsp\inc\VOFA.h
+  ..\User\Algorithm\inc\mahony_filter.h ..\User\Bsp\inc\VOFA.h

@@ -148,7 +148,7 @@ void StartIMUTask(void const * argument)
     IMU_QuaternionEKF_Init(10, 0.001f, 10000000, 1, 0.001f,0); //ekf初始化
     HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
     while(BMI088_init()){}
-
+    mahony_init(&mahony_filter, 2.0f, 0.01f, 0.9f,0.001f);
     for(;;)
     {
         INS_Task(&IMU_Data, &imu_temp);

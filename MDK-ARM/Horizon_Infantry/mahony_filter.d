@@ -1,5 +1,9 @@
-horizon_infantry/stm32f4xx_it.o: ..\Core\Src\stm32f4xx_it.c \
-  ..\Core\Inc\main.h ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
+horizon_infantry/mahony_filter.o: ..\User\Algorithm\mahony_filter.c \
+  ..\User\Algorithm\inc\mahony_filter.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\math.h \
+  ..\User\Start\Inc\All_Init.h ..\User\Bsp\inc\can_bsp.h \
+  ..\Core\Inc\can.h ..\Core\Inc\main.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h \
@@ -38,9 +42,7 @@ horizon_infantry/stm32f4xx_it.o: ..\Core\Src\stm32f4xx_it.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  ..\Core\Inc\stm32f4xx_it.h ..\User\Start\Inc\WHW_IRQN.h \
-  ..\User\Start\Inc\All_Init.h ..\User\Bsp\inc\can_bsp.h \
-  ..\Core\Inc\can.h D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\string.h \
   ..\User\Start\Inc\MY_define.h ..\User\Bsp\inc\bsp_dwt.h \
   ..\Core\Inc\tim.h ..\Core\Inc\usart.h ..\User\Bsp\inc\RUI_DBUS.h \
   ..\User\Algorithm\inc\RUI_MATH.h ..\Core\Inc\gpio.h \
@@ -65,7 +67,6 @@ horizon_infantry/stm32f4xx_it.o: ..\Core\Src\stm32f4xx_it.c \
   ..\User\Algorithm\inc\user_lib.h \
   ..\Middlewares\CMSIS\DSP\Inc\arm_math.h \
   ..\Middlewares\CMSIS\DSP\Inc\arm_math_types.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\math.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\float.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\limits.h \
   ..\Middlewares\CMSIS\DSP\Inc\arm_math_memory.h \
@@ -108,9 +109,9 @@ horizon_infantry/stm32f4xx_it.o: ..\Core\Src\stm32f4xx_it.c \
   ..\User\App\inc\Chassis_Task.h ..\User\App\inc\RobotUI_Ctrl.h \
   ..\User\UI\ui.h ..\User\UI\ui_interface.h ..\User\UI\ui_types.h \
   ..\User\UI\ui_g.h ..\User\App\inc\Robot.h ..\User\Bsp\inc\CANSPI.h \
-  ..\Core\Inc\spi.h ..\User\Bsp\inc\MCP2515.h ..\User\Bsp\inc\music.h \
+  ..\Core\Inc\spi.h ..\User\Bsp\inc\MCP2515.h \
+  ..\User\Start\Inc\WHW_IRQN.h ..\User\Bsp\inc\music.h \
   ..\User\Start\Inc\log.h ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
   D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h \
-  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h \
-  ..\User\Algorithm\inc\mahony_filter.h
+  ..\USB_DEVICE\App\usb_device.h ..\User\Bsp\inc\WS2812.h

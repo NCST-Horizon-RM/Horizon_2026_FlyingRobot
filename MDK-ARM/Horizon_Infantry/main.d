@@ -112,4 +112,5 @@ horizon_infantry/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\User\Bsp\inc\music.h ..\User\Start\Inc\log.h \
   ..\Middlewares\SEGGER_RTT\RTT\SEGGER_RTT.h \
   ..\Middlewares\SEGGER_RTT\RTT\..\Config\SEGGER_RTT_Conf.h \
-  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h ..\User\Bsp\inc\WS2812.h
+  D:\kevil\ARM\ARMCLANG\Bin\..\include\stdarg.h ..\User\Bsp\inc\WS2812.h \
+  ..\User\Algorithm\inc\mahony_filter.h
