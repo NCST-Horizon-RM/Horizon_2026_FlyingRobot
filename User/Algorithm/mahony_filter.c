@@ -92,9 +92,9 @@ void mahony_update(struct MAHONY_FILTER_t *f,
     if (is_static)
     {
         const float learn_rate = 0.006f;
-//        f->gyro_bias.x = (1 - learn_rate) * f->gyro_bias.x + learn_rate * gx;
-//        f->gyro_bias.y = (1 - learn_rate) * f->gyro_bias.y + learn_rate * gy;
-//        f->gyro_bias.z = (1 - learn_rate) * f->gyro_bias.z + learn_rate * gz;
+        f->gyro_bias.x = (1 - learn_rate) * f->gyro_bias.x + learn_rate * gx;
+        f->gyro_bias.y = (1 - learn_rate) * f->gyro_bias.y + learn_rate * gy;
+        f->gyro_bias.z = (1 - learn_rate) * f->gyro_bias.z + learn_rate * gz;
     }
 
     // È¥³ıÍÓÂİÒÇÁãÆ«
