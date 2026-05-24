@@ -457,7 +457,7 @@ void _ui_init_g_Ungroup1_3() {
     ui_g_Ungroup1_FLYABOUT2->width = 2;
     ui_g_Ungroup1_FLYABOUT2->font_size = 20;
     ui_g_Ungroup1_FLYABOUT2->str_length = 4;
-    strcpy(ui_g_Ungroup1_FLYABOUT2->string, "houtui");
+    strcpy(ui_g_Ungroup1_FLYABOUT2->string, "qian");
 
 
     ui_proc_string_frame(&ui_g_Ungroup1_3);
@@ -495,7 +495,7 @@ void _ui_init_g_Ungroup1_4() {
     ui_g_Ungroup1_FLYABOUT3->width = 2;
     ui_g_Ungroup1_FLYABOUT3->font_size = 20;
     ui_g_Ungroup1_FLYABOUT3->str_length = 4;
-    strcpy(ui_g_Ungroup1_FLYABOUT3->string, "daiming");
+    strcpy(ui_g_Ungroup1_FLYABOUT3->string, "hou");
 
 
     ui_proc_string_frame(&ui_g_Ungroup1_4);
@@ -533,7 +533,7 @@ void _ui_init_g_Ungroup1_5() {
     ui_g_Ungroup1_FLYABOUT4->width = 2;
     ui_g_Ungroup1_FLYABOUT4->font_size = 20;
     ui_g_Ungroup1_FLYABOUT4->str_length = 4;
-    strcpy(ui_g_Ungroup1_FLYABOUT4->string, "qifei");
+    strcpy(ui_g_Ungroup1_FLYABOUT4->string, "zuo");
 
 
     ui_proc_string_frame(&ui_g_Ungroup1_5);
@@ -571,7 +571,7 @@ void _ui_init_g_Ungroup1_6() {
     ui_g_Ungroup1_FLYABOUT5->width = 2;
     ui_g_Ungroup1_FLYABOUT5->font_size = 20;
     ui_g_Ungroup1_FLYABOUT5->str_length = 4;
-    strcpy(ui_g_Ungroup1_FLYABOUT5->string, "jiangluo");
+    strcpy(ui_g_Ungroup1_FLYABOUT5->string, "you");
 
 
     ui_proc_string_frame(&ui_g_Ungroup1_6);

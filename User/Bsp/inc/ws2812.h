@@ -24,6 +24,10 @@ extern all_state ALL_state;
 void ws2812_set_colors(uint8_t color_arr[][3]);
 void ws2812_double_flash_loop_param(const uint8_t colors_on[][3], const uint8_t colors_off[][3]);
 void ws2812_blink_alternate(const uint8_t colors_a[][3], const uint8_t colors_b[][3], uint32_t interval_ms);
+void ws2812_flow_forward(const uint8_t color_arr[][3], uint32_t interval_ms);
+void ws2812_flow_backward(const uint8_t color_arr[][3], uint32_t interval_ms);
+void ws2812_group_backward(const uint8_t color_arr[][3], uint32_t interval_ms);
+void ws2812_group_forward(const uint8_t color_arr[][3], uint32_t interval_ms);
 
 extern uint16_t ws2812_buf[WS2812_BUF_LEN];
 

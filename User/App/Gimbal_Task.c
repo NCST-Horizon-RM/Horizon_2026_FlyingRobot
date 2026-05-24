@@ -28,16 +28,16 @@ float PID_P_Yaw_2_zimiao[3] = {  1.8,   0.3f,   0.0f };
 float PID_P_Yaw_1_zimiao[3] = {  2.3,   0.4f,   0.0f };
 
 float PID_P_Yaw_shou[3] = {  2.0,   0.003f,   0.0f };
-float PID_S_Yaw_shou[3] = {  0.175,   0.0f,   0.0f   }; 
+float PID_S_Yaw_shou[3] = {  0.155,   0.0f,   0.0f   }; 
 			
 float PID_P_Pitch_shou[3] = {   1.3,   0.01f,   0   };
-float PID_S_Pitch_shou[3] = {   1.22,   0.0f,   0  }; 
+float PID_S_Pitch_shou[3] = {   1.31,   0.0f,   0  }; 
 
 float PID_P_Yaw_zimiao[3] = {  2.0,   0.003f,   0.0f };
-float PID_S_Yaw_zimiao[3] = {  0.175,   0.0f,   0.0f   };
+float PID_S_Yaw_zimiao[3] = {  0.155,   0.0f,   0.0f   };
 
 float PID_P_Pitch_zimiao[3] = {   1.3,   0.03f,   0   };
-float PID_S_Pitch_zimiao[3] = {   1.22,   0.0f,   0   };
+float PID_S_Pitch_zimiao[3] = {   1.31,   0.0f,   0   };
 
 uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
 {
@@ -47,7 +47,7 @@ uint8_t MOTOR_PID_Gimbal_INIT(MOTOR_Typdef *MOTOR)
     float PID_S_Pitch[3] = {   1.15,   0.0f,   0.01   };
     Feedforward_Init(&MOTOR->DJI_6020_Pitch.PID_F, 2000, PID_F_Pitch,//存储参数的结构体，前馈最大输出值,前馈控制器系数,低通滤波参数，最小二乘法一阶，二阶
                      0.5f, 0, 0);
-    PID_Init(&MOTOR->DJI_6020_Pitch.PID_P, 6000.0f, 50.0f,//存储初始化后的pid的参数结构体，总输出限幅，积分限幅，单个电机pid参数
+    PID_Init(&MOTOR->DJI_6020_Pitch.PID_P, 3000.0f, 50.0f,//存储初始化后的pid的参数结构体，总输出限幅，积分限幅，单个电机pid参数
              PID_P_Pitch, 1000, 1000,//变速积分参数，变速积分参数，总输出低通滤波，微分低通滤波，最小二乘提取信号
              0.0f, 0.0f, 0,
              Integral_Limit|OutputFilter|ErrorHandle//积分限幅,输出滤波,堵转监测
@@ -320,7 +320,7 @@ pitch_F=0.48252*cos(IMU->pitch*0.017453)/0.07/33*2048;
 				                            MOTOR->DJI_3508_Shoot_M.PID_S.Output  ,
 				                                MOTOR->DJI_3508_Shoot_R.PID_S.Output);
 		DJI_Current_Ctrl(&hcan2,0x4fe,-(int16_t)MOTOR->DJI_6020_Yaw.PID_S.Output,0,0,0);
-		LKMF_iq_ctrl(&hcan1,2,-MOTOR->DJI_6020_Pitch.PID_S.Output);
+		LKMF_iq_ctrl(&hcan1,2,-MOTOR->DJI_6020_Pitch.PID_S.Output-VisionRxDataTemp.Pitch_plan*0.5);
 	}
 //  if(Root->RM_DBUS)
 //{

@@ -313,7 +313,7 @@ void online_time_control(online_judge *ctrl)
         }
     }			
     switch(all_ui.led_state)
-    {
+    {//1上升 2下降 3前进 4后退 5左转 6右转
         case 0:
             all_ui.daiming   = 20;
             all_ui.qianjin   = 5;

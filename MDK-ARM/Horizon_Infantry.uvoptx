@@ -368,62 +368,47 @@
         <Ww>
           <count>42</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ui_cnt,0x0A</ItemText>
+          <ItemText>imu_temp,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>43</count>
           <WinNumber>1</WinNumber>
-          <ItemText>uicnt,0x0A</ItemText>
+          <ItemText>IMU_Data,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>44</count>
           <WinNumber>1</WinNumber>
-          <ItemText>fireaim,0x0A</ItemText>
+          <ItemText>AIM,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>45</count>
           <WinNumber>1</WinNumber>
-          <ItemText>imu_temp,0x0A</ItemText>
+          <ItemText>SINGLE_LOCK1,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>46</count>
           <WinNumber>1</WinNumber>
-          <ItemText>IMU_Data,0x0A</ItemText>
+          <ItemText>VisionTxData,0x10</ItemText>
         </Ww>
         <Ww>
           <count>47</count>
           <WinNumber>1</WinNumber>
-          <ItemText>imu</ItemText>
+          <ItemText>PID_P_Pitch_zimiao</ItemText>
         </Ww>
         <Ww>
           <count>48</count>
           <WinNumber>1</WinNumber>
-          <ItemText>AIM,0x0A</ItemText>
+          <ItemText>PID_S_Pitch_zimiao</ItemText>
         </Ww>
         <Ww>
           <count>49</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SINGLE_LOCK1,0x0A</ItemText>
+          <ItemText>mahony_filter,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>50</count>
           <WinNumber>1</WinNumber>
-          <ItemText>VisionTxData,0x10</ItemText>
-        </Ww>
-        <Ww>
-          <count>51</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>PID_P_Pitch_zimiao</ItemText>
-        </Ww>
-        <Ww>
-          <count>52</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>PID_S_Pitch_zimiao</ItemText>
-        </Ww>
-        <Ww>
-          <count>53</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>mahony_filter,0x0A</ItemText>
+          <ItemText>test,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

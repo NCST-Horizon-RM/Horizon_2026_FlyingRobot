@@ -174,3 +174,143 @@ void ws2812_blink_alternate(const uint8_t colors_a[][3], const uint8_t colors_b[
         }
     }
 }
+void ws2812_flow_forward(const uint8_t color_arr[][3], uint32_t interval_ms)
+{
+    static uint32_t last_tick = 0;
+    static uint8_t led_idx = 0;
+    uint32_t tick = HAL_GetTick();
+
+    if (tick - last_tick >= interval_ms)
+    {
+        last_tick = tick;
+
+        uint8_t colors[WS2812_LED_NUM][3] = {0};
+
+        for (int i = 0; i < WS2812_LED_NUM; i++)
+        {
+            colors[i][0] = 0;
+            colors[i][1] = 0;
+            colors[i][2] = 0;
+        }
+
+        colors[led_idx][0] = color_arr[0][0];
+        colors[led_idx][1] = color_arr[0][1];
+        colors[led_idx][2] = color_arr[0][2];
+
+        ws2812_set_colors(colors);
+
+        led_idx++;
+        if (led_idx >= WS2812_LED_NUM)
+        {
+            led_idx = 0;
+        }
+    }
+}
+void ws2812_flow_backward(const uint8_t color_arr[][3], uint32_t interval_ms)
+{
+    static uint32_t last_tick = 0;
+    static int8_t led_idx = WS2812_LED_NUM - 1;
+    uint32_t tick = HAL_GetTick();
+
+    if (tick - last_tick >= interval_ms)
+    {
+        last_tick = tick;
+
+        uint8_t colors[WS2812_LED_NUM][3] = {0};
+
+        for (int i = 0; i < WS2812_LED_NUM; i++)
+        {
+            colors[i][0] = 0;
+            colors[i][1] = 0;
+            colors[i][2] = 0;
+        }
+
+        colors[led_idx][0] = color_arr[0][0];
+        colors[led_idx][1] = color_arr[0][1];
+        colors[led_idx][2] = color_arr[0][2];
+
+        ws2812_set_colors(colors);
+
+        led_idx--;
+        if (led_idx < 0)
+        {
+            led_idx = WS2812_LED_NUM - 1;
+        }
+    }
+}
+void ws2812_group_forward(const uint8_t color_arr[][3], uint32_t interval_ms)
+{
+    static uint32_t last_tick = 0;
+    static uint8_t pos1 = 0;   // 前三颗灯组
+    static uint8_t pos2 = 0;   // 后三颗灯组
+    uint32_t tick = HAL_GetTick();
+
+    if (tick - last_tick >= interval_ms)
+    {
+        last_tick = tick;
+
+        uint8_t colors[WS2812_LED_NUM][3] = {0};
+
+        for (int i = 0; i < WS2812_LED_NUM; i++)
+        {
+            colors[i][0] = 0;
+            colors[i][1] = 0;
+            colors[i][2] = 0;
+        }
+
+        // 前三颗灯组：0,1,2
+        colors[pos1][0] = color_arr[0][0];
+        colors[pos1][1] = color_arr[0][1];
+        colors[pos1][2] = color_arr[0][2];
+
+        // 后三颗灯组：3,4,5
+        colors[3 + pos2][0] = color_arr[0][0];
+        colors[3 + pos2][1] = color_arr[0][1];
+        colors[3 + pos2][2] = color_arr[0][2];
+
+        ws2812_set_colors(colors);
+
+        pos1++;
+        pos2++;
+        if (pos1 >= 3) pos1 = 0;
+        if (pos2 >= 3) pos2 = 0;
+    }
+}
+void ws2812_group_backward(const uint8_t color_arr[][3], uint32_t interval_ms)
+{
+    static uint32_t last_tick = 0;
+    static int8_t pos1 = 2;   // 前三颗灯组：2 -> 1 -> 0
+    static int8_t pos2 = 2;   // 后三颗灯组：5 -> 4 -> 3
+    uint32_t tick = HAL_GetTick();
+
+    if (tick - last_tick >= interval_ms)
+    {
+        last_tick = tick;
+
+        uint8_t colors[WS2812_LED_NUM][3] = {0};
+
+        for (int i = 0; i < WS2812_LED_NUM; i++)
+        {
+            colors[i][0] = 0;
+            colors[i][1] = 0;
+            colors[i][2] = 0;
+        }
+
+        // 前三颗灯组：0,1,2
+        colors[pos1][0] = color_arr[0][0];
+        colors[pos1][1] = color_arr[0][1];
+        colors[pos1][2] = color_arr[0][2];
+
+        // 后三颗灯组：3,4,5
+        colors[3 + pos2][0] = color_arr[0][0];
+        colors[3 + pos2][1] = color_arr[0][1];
+        colors[3 + pos2][2] = color_arr[0][2];
+
+        ws2812_set_colors(colors);
+
+        pos1--;
+        pos2--;
+        if (pos1 < 0) pos1 = 2;
+        if (pos2 < 0) pos2 = 2;
+    }
+}

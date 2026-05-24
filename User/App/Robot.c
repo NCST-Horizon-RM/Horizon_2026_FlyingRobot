@@ -347,7 +347,7 @@ static int64_t RUI_F_GET_FIRE_AIM(DBUS_Typedef *DBUS,
 					  SINGLE_LOCK1 = 1;
 				    AIM = CONTAL->SHOOT_Bask.Angle +15000;
 				}	 
-		
+			
      if(all_ui.shoot_bool1||all_ui.shoot_bool2||all_ui.shoot_bool3||all_ui.shoot_bool4)
 		 {all_ui.shoot_stutas=20;}else{all_ui.shoot_stutas=5;}
 		 

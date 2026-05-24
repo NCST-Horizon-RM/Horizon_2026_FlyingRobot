@@ -83,7 +83,7 @@ void StartMoveTask(void const * argument)
     RUI_V_CONTAL.CG.YAW_INIT_ANGLE = INIT_ANGLE;
 
     //Pitch轴限幅
-    RUI_V_CONTAL.HEAD.Pitch_MAX = 2400;
+    RUI_V_CONTAL.HEAD.Pitch_MAX = 2000;
     RUI_V_CONTAL.HEAD.Pitch_MIN = -500;
 
     for (;;)
@@ -187,27 +187,49 @@ void StartRootTask(void const * argument)
             ws2812_set_colors(colors_off);
             break;
         case 1:              
-				     ws2812_blink_alternate(colors_orange, colors_off, 100);
+					   //ws2812_set_colors(colors_orange);
+				   ws2812_flow_forward(colors_orange,100);
+				//1上升 2下降 3前进 4后退 5左转 6右转
+				     //ws2812_blink_alternate(colors_orange, colors_off, 100);
             break;
         case 2:
-              ws2812_blink_alternate(colors_green, colors_off, 100);
+					  //ws2812_set_colors(colors_green);
+				ws2812_flow_backward(colors_cyan,100);
+             // ws2812_blink_alternate(colors_green, colors_off, 100);
             break;
         case 3:
-              ws2812_double_flash_loop_param(colors_cyan,colors_off);
+				  	ws2812_group_forward(colors_green,100);
+					  //ws2812_set_colors(colors_cyan);
+					    //ws2812_blink_alternate(colors_cyan, colors_off, 100);
+              //ws2812_double_flash_loop_param(colors_cyan,colors_off);
             break;
 				case 4:
-              ws2812_blink_alternate(colors_purple, colors_off, 100);
+					ws2812_group_backward(colors_white,100);
+					  //ws2812_set_colors(colors_purple);
+              //ws2812_blink_alternate(colors_purple, colors_off, 100);
             break;
 				 case 5:
-              ws2812_blink_alternate(colors_green, colors_off, 100);
+					 ws2812_set_colors(colors_yellow);
+             // ws2812_blink_alternate(colors_white, colors_off, 100);
+            break;
+				  case 6:
+						ws2812_set_colors(colors_purple);
+              //ws2812_blink_alternate(colors_yellow, colors_off, 100);
+            break;
+					 case 7:
+						 	ws2812_set_colors(colors_blue);
+              //ws2812_blink_alternate(colors_blue, colors_off, 100);
+					  case 8:
+						 	ws2812_set_colors(colors_red);
+              //ws2812_blink_alternate(colors_blue, colors_off, 100);
             break;
         default:
               ws2812_set_colors(colors_off);
             break;
     }
          Update_Robot_Level(User_data.robot_status.robot_level);
-		   // Update_Robot_Level(5);
-			  Update_Heat_Predictor(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite,SysTime.ms);  
+		   Update_Robot_Level(5);
+			  //Update_Heat_Predictor(ALL_MOTOR.DJI_3508_Shoot_M.DATA.Angle_Infinite,SysTime.ms);  
         ui_self_id=User_data.robot_status.robot_id;
 		}
         RUI_F_ROOT(&RUI_ROOT_STATUS, &WHW_V_DBUS, &ALL_MOTOR, &CAPDATE.GET);
@@ -245,7 +267,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 {
 	CAN_RxHeaderTypeDef can_rx;
     uint8_t rx_data[8];
-
+   
     HAL_CAN_GetRxMessage(hcan , CAN_RX_FIFO0 , &can_rx , rx_data);
     
 	if (hcan == &hcan1)		
